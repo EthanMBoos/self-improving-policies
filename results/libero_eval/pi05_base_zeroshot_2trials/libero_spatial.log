@@ -1,0 +1,249 @@
+[robosuite WARNING] No private macro file found! (macros.py:53)
+[robosuite WARNING] It is recommended to use a private macro file (macros.py:54)
+[robosuite WARNING] To setup, run: python <repo>/third_party/openpi/examples/libero/.venv/lib/python3.8/site-packages/robosuite/scripts/setup_macros.py (macros.py:55)
+INFO:root:Task suite: libero_spatial
+INFO:root:Waiting for server at ws://0.0.0.0:8000...
+[info] using task orders [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+  0%|          | 0/10 [00:00<?, ?it/s]<repo>/third_party/openpi/examples/libero/.venv/lib/python3.8/site-packages/numba/np/arraymath.py:3845: DeprecationWarning: `np.MachAr` is deprecated (NumPy 1.22).
+  @overload(np.MachAr)
+[Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+[Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+
+  0%|          | 0/2 [00:00<?, ?it/s][AINFO:root:
+Task: pick up the black bowl between the plate and the ramekin and place it on the plate
+INFO:root:Starting episode 1...
+INFO:root:Success: False
+INFO:root:# episodes completed so far: 1
+INFO:root:# successes: 0 (0.0%)
+
+ 50%|█████     | 1/2 [00:19<00:19, 19.90s/it][AINFO:root:
+Task: pick up the black bowl between the plate and the ramekin and place it on the plate
+INFO:root:Starting episode 2...
+INFO:root:Success: False
+INFO:root:# episodes completed so far: 2
+INFO:root:# successes: 0 (0.0%)
+
+100%|██████████| 2/2 [00:31<00:00, 15.21s/it][A100%|██████████| 2/2 [00:31<00:00, 15.92s/it]
+INFO:root:Current task success rate: 0.0
+INFO:root:Current total success rate: 0.0
+ 10%|█         | 1/10 [00:33<05:00, 33.37s/it][Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+[Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+
+  0%|          | 0/2 [00:00<?, ?it/s][AINFO:root:
+Task: pick up the black bowl next to the ramekin and place it on the plate
+INFO:root:Starting episode 1...
+INFO:root:Success: False
+INFO:root:# episodes completed so far: 3
+INFO:root:# successes: 0 (0.0%)
+
+ 50%|█████     | 1/2 [00:11<00:11, 11.51s/it][AINFO:root:
+Task: pick up the black bowl next to the ramekin and place it on the plate
+INFO:root:Starting episode 2...
+INFO:root:Success: False
+INFO:root:# episodes completed so far: 4
+INFO:root:# successes: 0 (0.0%)
+
+100%|██████████| 2/2 [00:23<00:00, 11.88s/it][A100%|██████████| 2/2 [00:23<00:00, 11.82s/it]
+INFO:root:Current task success rate: 0.0
+INFO:root:Current total success rate: 0.0
+ 20%|██        | 2/10 [00:57<03:45, 28.23s/it][Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+[Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+
+  0%|          | 0/2 [00:00<?, ?it/s][AINFO:root:
+Task: pick up the black bowl from table center and place it on the plate
+INFO:root:Starting episode 1...
+INFO:root:Success: False
+INFO:root:# episodes completed so far: 5
+INFO:root:# successes: 0 (0.0%)
+
+ 50%|█████     | 1/2 [00:12<00:12, 12.29s/it][AINFO:root:
+Task: pick up the black bowl from table center and place it on the plate
+INFO:root:Starting episode 2...
+INFO:root:Success: False
+INFO:root:# episodes completed so far: 6
+INFO:root:# successes: 0 (0.0%)
+
+100%|██████████| 2/2 [00:25<00:00, 12.67s/it][A100%|██████████| 2/2 [00:25<00:00, 12.62s/it]
+INFO:root:Current task success rate: 0.0
+INFO:root:Current total success rate: 0.0
+ 30%|███       | 3/10 [01:24<03:11, 27.31s/it][Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+[Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+
+  0%|          | 0/2 [00:00<?, ?it/s][AINFO:root:
+Task: pick up the black bowl on the cookie box and place it on the plate
+INFO:root:Starting episode 1...
+INFO:root:Success: False
+INFO:root:# episodes completed so far: 7
+INFO:root:# successes: 0 (0.0%)
+
+ 50%|█████     | 1/2 [00:12<00:12, 12.46s/it][AINFO:root:
+Task: pick up the black bowl on the cookie box and place it on the plate
+INFO:root:Starting episode 2...
+INFO:root:Success: False
+INFO:root:# episodes completed so far: 8
+INFO:root:# successes: 0 (0.0%)
+
+100%|██████████| 2/2 [00:24<00:00, 12.44s/it][A100%|██████████| 2/2 [00:24<00:00, 12.45s/it]
+INFO:root:Current task success rate: 0.0
+INFO:root:Current total success rate: 0.0
+ 40%|████      | 4/10 [01:50<02:40, 26.75s/it][Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+[Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+
+  0%|          | 0/2 [00:00<?, ?it/s][AINFO:root:
+Task: pick up the black bowl in the top drawer of the wooden cabinet and place it on the plate
+INFO:root:Starting episode 1...
+INFO:root:Success: False
+INFO:root:# episodes completed so far: 9
+INFO:root:# successes: 0 (0.0%)
+
+ 50%|█████     | 1/2 [00:12<00:12, 12.71s/it][AINFO:root:
+Task: pick up the black bowl in the top drawer of the wooden cabinet and place it on the plate
+INFO:root:Starting episode 2...
+INFO:root:Success: False
+INFO:root:# episodes completed so far: 10
+INFO:root:# successes: 0 (0.0%)
+
+100%|██████████| 2/2 [00:25<00:00, 12.77s/it][A100%|██████████| 2/2 [00:25<00:00, 12.76s/it]
+INFO:root:Current task success rate: 0.0
+INFO:root:Current total success rate: 0.0
+ 50%|█████     | 5/10 [02:16<02:13, 26.67s/it][Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+[Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+
+  0%|          | 0/2 [00:00<?, ?it/s][AINFO:root:
+Task: pick up the black bowl on the ramekin and place it on the plate
+INFO:root:Starting episode 1...
+INFO:root:Success: False
+INFO:root:# episodes completed so far: 11
+INFO:root:# successes: 0 (0.0%)
+
+ 50%|█████     | 1/2 [00:12<00:12, 12.58s/it][AINFO:root:
+Task: pick up the black bowl on the ramekin and place it on the plate
+INFO:root:Starting episode 2...
+INFO:root:Success: False
+INFO:root:# episodes completed so far: 12
+INFO:root:# successes: 0 (0.0%)
+
+100%|██████████| 2/2 [00:25<00:00, 12.90s/it][A100%|██████████| 2/2 [00:25<00:00, 12.86s/it]
+INFO:root:Current task success rate: 0.0
+INFO:root:Current total success rate: 0.0
+ 60%|██████    | 6/10 [02:43<01:46, 26.68s/it][Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+[Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+
+  0%|          | 0/2 [00:00<?, ?it/s][AINFO:root:
+Task: pick up the black bowl next to the cookie box and place it on the plate
+INFO:root:Starting episode 1...
+INFO:root:Success: False
+INFO:root:# episodes completed so far: 13
+INFO:root:# successes: 0 (0.0%)
+
+ 50%|█████     | 1/2 [00:12<00:12, 12.32s/it][AINFO:root:
+Task: pick up the black bowl next to the cookie box and place it on the plate
+INFO:root:Starting episode 2...
+INFO:root:Success: False
+INFO:root:# episodes completed so far: 14
+INFO:root:# successes: 0 (0.0%)
+
+100%|██████████| 2/2 [00:24<00:00, 12.30s/it][A100%|██████████| 2/2 [00:24<00:00, 12.30s/it]
+INFO:root:Current task success rate: 0.0
+INFO:root:Current total success rate: 0.0
+ 70%|███████   | 7/10 [03:09<01:19, 26.37s/it][Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+[Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+
+  0%|          | 0/2 [00:00<?, ?it/s][AINFO:root:
+Task: pick up the black bowl on the stove and place it on the plate
+INFO:root:Starting episode 1...
+INFO:root:Success: False
+INFO:root:# episodes completed so far: 15
+INFO:root:# successes: 0 (0.0%)
+
+ 50%|█████     | 1/2 [00:11<00:11, 11.92s/it][AINFO:root:
+Task: pick up the black bowl on the stove and place it on the plate
+INFO:root:Starting episode 2...
+INFO:root:Success: False
+INFO:root:# episodes completed so far: 16
+INFO:root:# successes: 0 (0.0%)
+
+100%|██████████| 2/2 [00:23<00:00, 11.93s/it][A100%|██████████| 2/2 [00:23<00:00, 11.93s/it]
+INFO:root:Current task success rate: 0.0
+INFO:root:Current total success rate: 0.0
+ 80%|████████  | 8/10 [03:33<00:51, 25.88s/it][Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+[Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+
+  0%|          | 0/2 [00:00<?, ?it/s][AINFO:root:
+Task: pick up the black bowl next to the plate and place it on the plate
+INFO:root:Starting episode 1...
+INFO:root:Success: False
+INFO:root:# episodes completed so far: 17
+INFO:root:# successes: 0 (0.0%)
+
+ 50%|█████     | 1/2 [00:11<00:11, 11.18s/it][AINFO:root:
+Task: pick up the black bowl next to the plate and place it on the plate
+INFO:root:Starting episode 2...
+INFO:root:Success: False
+INFO:root:# episodes completed so far: 18
+INFO:root:# successes: 0 (0.0%)
+
+100%|██████████| 2/2 [00:23<00:00, 11.76s/it][A100%|██████████| 2/2 [00:23<00:00, 11.67s/it]
+INFO:root:Current task success rate: 0.0
+INFO:root:Current total success rate: 0.0
+ 90%|█████████ | 9/10 [03:58<00:25, 25.40s/it][Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+[Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+
+  0%|          | 0/2 [00:00<?, ?it/s][AINFO:root:
+Task: pick up the black bowl on the wooden cabinet and place it on the plate
+INFO:root:Starting episode 1...
+INFO:root:Success: False
+INFO:root:# episodes completed so far: 19
+INFO:root:# successes: 0 (0.0%)
+
+ 50%|█████     | 1/2 [00:12<00:12, 12.57s/it][AINFO:root:
+Task: pick up the black bowl on the wooden cabinet and place it on the plate
+INFO:root:Starting episode 2...
+INFO:root:Success: False
+INFO:root:# episodes completed so far: 20
+INFO:root:# successes: 0 (0.0%)
+
+100%|██████████| 2/2 [00:23<00:00, 11.87s/it][A100%|██████████| 2/2 [00:23<00:00, 11.98s/it]
+INFO:root:Current task success rate: 0.0
+INFO:root:Current total success rate: 0.0
+100%|██████████| 10/10 [04:23<00:00, 25.28s/it]100%|██████████| 10/10 [04:23<00:00, 26.33s/it]
+INFO:root:Total success rate: 0.0
+INFO:root:Total episodes: 20
+Exception ignored in: <function MjRenderContext.__del__ at 0x79680ca01280>
+Traceback (most recent call last):
+  File "<repo>/third_party/openpi/examples/libero/.venv/lib/python3.8/site-packages/robosuite/utils/binding_utils.py", line 199, in __del__
+    self.gl_ctx.free()
+  File "<repo>/third_party/openpi/examples/libero/.venv/lib/python3.8/site-packages/robosuite/renderers/context/egl_context.py", line 149, in free
+    EGL.eglMakeCurrent(EGL_DISPLAY, EGL.EGL_NO_SURFACE, EGL.EGL_NO_SURFACE, EGL.EGL_NO_CONTEXT)
+  File "<repo>/third_party/openpi/examples/libero/.venv/lib/python3.8/site-packages/OpenGL/error.py", line 230, in glCheckError
+    raise self._errorClass(
+OpenGL.raw.EGL._errors.EGLError: EGLError(
+	err = EGL_NOT_INITIALIZED,
+	baseOperation = eglMakeCurrent,
+	cArguments = (
+		<OpenGL._opaque.EGLDisplay_pointer object at 0x7968012d87c0>,
+		<OpenGL._opaque.EGLSurface_pointer object at 0x796818c5e840>,
+		<OpenGL._opaque.EGLSurface_pointer object at 0x796818c5e840>,
+		<OpenGL._opaque.EGLContext_pointer object at 0x796818c5e4c0>,
+	),
+	result = 0
+)
+Exception ignored in: <function EGLGLContext.__del__ at 0x79680ca010d0>
+Traceback (most recent call last):
+  File "<repo>/third_party/openpi/examples/libero/.venv/lib/python3.8/site-packages/robosuite/renderers/context/egl_context.py", line 155, in __del__
+    self.free()
+  File "<repo>/third_party/openpi/examples/libero/.venv/lib/python3.8/site-packages/robosuite/renderers/context/egl_context.py", line 149, in free
+    EGL.eglMakeCurrent(EGL_DISPLAY, EGL.EGL_NO_SURFACE, EGL.EGL_NO_SURFACE, EGL.EGL_NO_CONTEXT)
+  File "<repo>/third_party/openpi/examples/libero/.venv/lib/python3.8/site-packages/OpenGL/error.py", line 230, in glCheckError
+    raise self._errorClass(
+OpenGL.raw.EGL._errors.EGLError: EGLError(
+	err = EGL_NOT_INITIALIZED,
+	baseOperation = eglMakeCurrent,
+	cArguments = (
+		<OpenGL._opaque.EGLDisplay_pointer object at 0x7968012d87c0>,
+		<OpenGL._opaque.EGLSurface_pointer object at 0x796818c5e840>,
+		<OpenGL._opaque.EGLSurface_pointer object at 0x796818c5e840>,
+		<OpenGL._opaque.EGLContext_pointer object at 0x796818c5e4c0>,
+	),
+	result = 0
+)

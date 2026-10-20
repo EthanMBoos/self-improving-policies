@@ -1,0 +1,809 @@
+[robosuite WARNING] No private macro file found! (macros.py:53)
+[robosuite WARNING] It is recommended to use a private macro file (macros.py:54)
+[robosuite WARNING] To setup, run: python <repo>/third_party/openpi/examples/libero/.venv/lib/python3.8/site-packages/robosuite/scripts/setup_macros.py (macros.py:55)
+INFO:root:Task suite: libero_spatial
+INFO:root:Waiting for server at ws://0.0.0.0:8000...
+[info] using task orders [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+  0%|          | 0/10 [00:00<?, ?it/s]<repo>/third_party/openpi/examples/libero/.venv/lib/python3.8/site-packages/numba/np/arraymath.py:3845: DeprecationWarning: `np.MachAr` is deprecated (NumPy 1.22).
+  @overload(np.MachAr)
+[Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+[Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+
+  0%|          | 0/10 [00:00<?, ?it/s][AINFO:root:
+Task: pick up the black bowl between the plate and the ramekin and place it on the plate
+INFO:root:Starting episode 1...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 1
+INFO:root:# successes: 1 (100.0%)
+
+ 10%|█         | 1/10 [00:05<00:49,  5.48s/it][AINFO:root:
+Task: pick up the black bowl between the plate and the ramekin and place it on the plate
+INFO:root:Starting episode 2...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 2
+INFO:root:# successes: 2 (100.0%)
+
+ 20%|██        | 2/10 [00:11<00:47,  5.91s/it][AINFO:root:
+Task: pick up the black bowl between the plate and the ramekin and place it on the plate
+INFO:root:Starting episode 3...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 3
+INFO:root:# successes: 3 (100.0%)
+
+ 30%|███       | 3/10 [00:16<00:38,  5.55s/it][AINFO:root:
+Task: pick up the black bowl between the plate and the ramekin and place it on the plate
+INFO:root:Starting episode 4...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 4
+INFO:root:# successes: 4 (100.0%)
+
+ 40%|████      | 4/10 [00:21<00:32,  5.36s/it][AINFO:root:
+Task: pick up the black bowl between the plate and the ramekin and place it on the plate
+INFO:root:Starting episode 5...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 5
+INFO:root:# successes: 5 (100.0%)
+
+ 50%|█████     | 5/10 [00:27<00:26,  5.27s/it][AINFO:root:
+Task: pick up the black bowl between the plate and the ramekin and place it on the plate
+INFO:root:Starting episode 6...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 6
+INFO:root:# successes: 6 (100.0%)
+
+ 60%|██████    | 6/10 [00:31<00:20,  5.14s/it][AINFO:root:
+Task: pick up the black bowl between the plate and the ramekin and place it on the plate
+INFO:root:Starting episode 7...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 7
+INFO:root:# successes: 7 (100.0%)
+
+ 70%|███████   | 7/10 [00:37<00:15,  5.13s/it][AINFO:root:
+Task: pick up the black bowl between the plate and the ramekin and place it on the plate
+INFO:root:Starting episode 8...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 8
+INFO:root:# successes: 8 (100.0%)
+
+ 80%|████████  | 8/10 [00:41<00:10,  5.09s/it][AINFO:root:
+Task: pick up the black bowl between the plate and the ramekin and place it on the plate
+INFO:root:Starting episode 9...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 9
+INFO:root:# successes: 9 (100.0%)
+
+ 90%|█████████ | 9/10 [00:47<00:05,  5.22s/it][AINFO:root:
+Task: pick up the black bowl between the plate and the ramekin and place it on the plate
+INFO:root:Starting episode 10...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 10
+INFO:root:# successes: 10 (100.0%)
+
+100%|██████████| 10/10 [00:52<00:00,  5.21s/it][A100%|██████████| 10/10 [00:52<00:00,  5.27s/it]
+INFO:root:Current task success rate: 1.0
+INFO:root:Current total success rate: 1.0
+ 10%|█         | 1/10 [00:54<08:09, 54.36s/it][Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+[Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+
+  0%|          | 0/10 [00:00<?, ?it/s][AINFO:root:
+Task: pick up the black bowl next to the ramekin and place it on the plate
+INFO:root:Starting episode 1...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 11
+INFO:root:# successes: 11 (100.0%)
+
+ 10%|█         | 1/10 [00:06<00:55,  6.20s/it][AINFO:root:
+Task: pick up the black bowl next to the ramekin and place it on the plate
+INFO:root:Starting episode 2...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 12
+INFO:root:# successes: 12 (100.0%)
+
+ 20%|██        | 2/10 [00:11<00:47,  5.91s/it][AINFO:root:
+Task: pick up the black bowl next to the ramekin and place it on the plate
+INFO:root:Starting episode 3...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 13
+INFO:root:# successes: 13 (100.0%)
+
+ 30%|███       | 3/10 [00:18<00:43,  6.18s/it][AINFO:root:
+Task: pick up the black bowl next to the ramekin and place it on the plate
+INFO:root:Starting episode 4...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 14
+INFO:root:# successes: 14 (100.0%)
+
+ 40%|████      | 4/10 [00:24<00:36,  6.15s/it][AINFO:root:
+Task: pick up the black bowl next to the ramekin and place it on the plate
+INFO:root:Starting episode 5...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 15
+INFO:root:# successes: 15 (100.0%)
+
+ 50%|█████     | 5/10 [00:30<00:31,  6.22s/it][AINFO:root:
+Task: pick up the black bowl next to the ramekin and place it on the plate
+INFO:root:Starting episode 6...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 16
+INFO:root:# successes: 16 (100.0%)
+
+ 60%|██████    | 6/10 [00:41<00:30,  7.74s/it][AINFO:root:
+Task: pick up the black bowl next to the ramekin and place it on the plate
+INFO:root:Starting episode 7...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 17
+INFO:root:# successes: 17 (100.0%)
+
+ 70%|███████   | 7/10 [00:48<00:22,  7.50s/it][AINFO:root:
+Task: pick up the black bowl next to the ramekin and place it on the plate
+INFO:root:Starting episode 8...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 18
+INFO:root:# successes: 18 (100.0%)
+
+ 80%|████████  | 8/10 [00:54<00:14,  7.14s/it][AINFO:root:
+Task: pick up the black bowl next to the ramekin and place it on the plate
+INFO:root:Starting episode 9...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 19
+INFO:root:# successes: 19 (100.0%)
+
+ 90%|█████████ | 9/10 [01:01<00:06,  6.91s/it][AINFO:root:
+Task: pick up the black bowl next to the ramekin and place it on the plate
+INFO:root:Starting episode 10...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 20
+INFO:root:# successes: 20 (100.0%)
+
+100%|██████████| 10/10 [01:07<00:00,  6.70s/it][A100%|██████████| 10/10 [01:07<00:00,  6.76s/it]
+INFO:root:Current task success rate: 1.0
+INFO:root:Current total success rate: 1.0
+ 20%|██        | 2/10 [02:02<08:21, 62.73s/it][Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+[Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+
+  0%|          | 0/10 [00:00<?, ?it/s][AINFO:root:
+Task: pick up the black bowl from table center and place it on the plate
+INFO:root:Starting episode 1...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 21
+INFO:root:# successes: 21 (100.0%)
+
+ 10%|█         | 1/10 [00:07<01:07,  7.46s/it][AINFO:root:
+Task: pick up the black bowl from table center and place it on the plate
+INFO:root:Starting episode 2...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 22
+INFO:root:# successes: 22 (100.0%)
+
+ 20%|██        | 2/10 [00:13<00:51,  6.40s/it][AINFO:root:
+Task: pick up the black bowl from table center and place it on the plate
+INFO:root:Starting episode 3...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 23
+INFO:root:# successes: 23 (100.0%)
+
+ 30%|███       | 3/10 [00:19<00:43,  6.18s/it][AINFO:root:
+Task: pick up the black bowl from table center and place it on the plate
+INFO:root:Starting episode 4...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 24
+INFO:root:# successes: 24 (100.0%)
+
+ 40%|████      | 4/10 [00:24<00:34,  5.71s/it][AINFO:root:
+Task: pick up the black bowl from table center and place it on the plate
+INFO:root:Starting episode 5...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 25
+INFO:root:# successes: 25 (100.0%)
+
+ 50%|█████     | 5/10 [00:30<00:29,  5.83s/it][AINFO:root:
+Task: pick up the black bowl from table center and place it on the plate
+INFO:root:Starting episode 6...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 26
+INFO:root:# successes: 26 (100.0%)
+
+ 60%|██████    | 6/10 [00:36<00:23,  5.88s/it][AINFO:root:
+Task: pick up the black bowl from table center and place it on the plate
+INFO:root:Starting episode 7...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 27
+INFO:root:# successes: 27 (100.0%)
+
+ 70%|███████   | 7/10 [00:43<00:18,  6.33s/it][AINFO:root:
+Task: pick up the black bowl from table center and place it on the plate
+INFO:root:Starting episode 8...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 28
+INFO:root:# successes: 28 (100.0%)
+
+ 80%|████████  | 8/10 [00:49<00:12,  6.15s/it][AINFO:root:
+Task: pick up the black bowl from table center and place it on the plate
+INFO:root:Starting episode 9...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 29
+INFO:root:# successes: 29 (100.0%)
+
+ 90%|█████████ | 9/10 [00:54<00:05,  6.00s/it][AINFO:root:
+Task: pick up the black bowl from table center and place it on the plate
+INFO:root:Starting episode 10...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 30
+INFO:root:# successes: 30 (100.0%)
+
+100%|██████████| 10/10 [01:00<00:00,  5.95s/it][A100%|██████████| 10/10 [01:00<00:00,  6.06s/it]
+INFO:root:Current task success rate: 1.0
+INFO:root:Current total success rate: 1.0
+ 30%|███       | 3/10 [03:04<07:15, 62.24s/it][Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+[Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+
+  0%|          | 0/10 [00:00<?, ?it/s][AINFO:root:
+Task: pick up the black bowl on the cookie box and place it on the plate
+INFO:root:Starting episode 1...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 31
+INFO:root:# successes: 31 (100.0%)
+
+ 10%|█         | 1/10 [00:05<00:48,  5.42s/it][AINFO:root:
+Task: pick up the black bowl on the cookie box and place it on the plate
+INFO:root:Starting episode 2...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 32
+INFO:root:# successes: 32 (100.0%)
+
+ 20%|██        | 2/10 [00:10<00:44,  5.51s/it][AINFO:root:
+Task: pick up the black bowl on the cookie box and place it on the plate
+INFO:root:Starting episode 3...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 33
+INFO:root:# successes: 33 (100.0%)
+
+ 30%|███       | 3/10 [00:16<00:38,  5.46s/it][AINFO:root:
+Task: pick up the black bowl on the cookie box and place it on the plate
+INFO:root:Starting episode 4...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 34
+INFO:root:# successes: 34 (100.0%)
+
+ 40%|████      | 4/10 [00:21<00:31,  5.21s/it][AINFO:root:
+Task: pick up the black bowl on the cookie box and place it on the plate
+INFO:root:Starting episode 5...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 35
+INFO:root:# successes: 35 (100.0%)
+
+ 50%|█████     | 5/10 [00:27<00:27,  5.54s/it][AINFO:root:
+Task: pick up the black bowl on the cookie box and place it on the plate
+INFO:root:Starting episode 6...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 36
+INFO:root:# successes: 36 (100.0%)
+
+ 60%|██████    | 6/10 [00:32<00:21,  5.34s/it][AINFO:root:
+Task: pick up the black bowl on the cookie box and place it on the plate
+INFO:root:Starting episode 7...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 37
+INFO:root:# successes: 37 (100.0%)
+
+ 70%|███████   | 7/10 [00:37<00:16,  5.43s/it][AINFO:root:
+Task: pick up the black bowl on the cookie box and place it on the plate
+INFO:root:Starting episode 8...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 38
+INFO:root:# successes: 38 (100.0%)
+
+ 80%|████████  | 8/10 [00:42<00:10,  5.30s/it][AINFO:root:
+Task: pick up the black bowl on the cookie box and place it on the plate
+INFO:root:Starting episode 9...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 39
+INFO:root:# successes: 39 (100.0%)
+
+ 90%|█████████ | 9/10 [00:48<00:05,  5.41s/it][AINFO:root:
+Task: pick up the black bowl on the cookie box and place it on the plate
+INFO:root:Starting episode 10...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 40
+INFO:root:# successes: 40 (100.0%)
+
+100%|██████████| 10/10 [00:54<00:00,  5.46s/it][A100%|██████████| 10/10 [00:54<00:00,  5.42s/it]
+INFO:root:Current task success rate: 1.0
+INFO:root:Current total success rate: 1.0
+ 40%|████      | 4/10 [03:59<05:56, 59.46s/it][Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+[Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+
+  0%|          | 0/10 [00:00<?, ?it/s][AINFO:root:
+Task: pick up the black bowl in the top drawer of the wooden cabinet and place it on the plate
+INFO:root:Starting episode 1...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 41
+INFO:root:# successes: 41 (100.0%)
+
+ 10%|█         | 1/10 [00:07<01:05,  7.24s/it][AINFO:root:
+Task: pick up the black bowl in the top drawer of the wooden cabinet and place it on the plate
+INFO:root:Starting episode 2...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 42
+INFO:root:# successes: 42 (100.0%)
+
+ 20%|██        | 2/10 [00:14<00:57,  7.23s/it][AINFO:root:
+Task: pick up the black bowl in the top drawer of the wooden cabinet and place it on the plate
+INFO:root:Starting episode 3...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 43
+INFO:root:# successes: 43 (100.0%)
+
+ 30%|███       | 3/10 [00:21<00:51,  7.33s/it][AINFO:root:
+Task: pick up the black bowl in the top drawer of the wooden cabinet and place it on the plate
+INFO:root:Starting episode 4...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 44
+INFO:root:# successes: 44 (100.0%)
+
+ 40%|████      | 4/10 [00:29<00:44,  7.33s/it][AINFO:root:
+Task: pick up the black bowl in the top drawer of the wooden cabinet and place it on the plate
+INFO:root:Starting episode 5...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 45
+INFO:root:# successes: 45 (100.0%)
+
+ 50%|█████     | 5/10 [00:37<00:38,  7.64s/it][AINFO:root:
+Task: pick up the black bowl in the top drawer of the wooden cabinet and place it on the plate
+INFO:root:Starting episode 6...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 46
+INFO:root:# successes: 46 (100.0%)
+
+ 60%|██████    | 6/10 [00:44<00:30,  7.59s/it][AINFO:root:
+Task: pick up the black bowl in the top drawer of the wooden cabinet and place it on the plate
+INFO:root:Starting episode 7...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 47
+INFO:root:# successes: 47 (100.0%)
+
+ 70%|███████   | 7/10 [00:52<00:23,  7.71s/it][AINFO:root:
+Task: pick up the black bowl in the top drawer of the wooden cabinet and place it on the plate
+INFO:root:Starting episode 8...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 48
+INFO:root:# successes: 48 (100.0%)
+
+ 80%|████████  | 8/10 [01:00<00:15,  7.64s/it][AINFO:root:
+Task: pick up the black bowl in the top drawer of the wooden cabinet and place it on the plate
+INFO:root:Starting episode 9...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 49
+INFO:root:# successes: 49 (100.0%)
+
+ 90%|█████████ | 9/10 [01:07<00:07,  7.49s/it][AINFO:root:
+Task: pick up the black bowl in the top drawer of the wooden cabinet and place it on the plate
+INFO:root:Starting episode 10...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 50
+INFO:root:# successes: 50 (100.0%)
+
+100%|██████████| 10/10 [01:14<00:00,  7.45s/it][A100%|██████████| 10/10 [01:14<00:00,  7.49s/it]
+INFO:root:Current task success rate: 1.0
+INFO:root:Current total success rate: 1.0
+ 50%|█████     | 5/10 [05:15<05:26, 65.40s/it][Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+[Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+
+  0%|          | 0/10 [00:00<?, ?it/s][AINFO:root:
+Task: pick up the black bowl on the ramekin and place it on the plate
+INFO:root:Starting episode 1...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 51
+INFO:root:# successes: 51 (100.0%)
+
+ 10%|█         | 1/10 [00:06<00:55,  6.11s/it][AINFO:root:
+Task: pick up the black bowl on the ramekin and place it on the plate
+INFO:root:Starting episode 2...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 52
+INFO:root:# successes: 52 (100.0%)
+
+ 20%|██        | 2/10 [00:12<00:48,  6.11s/it][AINFO:root:
+Task: pick up the black bowl on the ramekin and place it on the plate
+INFO:root:Starting episode 3...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 53
+INFO:root:# successes: 53 (100.0%)
+
+ 30%|███       | 3/10 [00:17<00:41,  5.92s/it][AINFO:root:
+Task: pick up the black bowl on the ramekin and place it on the plate
+INFO:root:Starting episode 4...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 54
+INFO:root:# successes: 54 (100.0%)
+
+ 40%|████      | 4/10 [00:23<00:34,  5.70s/it][AINFO:root:
+Task: pick up the black bowl on the ramekin and place it on the plate
+INFO:root:Starting episode 5...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 55
+INFO:root:# successes: 55 (100.0%)
+
+ 50%|█████     | 5/10 [00:29<00:28,  5.73s/it][AINFO:root:
+Task: pick up the black bowl on the ramekin and place it on the plate
+INFO:root:Starting episode 6...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 56
+INFO:root:# successes: 56 (100.0%)
+
+ 60%|██████    | 6/10 [00:35<00:23,  5.82s/it][AINFO:root:
+Task: pick up the black bowl on the ramekin and place it on the plate
+INFO:root:Starting episode 7...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 57
+INFO:root:# successes: 57 (100.0%)
+
+ 70%|███████   | 7/10 [00:40<00:16,  5.62s/it][AINFO:root:
+Task: pick up the black bowl on the ramekin and place it on the plate
+INFO:root:Starting episode 8...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 58
+INFO:root:# successes: 58 (100.0%)
+
+ 80%|████████  | 8/10 [00:45<00:11,  5.64s/it][AINFO:root:
+Task: pick up the black bowl on the ramekin and place it on the plate
+INFO:root:Starting episode 9...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 59
+INFO:root:# successes: 59 (100.0%)
+
+ 90%|█████████ | 9/10 [00:52<00:05,  5.91s/it][AINFO:root:
+Task: pick up the black bowl on the ramekin and place it on the plate
+INFO:root:Starting episode 10...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 60
+INFO:root:# successes: 60 (100.0%)
+
+100%|██████████| 10/10 [00:59<00:00,  6.13s/it][A100%|██████████| 10/10 [00:59<00:00,  5.91s/it]
+INFO:root:Current task success rate: 1.0
+INFO:root:Current total success rate: 1.0
+ 60%|██████    | 6/10 [06:15<04:14, 63.58s/it][Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+[Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+
+  0%|          | 0/10 [00:00<?, ?it/s][AINFO:root:
+Task: pick up the black bowl next to the cookie box and place it on the plate
+INFO:root:Starting episode 1...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 61
+INFO:root:# successes: 61 (100.0%)
+
+ 10%|█         | 1/10 [00:07<01:06,  7.44s/it][AINFO:root:
+Task: pick up the black bowl next to the cookie box and place it on the plate
+INFO:root:Starting episode 2...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 62
+INFO:root:# successes: 62 (100.0%)
+
+ 20%|██        | 2/10 [00:13<00:54,  6.85s/it][AINFO:root:
+Task: pick up the black bowl next to the cookie box and place it on the plate
+INFO:root:Starting episode 3...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 63
+INFO:root:# successes: 63 (100.0%)
+
+ 30%|███       | 3/10 [00:20<00:45,  6.56s/it][AINFO:root:
+Task: pick up the black bowl next to the cookie box and place it on the plate
+INFO:root:Starting episode 4...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 64
+INFO:root:# successes: 64 (100.0%)
+
+ 40%|████      | 4/10 [00:26<00:38,  6.42s/it][AINFO:root:
+Task: pick up the black bowl next to the cookie box and place it on the plate
+INFO:root:Starting episode 5...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 65
+INFO:root:# successes: 65 (100.0%)
+
+ 50%|█████     | 5/10 [00:33<00:32,  6.55s/it][AINFO:root:
+Task: pick up the black bowl next to the cookie box and place it on the plate
+INFO:root:Starting episode 6...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 66
+INFO:root:# successes: 66 (100.0%)
+
+ 60%|██████    | 6/10 [00:39<00:26,  6.60s/it][AINFO:root:
+Task: pick up the black bowl next to the cookie box and place it on the plate
+INFO:root:Starting episode 7...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 67
+INFO:root:# successes: 67 (100.0%)
+
+ 70%|███████   | 7/10 [00:46<00:19,  6.49s/it][AINFO:root:
+Task: pick up the black bowl next to the cookie box and place it on the plate
+INFO:root:Starting episode 8...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 68
+INFO:root:# successes: 68 (100.0%)
+
+ 80%|████████  | 8/10 [00:52<00:12,  6.43s/it][AINFO:root:
+Task: pick up the black bowl next to the cookie box and place it on the plate
+INFO:root:Starting episode 9...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 69
+INFO:root:# successes: 69 (100.0%)
+
+ 90%|█████████ | 9/10 [00:58<00:06,  6.49s/it][AINFO:root:
+Task: pick up the black bowl next to the cookie box and place it on the plate
+INFO:root:Starting episode 10...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 70
+INFO:root:# successes: 70 (100.0%)
+
+100%|██████████| 10/10 [01:05<00:00,  6.61s/it][A100%|██████████| 10/10 [01:05<00:00,  6.58s/it]
+INFO:root:Current task success rate: 1.0
+INFO:root:Current total success rate: 1.0
+ 70%|███████   | 7/10 [07:22<03:14, 64.70s/it][Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+[Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+
+  0%|          | 0/10 [00:00<?, ?it/s][AINFO:root:
+Task: pick up the black bowl on the stove and place it on the plate
+INFO:root:Starting episode 1...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 71
+INFO:root:# successes: 71 (100.0%)
+
+ 10%|█         | 1/10 [00:07<01:06,  7.34s/it][AINFO:root:
+Task: pick up the black bowl on the stove and place it on the plate
+INFO:root:Starting episode 2...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 72
+INFO:root:# successes: 72 (100.0%)
+
+ 20%|██        | 2/10 [00:14<00:58,  7.36s/it][AINFO:root:
+Task: pick up the black bowl on the stove and place it on the plate
+INFO:root:Starting episode 3...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 73
+INFO:root:# successes: 73 (100.0%)
+
+ 30%|███       | 3/10 [00:21<00:50,  7.27s/it][AINFO:root:
+Task: pick up the black bowl on the stove and place it on the plate
+INFO:root:Starting episode 4...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 74
+INFO:root:# successes: 74 (100.0%)
+
+ 40%|████      | 4/10 [00:28<00:42,  7.13s/it][AINFO:root:
+Task: pick up the black bowl on the stove and place it on the plate
+INFO:root:Starting episode 5...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 75
+INFO:root:# successes: 75 (100.0%)
+
+ 50%|█████     | 5/10 [00:36<00:36,  7.24s/it][AINFO:root:
+Task: pick up the black bowl on the stove and place it on the plate
+INFO:root:Starting episode 6...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 76
+INFO:root:# successes: 76 (100.0%)
+
+ 60%|██████    | 6/10 [00:45<00:31,  7.79s/it][AINFO:root:
+Task: pick up the black bowl on the stove and place it on the plate
+INFO:root:Starting episode 7...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 77
+INFO:root:# successes: 77 (100.0%)
+
+ 70%|███████   | 7/10 [00:52<00:23,  7.70s/it][AINFO:root:
+Task: pick up the black bowl on the stove and place it on the plate
+INFO:root:Starting episode 8...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 78
+INFO:root:# successes: 78 (100.0%)
+
+ 80%|████████  | 8/10 [01:00<00:15,  7.61s/it][AINFO:root:
+Task: pick up the black bowl on the stove and place it on the plate
+INFO:root:Starting episode 9...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 79
+INFO:root:# successes: 79 (100.0%)
+
+ 90%|█████████ | 9/10 [01:08<00:07,  7.81s/it][AINFO:root:
+Task: pick up the black bowl on the stove and place it on the plate
+INFO:root:Starting episode 10...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 80
+INFO:root:# successes: 80 (100.0%)
+
+100%|██████████| 10/10 [01:15<00:00,  7.75s/it][A100%|██████████| 10/10 [01:15<00:00,  7.59s/it]
+INFO:root:Current task success rate: 1.0
+INFO:root:Current total success rate: 1.0
+ 80%|████████  | 8/10 [08:39<02:17, 68.58s/it][Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+[Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+
+  0%|          | 0/10 [00:00<?, ?it/s][AINFO:root:
+Task: pick up the black bowl next to the plate and place it on the plate
+INFO:root:Starting episode 1...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 81
+INFO:root:# successes: 81 (100.0%)
+
+ 10%|█         | 1/10 [00:05<00:53,  5.97s/it][AINFO:root:
+Task: pick up the black bowl next to the plate and place it on the plate
+INFO:root:Starting episode 2...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 82
+INFO:root:# successes: 82 (100.0%)
+
+ 20%|██        | 2/10 [00:11<00:47,  5.90s/it][AINFO:root:
+Task: pick up the black bowl next to the plate and place it on the plate
+INFO:root:Starting episode 3...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 83
+INFO:root:# successes: 83 (100.0%)
+
+ 30%|███       | 3/10 [00:17<00:39,  5.66s/it][AINFO:root:
+Task: pick up the black bowl next to the plate and place it on the plate
+INFO:root:Starting episode 4...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 84
+INFO:root:# successes: 84 (100.0%)
+
+ 40%|████      | 4/10 [00:22<00:34,  5.71s/it][AINFO:root:
+Task: pick up the black bowl next to the plate and place it on the plate
+INFO:root:Starting episode 5...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 85
+INFO:root:# successes: 85 (100.0%)
+
+ 50%|█████     | 5/10 [00:29<00:29,  5.84s/it][AINFO:root:
+Task: pick up the black bowl next to the plate and place it on the plate
+INFO:root:Starting episode 6...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 86
+INFO:root:# successes: 86 (100.0%)
+
+ 60%|██████    | 6/10 [00:34<00:23,  5.87s/it][AINFO:root:
+Task: pick up the black bowl next to the plate and place it on the plate
+INFO:root:Starting episode 7...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 87
+INFO:root:# successes: 87 (100.0%)
+
+ 70%|███████   | 7/10 [00:41<00:17,  5.95s/it][AINFO:root:
+Task: pick up the black bowl next to the plate and place it on the plate
+INFO:root:Starting episode 8...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 88
+INFO:root:# successes: 88 (100.0%)
+
+ 80%|████████  | 8/10 [00:46<00:11,  5.75s/it][AINFO:root:
+Task: pick up the black bowl next to the plate and place it on the plate
+INFO:root:Starting episode 9...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 89
+INFO:root:# successes: 89 (100.0%)
+
+ 90%|█████████ | 9/10 [00:53<00:06,  6.01s/it][AINFO:root:
+Task: pick up the black bowl next to the plate and place it on the plate
+INFO:root:Starting episode 10...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 90
+INFO:root:# successes: 90 (100.0%)
+
+100%|██████████| 10/10 [00:58<00:00,  5.95s/it][A100%|██████████| 10/10 [00:58<00:00,  5.88s/it]
+INFO:root:Current task success rate: 1.0
+INFO:root:Current total success rate: 1.0
+ 90%|█████████ | 9/10 [09:39<01:05, 65.86s/it][Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+[Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+
+  0%|          | 0/10 [00:00<?, ?it/s][AINFO:root:
+Task: pick up the black bowl on the wooden cabinet and place it on the plate
+INFO:root:Starting episode 1...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 91
+INFO:root:# successes: 91 (100.0%)
+
+ 10%|█         | 1/10 [00:06<01:01,  6.83s/it][AINFO:root:
+Task: pick up the black bowl on the wooden cabinet and place it on the plate
+INFO:root:Starting episode 2...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 92
+INFO:root:# successes: 92 (100.0%)
+
+ 20%|██        | 2/10 [00:13<00:53,  6.67s/it][AINFO:root:
+Task: pick up the black bowl on the wooden cabinet and place it on the plate
+INFO:root:Starting episode 3...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 93
+INFO:root:# successes: 93 (100.0%)
+
+ 30%|███       | 3/10 [00:20<00:47,  6.73s/it][AINFO:root:
+Task: pick up the black bowl on the wooden cabinet and place it on the plate
+INFO:root:Starting episode 4...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 94
+INFO:root:# successes: 94 (100.0%)
+
+ 40%|████      | 4/10 [00:26<00:39,  6.63s/it][AINFO:root:
+Task: pick up the black bowl on the wooden cabinet and place it on the plate
+INFO:root:Starting episode 5...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 95
+INFO:root:# successes: 95 (100.0%)
+
+ 50%|█████     | 5/10 [00:33<00:33,  6.72s/it][AINFO:root:
+Task: pick up the black bowl on the wooden cabinet and place it on the plate
+INFO:root:Starting episode 6...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 96
+INFO:root:# successes: 96 (100.0%)
+
+ 60%|██████    | 6/10 [00:40<00:27,  6.86s/it][AINFO:root:
+Task: pick up the black bowl on the wooden cabinet and place it on the plate
+INFO:root:Starting episode 7...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 97
+INFO:root:# successes: 97 (100.0%)
+
+ 70%|███████   | 7/10 [00:48<00:21,  7.06s/it][AINFO:root:
+Task: pick up the black bowl on the wooden cabinet and place it on the plate
+INFO:root:Starting episode 8...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 98
+INFO:root:# successes: 98 (100.0%)
+
+ 80%|████████  | 8/10 [00:55<00:14,  7.23s/it][AINFO:root:
+Task: pick up the black bowl on the wooden cabinet and place it on the plate
+INFO:root:Starting episode 9...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 99
+INFO:root:# successes: 99 (100.0%)
+
+ 90%|█████████ | 9/10 [01:02<00:07,  7.11s/it][AINFO:root:
+Task: pick up the black bowl on the wooden cabinet and place it on the plate
+INFO:root:Starting episode 10...
+INFO:root:Success: True
+INFO:root:# episodes completed so far: 100
+INFO:root:# successes: 100 (100.0%)
+
+100%|██████████| 10/10 [01:09<00:00,  7.07s/it][A100%|██████████| 10/10 [01:09<00:00,  6.96s/it]
+INFO:root:Current task success rate: 1.0
+INFO:root:Current total success rate: 1.0
+100%|██████████| 10/10 [10:50<00:00, 67.33s/it]100%|██████████| 10/10 [10:50<00:00, 65.02s/it]
+INFO:root:Total success rate: 1.0
+INFO:root:Total episodes: 100
+Exception ignored in: <function MjRenderContext.__del__ at 0x70fa0bdc1280>
+Traceback (most recent call last):
+  File "<repo>/third_party/openpi/examples/libero/.venv/lib/python3.8/site-packages/robosuite/utils/binding_utils.py", line 199, in __del__
+    self.gl_ctx.free()
+  File "<repo>/third_party/openpi/examples/libero/.venv/lib/python3.8/site-packages/robosuite/renderers/context/egl_context.py", line 149, in free
+    EGL.eglMakeCurrent(EGL_DISPLAY, EGL.EGL_NO_SURFACE, EGL.EGL_NO_SURFACE, EGL.EGL_NO_CONTEXT)
+  File "<repo>/third_party/openpi/examples/libero/.venv/lib/python3.8/site-packages/OpenGL/error.py", line 230, in glCheckError
+    raise self._errorClass(
+OpenGL.raw.EGL._errors.EGLError: EGLError(
+	err = EGL_NOT_INITIALIZED,
+	baseOperation = eglMakeCurrent,
+	cArguments = (
+		<OpenGL._opaque.EGLDisplay_pointer object at 0x70f9fe65c740>,
+		<OpenGL._opaque.EGLSurface_pointer object at 0x70fa0be907c0>,
+		<OpenGL._opaque.EGLSurface_pointer object at 0x70fa0be907c0>,
+		<OpenGL._opaque.EGLContext_pointer object at 0x70fa0be90440>,
+	),
+	result = 0
+)
+Exception ignored in: <function EGLGLContext.__del__ at 0x70fa0bdc10d0>
+Traceback (most recent call last):
+  File "<repo>/third_party/openpi/examples/libero/.venv/lib/python3.8/site-packages/robosuite/renderers/context/egl_context.py", line 155, in __del__
+    self.free()
+  File "<repo>/third_party/openpi/examples/libero/.venv/lib/python3.8/site-packages/robosuite/renderers/context/egl_context.py", line 149, in free
+    EGL.eglMakeCurrent(EGL_DISPLAY, EGL.EGL_NO_SURFACE, EGL.EGL_NO_SURFACE, EGL.EGL_NO_CONTEXT)
+  File "<repo>/third_party/openpi/examples/libero/.venv/lib/python3.8/site-packages/OpenGL/error.py", line 230, in glCheckError
+    raise self._errorClass(
+OpenGL.raw.EGL._errors.EGLError: EGLError(
+	err = EGL_NOT_INITIALIZED,
+	baseOperation = eglMakeCurrent,
+	cArguments = (
+		<OpenGL._opaque.EGLDisplay_pointer object at 0x70f9fe65c740>,
+		<OpenGL._opaque.EGLSurface_pointer object at 0x70fa0be907c0>,
+		<OpenGL._opaque.EGLSurface_pointer object at 0x70fa0be907c0>,
+		<OpenGL._opaque.EGLContext_pointer object at 0x70fa0be90440>,
+	),
+	result = 0
+)

@@ -1,0 +1,249 @@
+[robosuite WARNING] No private macro file found! (macros.py:53)
+[robosuite WARNING] It is recommended to use a private macro file (macros.py:54)
+[robosuite WARNING] To setup, run: python <repo>/third_party/openpi/examples/libero/.venv/lib/python3.8/site-packages/robosuite/scripts/setup_macros.py (macros.py:55)
+INFO:root:Task suite: libero_10
+INFO:root:Waiting for server at ws://0.0.0.0:8000...
+[info] using task orders [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+  0%|          | 0/10 [00:00<?, ?it/s]<repo>/third_party/openpi/examples/libero/.venv/lib/python3.8/site-packages/numba/np/arraymath.py:3845: DeprecationWarning: `np.MachAr` is deprecated (NumPy 1.22).
+  @overload(np.MachAr)
+[Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+[Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+
+  0%|          | 0/2 [00:00<?, ?it/s][AINFO:root:
+Task: put both the alphabet soup and the tomato sauce in the basket
+INFO:root:Starting episode 1...
+INFO:root:Success: False
+INFO:root:# episodes completed so far: 1
+INFO:root:# successes: 0 (0.0%)
+
+ 50%|█████     | 1/2 [00:33<00:33, 33.90s/it][AINFO:root:
+Task: put both the alphabet soup and the tomato sauce in the basket
+INFO:root:Starting episode 2...
+INFO:root:Success: False
+INFO:root:# episodes completed so far: 2
+INFO:root:# successes: 0 (0.0%)
+
+100%|██████████| 2/2 [00:59<00:00, 29.19s/it][A100%|██████████| 2/2 [00:59<00:00, 29.89s/it]
+INFO:root:Current task success rate: 0.0
+INFO:root:Current total success rate: 0.0
+ 10%|█         | 1/10 [01:01<09:13, 61.47s/it][Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+[Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+
+  0%|          | 0/2 [00:00<?, ?it/s][AINFO:root:
+Task: put both the cream cheese box and the butter in the basket
+INFO:root:Starting episode 1...
+INFO:root:Success: False
+INFO:root:# episodes completed so far: 3
+INFO:root:# successes: 0 (0.0%)
+
+ 50%|█████     | 1/2 [00:27<00:27, 27.38s/it][AINFO:root:
+Task: put both the cream cheese box and the butter in the basket
+INFO:root:Starting episode 2...
+INFO:root:Success: False
+INFO:root:# episodes completed so far: 4
+INFO:root:# successes: 0 (0.0%)
+
+100%|██████████| 2/2 [00:55<00:00, 27.78s/it][A100%|██████████| 2/2 [00:55<00:00, 27.72s/it]
+INFO:root:Current task success rate: 0.0
+INFO:root:Current total success rate: 0.0
+ 20%|██        | 2/10 [01:57<07:48, 58.50s/it][Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+[Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+
+  0%|          | 0/2 [00:00<?, ?it/s][AINFO:root:
+Task: turn on the stove and put the moka pot on it
+INFO:root:Starting episode 1...
+INFO:root:Success: False
+INFO:root:# episodes completed so far: 5
+INFO:root:# successes: 0 (0.0%)
+
+ 50%|█████     | 1/2 [00:26<00:26, 26.84s/it][AINFO:root:
+Task: turn on the stove and put the moka pot on it
+INFO:root:Starting episode 2...
+INFO:root:Success: False
+INFO:root:# episodes completed so far: 6
+INFO:root:# successes: 0 (0.0%)
+
+100%|██████████| 2/2 [00:53<00:00, 26.76s/it][A100%|██████████| 2/2 [00:53<00:00, 26.77s/it]
+INFO:root:Current task success rate: 0.0
+INFO:root:Current total success rate: 0.0
+ 30%|███       | 3/10 [02:51<06:35, 56.48s/it][Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+[Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+
+  0%|          | 0/2 [00:00<?, ?it/s][AINFO:root:
+Task: put the black bowl in the bottom drawer of the cabinet and close it
+INFO:root:Starting episode 1...
+INFO:root:Success: False
+INFO:root:# episodes completed so far: 7
+INFO:root:# successes: 0 (0.0%)
+
+ 50%|█████     | 1/2 [00:25<00:25, 25.51s/it][AINFO:root:
+Task: put the black bowl in the bottom drawer of the cabinet and close it
+INFO:root:Starting episode 2...
+INFO:root:Success: False
+INFO:root:# episodes completed so far: 8
+INFO:root:# successes: 0 (0.0%)
+
+100%|██████████| 2/2 [00:51<00:00, 25.65s/it][A100%|██████████| 2/2 [00:51<00:00, 25.63s/it]
+INFO:root:Current task success rate: 0.0
+INFO:root:Current total success rate: 0.0
+ 40%|████      | 4/10 [03:44<05:28, 54.78s/it][Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+[Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+
+  0%|          | 0/2 [00:00<?, ?it/s][AINFO:root:
+Task: put the white mug on the left plate and put the yellow and white mug on the right plate
+INFO:root:Starting episode 1...
+INFO:root:Success: False
+INFO:root:# episodes completed so far: 9
+INFO:root:# successes: 0 (0.0%)
+
+ 50%|█████     | 1/2 [00:26<00:26, 26.54s/it][AINFO:root:
+Task: put the white mug on the left plate and put the yellow and white mug on the right plate
+INFO:root:Starting episode 2...
+INFO:root:Success: False
+INFO:root:# episodes completed so far: 10
+INFO:root:# successes: 0 (0.0%)
+
+100%|██████████| 2/2 [00:49<00:00, 24.43s/it][A100%|██████████| 2/2 [00:49<00:00, 24.75s/it]
+INFO:root:Current task success rate: 0.0
+INFO:root:Current total success rate: 0.0
+ 50%|█████     | 5/10 [04:35<04:28, 53.71s/it][Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+[Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+
+  0%|          | 0/2 [00:00<?, ?it/s][AINFO:root:
+Task: pick up the book and place it in the back compartment of the caddy
+INFO:root:Starting episode 1...
+INFO:root:Success: False
+INFO:root:# episodes completed so far: 11
+INFO:root:# successes: 0 (0.0%)
+
+ 50%|█████     | 1/2 [00:18<00:18, 18.90s/it][AINFO:root:
+Task: pick up the book and place it in the back compartment of the caddy
+INFO:root:Starting episode 2...
+INFO:root:Success: False
+INFO:root:# episodes completed so far: 12
+INFO:root:# successes: 0 (0.0%)
+
+100%|██████████| 2/2 [00:34<00:00, 16.91s/it][A100%|██████████| 2/2 [00:34<00:00, 17.20s/it]
+INFO:root:Current task success rate: 0.0
+INFO:root:Current total success rate: 0.0
+ 60%|██████    | 6/10 [05:11<03:09, 47.50s/it][Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+[Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+
+  0%|          | 0/2 [00:00<?, ?it/s][AINFO:root:
+Task: put the white mug on the plate and put the chocolate pudding to the right of the plate
+INFO:root:Starting episode 1...
+INFO:root:Success: False
+INFO:root:# episodes completed so far: 13
+INFO:root:# successes: 0 (0.0%)
+
+ 50%|█████     | 1/2 [00:11<00:11, 11.13s/it][AINFO:root:
+Task: put the white mug on the plate and put the chocolate pudding to the right of the plate
+INFO:root:Starting episode 2...
+INFO:root:Success: False
+INFO:root:# episodes completed so far: 14
+INFO:root:# successes: 0 (0.0%)
+
+100%|██████████| 2/2 [00:22<00:00, 11.18s/it][A100%|██████████| 2/2 [00:22<00:00, 11.17s/it]
+INFO:root:Current task success rate: 0.0
+INFO:root:Current total success rate: 0.0
+ 70%|███████   | 7/10 [05:34<01:58, 39.52s/it][Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+[Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+
+  0%|          | 0/2 [00:00<?, ?it/s][AINFO:root:
+Task: put both the alphabet soup and the cream cheese box in the basket
+INFO:root:Starting episode 1...
+INFO:root:Success: False
+INFO:root:# episodes completed so far: 15
+INFO:root:# successes: 0 (0.0%)
+
+ 50%|█████     | 1/2 [00:10<00:10, 10.90s/it][AINFO:root:
+Task: put both the alphabet soup and the cream cheese box in the basket
+INFO:root:Starting episode 2...
+INFO:root:Success: False
+INFO:root:# episodes completed so far: 16
+INFO:root:# successes: 0 (0.0%)
+
+100%|██████████| 2/2 [00:21<00:00, 10.86s/it][A100%|██████████| 2/2 [00:21<00:00, 10.87s/it]
+INFO:root:Current task success rate: 0.0
+INFO:root:Current total success rate: 0.0
+ 80%|████████  | 8/10 [05:56<01:08, 34.05s/it][Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+[Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+
+  0%|          | 0/2 [00:00<?, ?it/s][AINFO:root:
+Task: put both moka pots on the stove
+INFO:root:Starting episode 1...
+INFO:root:Success: False
+INFO:root:# episodes completed so far: 17
+INFO:root:# successes: 0 (0.0%)
+
+ 50%|█████     | 1/2 [00:10<00:10, 10.83s/it][AINFO:root:
+Task: put both moka pots on the stove
+INFO:root:Starting episode 2...
+INFO:root:Success: False
+INFO:root:# episodes completed so far: 18
+INFO:root:# successes: 0 (0.0%)
+
+100%|██████████| 2/2 [00:21<00:00, 10.85s/it][A100%|██████████| 2/2 [00:21<00:00, 10.84s/it]
+INFO:root:Current task success rate: 0.0
+INFO:root:Current total success rate: 0.0
+ 90%|█████████ | 9/10 [06:18<00:30, 30.28s/it][Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+[Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+
+  0%|          | 0/2 [00:00<?, ?it/s][AINFO:root:
+Task: put the yellow and white mug in the microwave and close it
+INFO:root:Starting episode 1...
+INFO:root:Success: False
+INFO:root:# episodes completed so far: 19
+INFO:root:# successes: 0 (0.0%)
+
+ 50%|█████     | 1/2 [00:10<00:10, 10.94s/it][AINFO:root:
+Task: put the yellow and white mug in the microwave and close it
+INFO:root:Starting episode 2...
+INFO:root:Success: False
+INFO:root:# episodes completed so far: 20
+INFO:root:# successes: 0 (0.0%)
+
+100%|██████████| 2/2 [00:21<00:00, 10.89s/it][A100%|██████████| 2/2 [00:21<00:00, 10.90s/it]
+INFO:root:Current task success rate: 0.0
+INFO:root:Current total success rate: 0.0
+100%|██████████| 10/10 [06:41<00:00, 27.81s/it]100%|██████████| 10/10 [06:41<00:00, 40.11s/it]
+INFO:root:Total success rate: 0.0
+INFO:root:Total episodes: 20
+Exception ignored in: <function MjRenderContext.__del__ at 0x7fb0bceea280>
+Traceback (most recent call last):
+  File "<repo>/third_party/openpi/examples/libero/.venv/lib/python3.8/site-packages/robosuite/utils/binding_utils.py", line 199, in __del__
+    self.gl_ctx.free()
+  File "<repo>/third_party/openpi/examples/libero/.venv/lib/python3.8/site-packages/robosuite/renderers/context/egl_context.py", line 149, in free
+    EGL.eglMakeCurrent(EGL_DISPLAY, EGL.EGL_NO_SURFACE, EGL.EGL_NO_SURFACE, EGL.EGL_NO_CONTEXT)
+  File "<repo>/third_party/openpi/examples/libero/.venv/lib/python3.8/site-packages/OpenGL/error.py", line 230, in glCheckError
+    raise self._errorClass(
+OpenGL.raw.EGL._errors.EGLError: EGLError(
+	err = EGL_NOT_INITIALIZED,
+	baseOperation = eglMakeCurrent,
+	cArguments = (
+		<OpenGL._opaque.EGLDisplay_pointer object at 0x7fafd17cc540>,
+		<OpenGL._opaque.EGLSurface_pointer object at 0x7fb0bcfb8840>,
+		<OpenGL._opaque.EGLSurface_pointer object at 0x7fb0bcfb8840>,
+		<OpenGL._opaque.EGLContext_pointer object at 0x7fb0bcfb84c0>,
+	),
+	result = 0
+)
+Exception ignored in: <function EGLGLContext.__del__ at 0x7fb0bceea0d0>
+Traceback (most recent call last):
+  File "<repo>/third_party/openpi/examples/libero/.venv/lib/python3.8/site-packages/robosuite/renderers/context/egl_context.py", line 155, in __del__
+    self.free()
+  File "<repo>/third_party/openpi/examples/libero/.venv/lib/python3.8/site-packages/robosuite/renderers/context/egl_context.py", line 149, in free
+    EGL.eglMakeCurrent(EGL_DISPLAY, EGL.EGL_NO_SURFACE, EGL.EGL_NO_SURFACE, EGL.EGL_NO_CONTEXT)
+  File "<repo>/third_party/openpi/examples/libero/.venv/lib/python3.8/site-packages/OpenGL/error.py", line 230, in glCheckError
+    raise self._errorClass(
+OpenGL.raw.EGL._errors.EGLError: EGLError(
+	err = EGL_NOT_INITIALIZED,
+	baseOperation = eglMakeCurrent,
+	cArguments = (
+		<OpenGL._opaque.EGLDisplay_pointer object at 0x7fafd17cc540>,
+		<OpenGL._opaque.EGLSurface_pointer object at 0x7fb0bcfb8840>,
+		<OpenGL._opaque.EGLSurface_pointer object at 0x7fb0bcfb8840>,
+		<OpenGL._opaque.EGLContext_pointer object at 0x7fb0bcfb84c0>,
+	),
+	result = 0
+)

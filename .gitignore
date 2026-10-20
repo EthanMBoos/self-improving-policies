@@ -1,0 +1,6 @@
+# Model checkpoints (~25 GB, re-download with scripts / openpi)
+checkpoints/
+# External code (openpi + its LIBERO submodule)
+third_party/
+# Eval outputs (videos, logs)
+outputs/

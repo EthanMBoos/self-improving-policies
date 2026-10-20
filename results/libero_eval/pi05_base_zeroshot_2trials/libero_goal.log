@@ -1,0 +1,249 @@
+[robosuite WARNING] No private macro file found! (macros.py:53)
+[robosuite WARNING] It is recommended to use a private macro file (macros.py:54)
+[robosuite WARNING] To setup, run: python <repo>/third_party/openpi/examples/libero/.venv/lib/python3.8/site-packages/robosuite/scripts/setup_macros.py (macros.py:55)
+INFO:root:Task suite: libero_goal
+INFO:root:Waiting for server at ws://0.0.0.0:8000...
+[info] using task orders [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+  0%|          | 0/10 [00:00<?, ?it/s]<repo>/third_party/openpi/examples/libero/.venv/lib/python3.8/site-packages/numba/np/arraymath.py:3845: DeprecationWarning: `np.MachAr` is deprecated (NumPy 1.22).
+  @overload(np.MachAr)
+[Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+[Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+
+  0%|          | 0/2 [00:00<?, ?it/s][AINFO:root:
+Task: open the middle drawer of the cabinet
+INFO:root:Starting episode 1...
+INFO:root:Success: False
+INFO:root:# episodes completed so far: 1
+INFO:root:# successes: 0 (0.0%)
+
+ 50%|█████     | 1/2 [00:23<00:23, 23.52s/it][AINFO:root:
+Task: open the middle drawer of the cabinet
+INFO:root:Starting episode 2...
+INFO:root:Success: False
+INFO:root:# episodes completed so far: 2
+INFO:root:# successes: 0 (0.0%)
+
+100%|██████████| 2/2 [00:38<00:00, 18.68s/it][A100%|██████████| 2/2 [00:38<00:00, 19.40s/it]
+INFO:root:Current task success rate: 0.0
+INFO:root:Current total success rate: 0.0
+ 10%|█         | 1/10 [00:40<06:01, 40.19s/it][Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+[Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+
+  0%|          | 0/2 [00:00<?, ?it/s][AINFO:root:
+Task: put the bowl on the stove
+INFO:root:Starting episode 1...
+INFO:root:Success: False
+INFO:root:# episodes completed so far: 3
+INFO:root:# successes: 0 (0.0%)
+
+ 50%|█████     | 1/2 [00:15<00:15, 15.97s/it][AINFO:root:
+Task: put the bowl on the stove
+INFO:root:Starting episode 2...
+INFO:root:Success: False
+INFO:root:# episodes completed so far: 4
+INFO:root:# successes: 0 (0.0%)
+
+100%|██████████| 2/2 [00:31<00:00, 15.81s/it][A100%|██████████| 2/2 [00:31<00:00, 15.83s/it]
+INFO:root:Current task success rate: 0.0
+INFO:root:Current total success rate: 0.0
+ 20%|██        | 2/10 [01:12<04:45, 35.66s/it][Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+[Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+
+  0%|          | 0/2 [00:00<?, ?it/s][AINFO:root:
+Task: put the wine bottle on top of the cabinet
+INFO:root:Starting episode 1...
+INFO:root:Success: False
+INFO:root:# episodes completed so far: 5
+INFO:root:# successes: 0 (0.0%)
+
+ 50%|█████     | 1/2 [00:16<00:16, 16.31s/it][AINFO:root:
+Task: put the wine bottle on top of the cabinet
+INFO:root:Starting episode 2...
+INFO:root:Success: False
+INFO:root:# episodes completed so far: 6
+INFO:root:# successes: 0 (0.0%)
+
+100%|██████████| 2/2 [00:32<00:00, 16.50s/it][A100%|██████████| 2/2 [00:32<00:00, 16.47s/it]
+INFO:root:Current task success rate: 0.0
+INFO:root:Current total success rate: 0.0
+ 30%|███       | 3/10 [01:46<04:03, 34.78s/it][Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+[Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+
+  0%|          | 0/2 [00:00<?, ?it/s][AINFO:root:
+Task: open the top drawer and put the bowl inside
+INFO:root:Starting episode 1...
+INFO:root:Success: False
+INFO:root:# episodes completed so far: 7
+INFO:root:# successes: 0 (0.0%)
+
+ 50%|█████     | 1/2 [00:16<00:16, 16.41s/it][AINFO:root:
+Task: open the top drawer and put the bowl inside
+INFO:root:Starting episode 2...
+INFO:root:Success: False
+INFO:root:# episodes completed so far: 8
+INFO:root:# successes: 0 (0.0%)
+
+100%|██████████| 2/2 [00:32<00:00, 16.49s/it][A100%|██████████| 2/2 [00:32<00:00, 16.47s/it]
+INFO:root:Current task success rate: 0.0
+INFO:root:Current total success rate: 0.0
+ 40%|████      | 4/10 [02:20<03:26, 34.37s/it][Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+[Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+
+  0%|          | 0/2 [00:00<?, ?it/s][AINFO:root:
+Task: put the bowl on top of the cabinet
+INFO:root:Starting episode 1...
+INFO:root:Success: False
+INFO:root:# episodes completed so far: 9
+INFO:root:# successes: 0 (0.0%)
+
+ 50%|█████     | 1/2 [00:16<00:16, 16.65s/it][AINFO:root:
+Task: put the bowl on top of the cabinet
+INFO:root:Starting episode 2...
+INFO:root:Success: False
+INFO:root:# episodes completed so far: 10
+INFO:root:# successes: 0 (0.0%)
+
+100%|██████████| 2/2 [00:32<00:00, 15.99s/it][A100%|██████████| 2/2 [00:32<00:00, 16.09s/it]
+INFO:root:Current task success rate: 0.0
+INFO:root:Current total success rate: 0.0
+ 50%|█████     | 5/10 [02:53<02:49, 33.86s/it][Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+[Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+
+  0%|          | 0/2 [00:00<?, ?it/s][AINFO:root:
+Task: push the plate to the front of the stove
+INFO:root:Starting episode 1...
+INFO:root:Success: False
+INFO:root:# episodes completed so far: 11
+INFO:root:# successes: 0 (0.0%)
+
+ 50%|█████     | 1/2 [00:15<00:15, 15.98s/it][AINFO:root:
+Task: push the plate to the front of the stove
+INFO:root:Starting episode 2...
+INFO:root:Success: False
+INFO:root:# episodes completed so far: 12
+INFO:root:# successes: 0 (0.0%)
+
+100%|██████████| 2/2 [00:31<00:00, 15.64s/it][A100%|██████████| 2/2 [00:31<00:00, 15.69s/it]
+INFO:root:Current task success rate: 0.0
+INFO:root:Current total success rate: 0.0
+ 60%|██████    | 6/10 [03:25<02:13, 33.29s/it][Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+[Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+
+  0%|          | 0/2 [00:00<?, ?it/s][AINFO:root:
+Task: put the cream cheese in the bowl
+INFO:root:Starting episode 1...
+INFO:root:Success: False
+INFO:root:# episodes completed so far: 13
+INFO:root:# successes: 0 (0.0%)
+
+ 50%|█████     | 1/2 [00:15<00:15, 15.63s/it][AINFO:root:
+Task: put the cream cheese in the bowl
+INFO:root:Starting episode 2...
+INFO:root:Success: False
+INFO:root:# episodes completed so far: 14
+INFO:root:# successes: 0 (0.0%)
+
+100%|██████████| 2/2 [00:29<00:00, 14.80s/it][A100%|██████████| 2/2 [00:29<00:00, 14.92s/it]
+INFO:root:Current task success rate: 0.0
+INFO:root:Current total success rate: 0.0
+ 70%|███████   | 7/10 [03:55<01:37, 32.44s/it][Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+[Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+
+  0%|          | 0/2 [00:00<?, ?it/s][AINFO:root:
+Task: turn on the stove
+INFO:root:Starting episode 1...
+INFO:root:Success: False
+INFO:root:# episodes completed so far: 15
+INFO:root:# successes: 0 (0.0%)
+
+ 50%|█████     | 1/2 [00:15<00:15, 15.29s/it][AINFO:root:
+Task: turn on the stove
+INFO:root:Starting episode 2...
+INFO:root:Success: False
+INFO:root:# episodes completed so far: 16
+INFO:root:# successes: 0 (0.0%)
+
+100%|██████████| 2/2 [00:29<00:00, 14.57s/it][A100%|██████████| 2/2 [00:29<00:00, 14.68s/it]
+INFO:root:Current task success rate: 0.0
+INFO:root:Current total success rate: 0.0
+ 80%|████████  | 8/10 [04:26<01:03, 31.73s/it][Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+[Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+
+  0%|          | 0/2 [00:00<?, ?it/s][AINFO:root:
+Task: put the bowl on the plate
+INFO:root:Starting episode 1...
+INFO:root:Success: False
+INFO:root:# episodes completed so far: 17
+INFO:root:# successes: 0 (0.0%)
+
+ 50%|█████     | 1/2 [00:11<00:11, 11.47s/it][AINFO:root:
+Task: put the bowl on the plate
+INFO:root:Starting episode 2...
+INFO:root:Success: False
+INFO:root:# episodes completed so far: 18
+INFO:root:# successes: 0 (0.0%)
+
+100%|██████████| 2/2 [00:23<00:00, 11.94s/it][A100%|██████████| 2/2 [00:23<00:00, 11.87s/it]
+INFO:root:Current task success rate: 0.0
+INFO:root:Current total success rate: 0.0
+ 90%|█████████ | 9/10 [04:50<00:29, 29.49s/it][Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+[Warning]: datasets path <repo>/third_party/openpi/third_party/libero/libero/libero/../datasets does not exist!
+
+  0%|          | 0/2 [00:00<?, ?it/s][AINFO:root:
+Task: put the wine bottle on the rack
+INFO:root:Starting episode 1...
+INFO:root:Success: False
+INFO:root:# episodes completed so far: 19
+INFO:root:# successes: 0 (0.0%)
+
+ 50%|█████     | 1/2 [00:11<00:11, 11.15s/it][AINFO:root:
+Task: put the wine bottle on the rack
+INFO:root:Starting episode 2...
+INFO:root:Success: False
+INFO:root:# episodes completed so far: 20
+INFO:root:# successes: 0 (0.0%)
+
+100%|██████████| 2/2 [00:19<00:00,  9.61s/it][A100%|██████████| 2/2 [00:19<00:00,  9.84s/it]
+INFO:root:Current task success rate: 0.0
+INFO:root:Current total success rate: 0.0
+100%|██████████| 10/10 [05:11<00:00, 26.72s/it]100%|██████████| 10/10 [05:11<00:00, 31.12s/it]
+INFO:root:Total success rate: 0.0
+INFO:root:Total episodes: 20
+Exception ignored in: <function MjRenderContext.__del__ at 0x7afc6223f280>
+Traceback (most recent call last):
+  File "<repo>/third_party/openpi/examples/libero/.venv/lib/python3.8/site-packages/robosuite/utils/binding_utils.py", line 199, in __del__
+    self.gl_ctx.free()
+  File "<repo>/third_party/openpi/examples/libero/.venv/lib/python3.8/site-packages/robosuite/renderers/context/egl_context.py", line 149, in free
+    EGL.eglMakeCurrent(EGL_DISPLAY, EGL.EGL_NO_SURFACE, EGL.EGL_NO_SURFACE, EGL.EGL_NO_CONTEXT)
+  File "<repo>/third_party/openpi/examples/libero/.venv/lib/python3.8/site-packages/OpenGL/error.py", line 230, in glCheckError
+    raise self._errorClass(
+OpenGL.raw.EGL._errors.EGLError: EGLError(
+	err = EGL_NOT_INITIALIZED,
+	baseOperation = eglMakeCurrent,
+	cArguments = (
+		<OpenGL._opaque.EGLDisplay_pointer object at 0x7afc4ff18940>,
+		<OpenGL._opaque.EGLSurface_pointer object at 0x7afc6230f840>,
+		<OpenGL._opaque.EGLSurface_pointer object at 0x7afc6230f840>,
+		<OpenGL._opaque.EGLContext_pointer object at 0x7afc6230f4c0>,
+	),
+	result = 0
+)
+Exception ignored in: <function EGLGLContext.__del__ at 0x7afc6223f0d0>
+Traceback (most recent call last):
+  File "<repo>/third_party/openpi/examples/libero/.venv/lib/python3.8/site-packages/robosuite/renderers/context/egl_context.py", line 155, in __del__
+    self.free()
+  File "<repo>/third_party/openpi/examples/libero/.venv/lib/python3.8/site-packages/robosuite/renderers/context/egl_context.py", line 149, in free
+    EGL.eglMakeCurrent(EGL_DISPLAY, EGL.EGL_NO_SURFACE, EGL.EGL_NO_SURFACE, EGL.EGL_NO_CONTEXT)
+  File "<repo>/third_party/openpi/examples/libero/.venv/lib/python3.8/site-packages/OpenGL/error.py", line 230, in glCheckError
+    raise self._errorClass(
+OpenGL.raw.EGL._errors.EGLError: EGLError(
+	err = EGL_NOT_INITIALIZED,
+	baseOperation = eglMakeCurrent,
+	cArguments = (
+		<OpenGL._opaque.EGLDisplay_pointer object at 0x7afc4ff18940>,
+		<OpenGL._opaque.EGLSurface_pointer object at 0x7afc6230f840>,
+		<OpenGL._opaque.EGLSurface_pointer object at 0x7afc6230f840>,
+		<OpenGL._opaque.EGLContext_pointer object at 0x7afc6230f4c0>,
+	),
+	result = 0
+)
