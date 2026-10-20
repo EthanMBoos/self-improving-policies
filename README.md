@@ -2,7 +2,7 @@
 
 Can a VLM grade the robot? We use vision-language models as reward models for self-improving robot policies:
 rejection-sampling fine-tuning of π0.5 in LIBERO, where the pass/fail label on each rollout comes from a VLM
-instead of the simulator.
+instead of the simulator. Full project proposal: [docs/DML_Project_Proposal.pdf](docs/DML_Project_Proposal.pdf).
 
 This branch covers the first pipeline step: getting the π0.5 checkpoints from
 [openpi](https://github.com/Physical-Intelligence/openpi) running in the LIBERO simulator and measuring baselines.
@@ -134,6 +134,7 @@ data pipeline and the LIBERO norm stats bundled with the `pi05_libero` checkpoin
 ## Repository layout
 
 ```
+docs/DML_Project_Proposal.pdf project proposal
 scripts/
   download_checkpoints.py     download + verify pi05 checkpoints from gs://openpi-assets
   setup_openpi.sh             clone openpi, build server/client envs, write LIBERO config
