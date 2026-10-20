@@ -17,8 +17,10 @@ Evaluated on one RTX 5090 with openpi's LIBERO eval client (`examples/libero/mai
 | π0.5-LIBERO, published by openpi | 50 | 98.8 | 98.2 | 98.0 | 92.4 | 96.85 |
 | π0.5-base (`pi05_base`), zero-shot | 2 | 0.0 | 0.0 | 0.0 | 0.0 | **0.0** |
 
-Each suite has 10 tasks, so 10 trials/task = 100 episodes per suite (roughly ±3 points). Per-task breakdowns and
-raw logs are in [results/libero_eval/](results/libero_eval/).
+Each suite has 10 tasks, so 10 trials/task = 100 episodes per suite (roughly ±3 points). Per-task breakdowns, raw
+logs and rollout videos (`videos_<suite>/`) are in [results/libero_eval/](results/libero_eval/). The openpi client
+keeps one video per task and outcome (`rollout_<task>_{success,failure}.mp4`), so each is the last episode with that
+outcome, not every episode.
 
 - **π0.5-LIBERO reproduces the published numbers.** Its weakest tasks are "put both moka pots on the stove" (6/10)
   and "open the top drawer and put the bowl inside" (8/10).
@@ -141,7 +143,7 @@ scripts/
   run_libero_eval.sh          run the LIBERO eval client on the four suites in parallel
   serve_pi05_base_zeroshot.py serve pi05_base with the LIBERO pipeline (zero-shot)
   summarize_libero.py         per-task / per-suite success rates from client logs
-results/libero_eval/          summaries + logs of the runs above
+results/libero_eval/          summaries, logs and rollout videos of the runs above
 checkpoints/                  (gitignored) model weights
 third_party/                  (gitignored) openpi + LIBERO + environments
 outputs/                      (gitignored) eval logs and videos
