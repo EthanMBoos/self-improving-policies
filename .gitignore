@@ -4,3 +4,12 @@ checkpoints/
 third_party/
 # Eval outputs (videos, logs)
 outputs/
+# Loop outputs (datasets, checkpoints, metrics per round)
+runs/
+# Claude Code and Claude-generated files: never pushed
+.claude/
+CLAUDE.local.md
+AGENTS.md
+docs/*.md
+docs/verification/
+docs/diagrams/
