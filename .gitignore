@@ -4,3 +4,5 @@ checkpoints/
 third_party/
 # Eval outputs (videos, logs)
 outputs/
+# Python caches
+__pycache__/

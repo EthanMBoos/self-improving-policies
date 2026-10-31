@@ -1,0 +1,50 @@
+
+== libero_spatial: 91/100 = 91.0%   mean steps (successes): 108
+    10/10  00 pick up the black bowl between the plate and the ramekin and place it on the plate
+    10/10  01 pick up the black bowl next to the ramekin and place it on the plate
+    10/10  02 pick up the black bowl from table center and place it on the plate
+    10/10  03 pick up the black bowl on the cookie box and place it on the plate
+     5/10  04 pick up the black bowl in the top drawer of the wooden cabinet and place it on the plate
+     9/10  05 pick up the black bowl on the ramekin and place it on the plate
+    10/10  06 pick up the black bowl next to the cookie box and place it on the plate
+     9/10  07 pick up the black bowl on the stove and place it on the plate
+     8/10  08 pick up the black bowl next to the plate and place it on the plate
+    10/10  09 pick up the black bowl on the wooden cabinet and place it on the plate
+
+== libero_object: 92/100 = 92.0%   mean steps (successes): 144
+     8/10  00 pick up the alphabet soup and place it in the basket
+    10/10  01 pick up the cream cheese and place it in the basket
+    10/10  02 pick up the salad dressing and place it in the basket
+     8/10  03 pick up the bbq sauce and place it in the basket
+    10/10  04 pick up the ketchup and place it in the basket
+     7/10  05 pick up the tomato sauce and place it in the basket
+    10/10  06 pick up the butter and place it in the basket
+     9/10  07 pick up the milk and place it in the basket
+    10/10  08 pick up the chocolate pudding and place it in the basket
+    10/10  09 pick up the orange juice and place it in the basket
+
+== libero_goal: 77/100 = 77.0%   mean steps (successes): 105
+     9/10  00 open the middle drawer of the cabinet
+    10/10  01 put the bowl on the stove
+     9/10  02 put the wine bottle on top of the cabinet
+     3/10  03 open the top drawer and put the bowl inside
+    10/10  04 put the bowl on top of the cabinet
+     7/10  05 push the plate to the front of the stove
+     7/10  06 put the cream cheese in the bowl
+    10/10  07 turn on the stove
+    10/10  08 put the bowl on the plate
+     2/10  09 put the wine bottle on the rack
+
+== libero_10: 65/100 = 65.0%   mean steps (successes): 271
+     7/10  00 put both the alphabet soup and the tomato sauce in the basket
+    10/10  01 put both the cream cheese box and the butter in the basket
+     6/10  02 turn on the stove and put the moka pot on it
+     7/10  03 put the black bowl in the bottom drawer of the cabinet and close it
+     4/10  04 put the white mug on the left plate and put the yellow and white mug on the right plate
+     8/10  05 pick up the book and place it in the back compartment of the caddy
+     9/10  06 put the white mug on the plate and put the chocolate pudding to the right of the plate
+     6/10  07 put both the alphabet soup and the cream cheese box in the basket
+     3/10  08 put both moka pots on the stove
+     5/10  09 put the yellow and white mug in the microwave and close it
+
+Average over suites: 81.2%   pooled: 325/400
