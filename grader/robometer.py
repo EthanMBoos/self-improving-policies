@@ -113,12 +113,17 @@ def main() -> None:
     p.add_argument("rollout_dir", type=pathlib.Path)
     p.add_argument("--config", required=True, type=pathlib.Path)
     p.add_argument("--camera", default=None, help="override the config's camera (video name without .mp4)")
+    p.add_argument("--model-dir", default=None, help="override the config's model_dir (e.g. checkpoints/Robometer-4B-fft-libero-infer)")
+    p.add_argument("--tag", default=None, help="name for the output file in --no-sidecar mode (default: the camera)")
     p.add_argument("--no-sidecar", action="store_true", help="only report agreement; write grader_out.<camera>.json")
     p.add_argument("--force", action="store_true", help="re-grade episodes that already have a score")
     args = p.parse_args()
     grader = LoopConfig.load(args.config).grader
     if args.camera:
         grader.camera = args.camera
+    if args.model_dir:
+        grader.model_dir = args.model_dir
+        grader.name = "robometer-" + pathlib.Path(args.model_dir).name.replace("-infer", "")
     rollout_dir = args.rollout_dir
     if not args.no_sidecar:
         updates = grade_rollouts(rollout_dir, grader, only_missing=not args.force)
@@ -130,13 +135,16 @@ def main() -> None:
     for m in lines:
         if not pathlib.Path(m[grader.camera]).exists():
             raise FileNotFoundError(m[grader.camera])
-    result = _run(lines, rollout_dir / f"grader_out.{grader.camera}.json", grader, rollout_dir / "grader.log")
+    tag = args.tag or grader.camera
+    result = _run(lines, rollout_dir / f"grader_out.{tag}.json", grader, rollout_dir / "grader.log")
     result.pop("__timing__", None)
     sim = [int(bool(r["sim_success"])) for r in records]
     scores = [float(result[r["id"]]["score"]) for r in records]
     sweep = metrics.threshold_sweep(sim, scores, sorted(set(grader.audit_thresholds) | {grader.threshold}))
     any_m = next(iter(sweep.values()))
-    summary = {"camera": grader.camera, "n": len(records), "auroc": any_m["auroc"], "brier": any_m["brier"],
+    progress = [float(result[r["id"]].get("final_progress") or 0.0) for r in records]
+    summary = {"model": grader.model_dir, "camera": grader.camera, "n": len(records), "auroc": any_m["auroc"],
+               "auroc_final_progress": metrics.auroc(progress, sim), "brier": any_m["brier"],
                "thresholds": {t: {k: m[k] for k in ("tp", "fp", "fn", "tn", "precision", "recall")} for t, m in sweep.items()}}
     print(json.dumps(summary, indent=2))
 
