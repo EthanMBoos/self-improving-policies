@@ -1,7 +1,7 @@
 """Robometer-4B as the grader: last-frame success probability per rollout, written into the sidecar.
 
 Runs anywhere with the standard library; the model itself runs in Robometer's own environment through
-grader/robometer_grade.py as a subprocess (one load per call, so grade whole directories, not single episodes).
+grader/programs/robometer_grade.py as a subprocess (one load per call, so grade whole directories, not single episodes).
 
     from grader.robometer import grade_rollouts, score
     grade_rollouts(pathlib.Path("runs/x/round_1/rollouts"), cfg.grader)   # fills grader_* fields in episodes_extra.jsonl
@@ -24,7 +24,9 @@ from rft import sidecar
 from rft.config import GraderSettings
 
 REPO = pathlib.Path(__file__).resolve().parent.parent
-GRADE_SCRIPT = REPO / "grader" / "robometer_grade.py"
+# The program lives in its own folder: Python puts a script's directory first on sys.path, and a sibling named
+# robometer.py (this file) would shadow the installed robometer package inside it.
+GRADE_SCRIPT = REPO / "grader" / "programs" / "robometer_grade.py"
 
 
 def _run(manifest_lines: list[dict], out_path: pathlib.Path, grader: GraderSettings, log_path: pathlib.Path) -> dict:

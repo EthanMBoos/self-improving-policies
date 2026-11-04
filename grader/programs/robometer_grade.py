@@ -1,5 +1,6 @@
 # Robometer-4B grader program. Copied from scripts/rl/graders/robometer_grade.py on branch stratos (commit 3db6273,
 # Efstratios Reppas, 2026-10-31) so both loops in this repository grade with one program. Unchanged except this header.
+# It sits in grader/programs/ so that `import robometer` below resolves to the installed package, not grader/robometer.py.
 """Robometer grader (run with Robometer's environment: third_party/robometer/.venv/bin/python).
 
 Reads a manifest of episodes (JSONL: id, task, agentview video path) and writes {id: {label, score, ...}}:
