@@ -13,3 +13,4 @@ AGENTS.md
 docs/*.md
 docs/verification/
 docs/diagrams/
+.DS_Store
