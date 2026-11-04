@@ -35,7 +35,7 @@ class GraderSettings:
     threshold: float = 0.65
     audit_thresholds: list[float] = dataclasses.field(default_factory=lambda: [0.5, 0.65, 0.85])
     max_frames: int = 8
-    camera: str = "agentview"
+    camera: str = "agentview_grader"  # Robometer's LIBERO training orientation; see scripts/make_grader_videos.py
     batch_size: int = 16
 
 

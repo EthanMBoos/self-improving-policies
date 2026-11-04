@@ -10,6 +10,10 @@ grader/programs/robometer_grade.py as a subprocess (one load per call, so grade 
 Fields written per episode: grader_name, grader_score (last-frame success probability), grader_label (score at or
 above the configured threshold), grader_final_progress, grader_max_success_prob. The per-frame curves go to
 <rollout_dir>/grader_curves.json for the false-positive gallery.
+
+Orientation: the grader scores <id>/<camera>.mp4; the default camera is agentview_grader, Robometer's LIBERO training
+orientation (see scripts/make_grader_videos.py). Command line, for comparing orientations without touching the sidecar:
+    python3 -m grader.robometer runs/x/round_1/rollouts --config configs/rft/x.json --camera agentview --no-sidecar
 """
 
 from __future__ import annotations
@@ -97,3 +101,45 @@ def score(video_path: pathlib.Path, instruction: str, grader: GraderSettings) ->
         result = _run([{"id": "one", "task": instruction, grader.camera: str(pathlib.Path(video_path).resolve())}],
                       out, grader, pathlib.Path(tmp) / "grader.log")
         return float(result["one"]["score"])
+
+
+def main() -> None:
+    import argparse
+
+    from rft import metrics
+    from rft.config import LoopConfig
+
+    p = argparse.ArgumentParser(description="grade a rollout directory with Robometer")
+    p.add_argument("rollout_dir", type=pathlib.Path)
+    p.add_argument("--config", required=True, type=pathlib.Path)
+    p.add_argument("--camera", default=None, help="override the config's camera (video name without .mp4)")
+    p.add_argument("--no-sidecar", action="store_true", help="only report agreement; write grader_out.<camera>.json")
+    p.add_argument("--force", action="store_true", help="re-grade episodes that already have a score")
+    args = p.parse_args()
+    grader = LoopConfig.load(args.config).grader
+    if args.camera:
+        grader.camera = args.camera
+    rollout_dir = args.rollout_dir
+    if not args.no_sidecar:
+        updates = grade_rollouts(rollout_dir, grader, only_missing=not args.force)
+        print(json.dumps({"graded": len(updates), "camera": grader.camera}))
+        return
+    records = [r for r in sidecar.read_records(rollout_dir / sidecar.FILENAME) if not r.get("error")]
+    lines = [{"id": r["id"], "task": r["task"], grader.camera: str((rollout_dir / r["dir"] / f"{grader.camera}.mp4").resolve())}
+             for r in records]
+    for m in lines:
+        if not pathlib.Path(m[grader.camera]).exists():
+            raise FileNotFoundError(m[grader.camera])
+    result = _run(lines, rollout_dir / f"grader_out.{grader.camera}.json", grader, rollout_dir / "grader.log")
+    result.pop("__timing__", None)
+    sim = [int(bool(r["sim_success"])) for r in records]
+    scores = [float(result[r["id"]]["score"]) for r in records]
+    sweep = metrics.threshold_sweep(sim, scores, sorted(set(grader.audit_thresholds) | {grader.threshold}))
+    any_m = next(iter(sweep.values()))
+    summary = {"camera": grader.camera, "n": len(records), "auroc": any_m["auroc"], "brier": any_m["brier"],
+               "thresholds": {t: {k: m[k] for k in ("tp", "fp", "fn", "tn", "precision", "recall")} for t, m in sweep.items()}}
+    print(json.dumps(summary, indent=2))
+
+
+if __name__ == "__main__":
+    main()

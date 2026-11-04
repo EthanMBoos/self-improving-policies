@@ -14,6 +14,7 @@ experiment it is logged and never used to select. Everything pre-registered is i
 | `scripts/finetune_round.py` | openpi env | Full fine-tune of a checkpoint on a dataset with the round config; runs openpi's own trainer |
 | `grader/programs/robometer_grade.py` | Robometer env | The grader program (from branch `stratos`); last-frame success probability per video |
 | `grader/robometer.py` | any | Grades a rollout directory through the program above and writes `grader_*` fields into the sidecar |
+| `scripts/make_grader_videos.py` | LIBERO client env | Grader-oriented videos from `frames.npz` for rollouts logged before the worker wrote them (`--raw` adds the raw render) |
 | `grader/audit.py` | any | Confusion matrix against the simulator at several thresholds, the D5 verdict, false positives to watch |
 | `rft/select.py` | any | The only place a verdict becomes training data; one field per judge |
 | `scripts/loop.py` | any (orchestration only) | Rounds: rollouts, grade, select, pack, fine-tune, exam, `metrics.json`; resumable |
@@ -68,6 +69,19 @@ selection (`kept.json`), the kept episodes as a dataset (`lerobot/rft/train`, pl
 the round k checkpoint (`checkpoint/pi05_rft/round_k/<step>`), the round k exam (`exam/`), and `metrics.json`.
 `round_0/` holds only the base checkpoint's exam. So `metrics.json` in `round_k` describes the brain after k
 fine-tunes, and the plot's x axis is k.
+
+## Frame orientation for the grader
+
+Robometer's LIBERO training frames are the raw agentview render flipped vertically (its dataset loader). The policy,
+openpi, and our videos use the raw render rotated 180 degrees, the left-right mirror of that. So the worker writes
+two third-person videos per episode: `agentview.mp4` (upright, for humans) and `agentview_grader.mp4` (mirrored, what
+the grader scores; `grader.camera` in the config). To compare orientations on logged rollouts without touching the
+sidecar:
+
+```
+third_party/openpi/examples/libero/.venv/bin/python scripts/make_grader_videos.py <rollout_dir> --raw
+for cam in agentview agentview_grader agentview_raw; do python3 -m grader.robometer <rollout_dir> --config <cfg> --camera $cam --no-sidecar; done
+```
 
 ## Numbers that must not be hardcoded
 

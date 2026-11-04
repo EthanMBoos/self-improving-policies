@@ -9,7 +9,9 @@ that generator), and the raw arrays are saved for the LeRobot packer in rft/lero
 Writes under <out>/:
     episodes_extra.jsonl         one record per episode (keys in rft/sidecar.py); resume skips ids already there
     <id>/frames.npz              image [T,256,256,3] uint8 upright, wrist_image [T,256,256,3], state [T,8], actions [T,7]
-    <id>/agentview.mp4, wrist.mp4   20 fps, for the grader and for humans (unless --no-video)
+    <id>/agentview.mp4, wrist.mp4   20 fps, upright (the policy's view), for humans (unless --no-video)
+    <id>/agentview_grader.mp4    upright mirrored left-right = Robometer's LIBERO training orientation (its loader
+                                 flips the raw render vertically); this is what the grader scores
 
 The parent script (scripts/rollout_and_log.py) sets PYTHONPATH, MUJOCO_GL and LIBERO_CONFIG_PATH and runs:
     examples/libero/.venv/bin/python scripts/rollout_worker.py --suite libero_90 --task-id 24 \
@@ -154,6 +156,7 @@ def main():
             ep_dir.mkdir(exist_ok=True)
             if frames and not args.no_video:
                 imageio.mimwrite(ep_dir / "agentview.mp4", frames, fps=VIDEO_FPS)
+                imageio.mimwrite(ep_dir / "agentview_grader.mp4", [np.ascontiguousarray(f[:, ::-1]) for f in frames], fps=VIDEO_FPS)
                 imageio.mimwrite(ep_dir / "wrist.mp4", wrist_frames, fps=VIDEO_FPS)
             if frames and not args.no_frames:
                 np.savez_compressed(

@@ -27,6 +27,7 @@ class ConfigTests(unittest.TestCase):
             self.assertEqual(len(cfg.exam_seeds()), cfg.exam_episodes)
             self.assertEqual(cfg.grader.threshold, 0.65)
             self.assertIn(cfg.grader.threshold, cfg.grader.audit_thresholds)
+            self.assertEqual(cfg.grader.camera, "agentview_grader")
 
     def test_validation(self):
         base = json.loads((REPO / "configs" / "rft" / "middle_bowl.json").read_text())
