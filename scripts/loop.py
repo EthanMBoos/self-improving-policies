@@ -142,10 +142,14 @@ def select_kept(cfg: LoopConfig, judge: str, round_dir: pathlib.Path) -> dict:
     if kept_path.exists():
         return json.loads(kept_path.read_text())
     records = [r for r in sidecar.read_records(round_dir / "rollouts" / sidecar.FILENAME) if not r.get("error")]
-    threshold = None if judge == select.SIM_JUDGE else cfg.grader.threshold
-    ids = select.select_episodes(records, judge, threshold)
-    kept = {"judge": judge, "threshold": threshold, "n_rollouts": len(records), "n_kept": len(ids), "ids": ids,
-            "min_kept": cfg.min_kept, "enough": len(ids) >= cfg.min_kept}
+    sim = judge == select.SIM_JUDGE
+    # --judge says which kind of judge; the config names the grader that wrote the scores (general or in-domain
+    # checkpoint), and select.label refuses scores written by any other grader.
+    grader_name = None if sim else cfg.grader.name
+    threshold = None if sim else cfg.grader.threshold
+    ids = select.select_episodes(records, judge if sim else grader_name, threshold)
+    kept = {"judge": judge, "grader_name": grader_name, "threshold": threshold, "n_rollouts": len(records),
+            "n_kept": len(ids), "ids": ids, "min_kept": cfg.min_kept, "enough": len(ids) >= cfg.min_kept}
     kept_path.write_text(json.dumps(kept, indent=2))
     return kept
 
@@ -266,6 +270,7 @@ def run_round(cfg: LoopConfig, args, run_dir: pathlib.Path, k: int, graded: bool
     log(f"round {k}: judge {args.judge} kept {kept['n_kept']} of {kept['n_rollouts']} (min {cfg.min_kept})")
     base_metrics = {"round": k, "n_rollouts": kept["n_rollouts"], "n_kept": kept["n_kept"], "task": cfg.task_name,
                     "task_id": cfg.task_id, "suite": cfg.suite, "judge": args.judge, "threshold": kept["threshold"],
+                    "grader_name": cfg.grader.name if graded else None,
                     "seed": {"rollout_seeds": [cfg.rollout_seeds(k)[0], cfg.rollout_seeds(k)[-1]],
                              "exam_seeds": [cfg.exam_seeds()[0], cfg.exam_seeds()[-1]], "train_seed": cfg.train.seed},
                     "init_checkpoint": str(init_ckpt), "rollouts": rollout_stats(round_dir, cfg, graded)}
