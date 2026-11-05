@@ -24,6 +24,9 @@ class Grader:
         """Return {episode_id: {"label": 0|1, "score": float|None, ...}}."""
         raise NotImplementedError
 
+    def start(self, work_dir: pathlib.Path) -> None:
+        """Load the grader ahead of the first grade() call (no-op unless it keeps a model loaded)."""
+
     def close(self) -> None:
         pass
 
@@ -101,6 +104,11 @@ class CommandGrader(Grader):
                                      stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=self._log, text=True,
                                      bufsize=1)
         self._read_until("__SIP_READY__")
+
+    def start(self, work_dir):
+        if self.persistent and (self.proc is None or self.proc.poll() is not None):
+            work_dir.mkdir(parents=True, exist_ok=True)
+            self._start(work_dir)
 
     def grade(self, episodes, work_dir):
         manifest, out = self._write_manifest(episodes, work_dir)

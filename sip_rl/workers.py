@@ -23,6 +23,7 @@ import torch
 from rlinf.envs.utils import get_env_attr
 from rlinf.workers.actor.embodied_fsdp_actor_worker import EmbodiedFSDPActor
 from rlinf.workers.env.env_worker import EnvWorker
+from rlinf.workers.rollout.hf.huggingface_worker import MultiStepRolloutWorker
 
 
 def _np_frames(x) -> np.ndarray:
@@ -141,6 +142,22 @@ class RecordingEnvWorker(EnvWorker):
         self._rec_epoch += 1
 
 
+class CheckedRolloutWorker(MultiStepRolloutWorker):
+    def param_checksums(self, names: list[str]) -> dict:
+        """Same checksums as GradedActor.trainable_checksums for the rollout model's copies (None if missing).
+        The weight syncer loads with strict=False, so a name mismatch would otherwise go unnoticed."""
+        params = dict(self.hf_model.named_parameters())
+        out = {}
+        for name in names:
+            p = params.get(name)
+            if p is None:
+                out[name] = None
+            else:
+                x = p.detach().double()
+                out[name] = [float(x.abs().sum()), float((x * x).sum())]
+        return out
+
+
 class GradedActor(EmbodiedFSDPActor):
     # One GPU holds the actor, the rollout model and the env renderers in turn, so memory the actor no longer
     # needs is handed back explicitly: the trajectory batch after training, cached blocks after weight sync.
@@ -165,7 +182,23 @@ class GradedActor(EmbodiedFSDPActor):
         return cleared
 
     def run_training(self):
-        metrics = super().run_training()
+        # Critic warm-up: for the first sip.critic_warmup_iterations iterations only the value head learns (the
+        # actor param groups get lr 0, so AdamW leaves them unchanged); the policy is never updated with
+        # advantages from a randomly initialised value head. Keyed on the global step, so a resume never repeats it.
+        groups = self.optimizer.param_groups
+        warmup = self.version < int(self.cfg.sip.get("critic_warmup_iterations", 0))
+        saved_lrs = [g["lr"] for g in groups]
+        if warmup:
+            if len(groups) < 2 or groups[-1]["lr"] != self.cfg.actor.optim.value_lr:
+                raise RuntimeError(f"critic warm-up expects the value head as the last param group, got lrs {saved_lrs}")
+            for g in groups[:-1]:
+                g["lr"] = 0.0
+        try:
+            metrics = super().run_training()
+        finally:
+            for g, lr in zip(groups, saved_lrs):
+                g["lr"] = lr
+        metrics["actor/critic_warmup"] = float(warmup)
         self.rollout_batch = {}
         self._clear_fsdp_saved_views()
         gc.collect()
@@ -178,6 +211,16 @@ class GradedActor(EmbodiedFSDPActor):
         gc.collect()
         torch.cuda.empty_cache()
         self._log_mem("after sync+offload")
+
+    def trainable_checksums(self) -> dict:
+        """{name: [sum |x|, sum x^2]} of the trainable tensors, compared against the rollout model after a sync."""
+        out = {}
+        for name, p in self.model.named_parameters():
+            if p.requires_grad:
+                clean = name.replace("_fsdp_wrapped_module.", "").replace("_checkpoint_wrapped_module.", "")
+                x = p.detach().double()
+                out[clean] = [float(x.abs().sum()), float((x * x).sum())]
+        return out
 
     def save_trainable(self, path: str) -> dict:
         """Save only the trainable tensors (LoRA, value head, small heads): a few tens of MB per snapshot."""

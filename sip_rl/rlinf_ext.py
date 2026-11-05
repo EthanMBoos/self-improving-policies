@@ -23,8 +23,15 @@ def register() -> None:
         if rank:
             from sip_rl.expert_lora import apply_expert_lora
 
+            from sip_rl.expert_lora import HEADS
+
             stats = apply_expert_lora(model, rank=int(rank), alpha=cfg.get("expert_lora_alpha", None))
             logger.warning(f"[sip_rl] expert LoRA applied: {stats}")
+            # Full-rank action/time heads: lr = optim.lr * head_lr_scale (RLinf's build_optimizer reads
+            # model.lr_multipliers; LoRA keeps optim.lr, the value head optim.value_lr).
+            scale = cfg.get("head_lr_scale", None)
+            if scale is not None and float(scale) != 1.0:
+                model.lr_multipliers = {name: float(scale) for name in HEADS}
         ckpt = cfg.get("trainable_ckpt", None)
         if ckpt:  # evaluation of a training snapshot: LoRA + small heads on top of the base checkpoint
             import torch

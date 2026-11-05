@@ -13,10 +13,14 @@ OUT="$(realpath -m "${1:?usage: $0 <out_dir> <episodes_per_task> [snapshot.pt] [
 PER_TASK="${2:?episodes per task}"
 SNAP="${3:-}"
 shift $(( $# >= 3 ? 3 : 2 ))
-ENVS="${EVAL_ENVS:-16}"            # parallel envs (each ~0.75 GB GPU, ~1.7 GB RAM)
+MAX_ENVS="${EVAL_ENVS:-20}"        # max parallel envs (each ~0.75 GB GPU, ~1.7 GB RAM)
 CHUNK="${EVAL_CHUNK:-10}"          # actions executed per policy call; 10 = the RL training setting
 TOTAL=$(( PER_TASK * 10 ))         # LIBERO-10 has 10 tasks
-EPOCHS=$(( (TOTAL + ENVS - 1) / ENVS ))
+# envs x epochs must equal TOTAL exactly: RLinf fills slots beyond the layout pool with padding layouts (id -1),
+# and with 500 episodes on 16 envs (512 slots) a LIBERO subprocess crashed in the padded last epoch, every time.
+ENVS=$MAX_ENVS
+while [ $(( TOTAL % ENVS )) -ne 0 ]; do ENVS=$(( ENVS - 1 )); done
+EPOCHS=$(( TOTAL / ENVS ))
 
 EXTRA=()
 if [ -n "$SNAP" ]; then

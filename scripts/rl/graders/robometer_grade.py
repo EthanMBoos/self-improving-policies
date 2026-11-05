@@ -12,12 +12,17 @@ RAM between requests and is moved to the GPU only while grading.
 
 import argparse
 import json
+import os
 import pathlib
 import sys
 import time
 
-import imageio.v3 as iio
-import torch
+# The grader shares the GPU with the env renderers and the (offloaded) policy workers; fragmentation-free
+# allocation leaves more of the remaining memory usable. Must be set before torch initialises CUDA.
+os.environ.setdefault("PYTORCH_CUDA_ALLOC_CONF", "expandable_segments:True")
+
+import imageio.v3 as iio  # noqa: E402
+import torch  # noqa: E402
 from robometer.evals.eval_server import compute_batch_outputs
 from robometer.evals.eval_utils import raw_dict_to_sample
 from robometer.utils.save import load_model_from_hf
@@ -33,23 +38,43 @@ class Robometer:
         self.num_bins = getattr(loss_cfg, "progress_discrete_bins", None) or getattr(self.cfg.model, "progress_discrete_bins", 10)
         self.collate = setup_batch_collator(proc, self.tok, self.cfg, is_eval=True)
 
+    def _infer(self, chunk, args) -> dict:
+        samples = [
+            raw_dict_to_sample(
+                {"frames": iio.imread(e[args.camera]), "task": e["task"], "id": e["id"], "metadata": {},
+                 "video_embeddings": None},
+                max_frames=args.max_frames, sample_type="progress",
+            )
+            for e in chunk
+        ]
+        batch = self.collate(samples)["progress_inputs"]
+        batch = {k: (v.to("cuda") if hasattr(v, "to") else v) for k, v in batch.items()}
+        with torch.no_grad():
+            return compute_batch_outputs(self.model, self.tok, batch, sample_type="progress",
+                                         is_discrete_mode=self.is_discrete, num_bins=self.num_bins)
+
     def grade(self, eps, args) -> dict:
         out = {}
-        for i in range(0, len(eps), args.batch_size):
-            chunk = eps[i : i + args.batch_size]
-            samples = [
-                raw_dict_to_sample(
-                    {"frames": iio.imread(e[args.camera]), "task": e["task"], "id": e["id"], "metadata": {},
-                     "video_embeddings": None},
-                    max_frames=args.max_frames, sample_type="progress",
-                )
-                for e in chunk
-            ]
-            batch = self.collate(samples)["progress_inputs"]
-            batch = {k: (v.to("cuda") if hasattr(v, "to") else v) for k, v in batch.items()}
-            with torch.no_grad():
-                r = compute_batch_outputs(self.model, self.tok, batch, sample_type="progress",
-                                          is_discrete_mode=self.is_discrete, num_bins=self.num_bins)
+        bs, i = args.batch_size, 0
+        self.oom_retries = 0
+        while i < len(eps):
+            chunk = eps[i : i + bs]
+            try:
+                r = self._infer(chunk, args)
+            except torch.OutOfMemoryError:
+                if bs == 1:
+                    raise
+                r = None
+            if r is None:
+                # Free memory varies with what the other workers hold; retry the same episodes with half the batch
+                # instead of failing the RL run. (Cache emptied outside the except block: the traceback keeps the
+                # failed batch's tensors alive until it is left.)
+                torch.cuda.empty_cache()
+                bs = max(1, bs // 2)
+                self.oom_retries += 1
+                print(f"CUDA OOM at batch size {len(chunk)}; retrying with {bs}", file=sys.stderr, flush=True)
+                continue
+            i += len(chunk)
             progress = r.get("progress_pred", [])
             success = (r.get("outputs_success") or {}).get("success_probs", [])
             for e, prog, succ in zip(chunk, progress, success):
@@ -76,7 +101,7 @@ def run_request(rm: Robometer, manifest: str, out_path: str, args, on_gpu: bool)
         rm.model.to("cpu")
         torch.cuda.empty_cache()
     out["__timing__"] = {"to_gpu_s": t1 - t0, "infer_s": t2 - t1, "to_cpu_s": time.time() - t2,
-                         "episodes": len(eps), "peak_gpu_mem_gib": peak}
+                         "episodes": len(eps), "peak_gpu_mem_gib": peak, "oom_retries": rm.oom_retries}
     pathlib.Path(out_path).write_text(json.dumps(out))
 
 

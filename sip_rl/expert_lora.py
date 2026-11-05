@@ -25,8 +25,9 @@ from torch import nn
 
 from rlinf.models.embodiment.openpi.modules.gemma import FeedForward, gelu_glu
 
-EXTRA_TRAINABLE = ("value_head", "action_in_proj", "action_out_proj", "time_mlp_in", "time_mlp_out",
-                   "action_time_mlp_in", "action_time_mlp_out", "state_proj")
+HEADS = ("action_in_proj", "action_out_proj", "time_mlp_in", "time_mlp_out", "action_time_mlp_in",
+         "action_time_mlp_out", "state_proj")
+EXTRA_TRAINABLE = ("value_head", *HEADS)
 
 
 class LoRAAdapter(nn.Module):

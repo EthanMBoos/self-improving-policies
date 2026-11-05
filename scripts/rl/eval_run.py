@@ -1,6 +1,6 @@
 """Evaluate an RL run's snapshots on LIBERO-10's official layouts (after training; resumable).
 
-Usage: python3 scripts/rl/eval_run.py <run_name> [--min-episodes 4096] [--every 1024]
+Usage: python3 scripts/rl/eval_run.py <run_name> [--min-episodes 3840] [--every 960]
 Schedule:
     start checkpoint (shared by all runs)               500 episodes   outputs/rl/evals/start
     snapshots at multiples of --every episodes           200 episodes
@@ -27,8 +27,8 @@ def evaluate(out: pathlib.Path, per_task: int, snapshot: str | None) -> dict:
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("run")
-    p.add_argument("--min-episodes", type=int, default=4096)
-    p.add_argument("--every", type=int, default=1024)
+    p.add_argument("--min-episodes", type=int, default=3840)
+    p.add_argument("--every", type=int, default=960)
     p.add_argument("--start-per-task", type=int, default=50)
     p.add_argument("--snapshot-per-task", type=int, default=20)
     p.add_argument("--cutoff-per-task", type=int, default=50)
@@ -52,7 +52,13 @@ def main():
         else:
             continue
         snap = pathlib.Path(r["snapshot"])
-        s = evaluate(evals / a.run / f"{snap.stem}_{per_task * 10}", per_task, str(snap))
+        out = evals / a.run / f"{snap.stem}_{per_task * 10}"
+        # Reuse an existing evaluation of this snapshot with at least as many episodes (e.g. the pilot check).
+        done = [d for d in (evals / a.run).glob(f"{snap.stem}_*") if (d / "summary.json").exists()
+                and int(d.name.rsplit("_", 1)[1]) >= per_task * 10]
+        if done and not (out / "summary.json").exists():
+            out = max(done, key=lambda d: int(d.name.rsplit("_", 1)[1]))
+        s = evaluate(out, per_task, str(snap))
         points.append({"snapshot": str(snap), "episodes": r["episodes"], "gpu_hours": r["gpu_hours"],
                        "reasons": reasons, "eval_episodes": s["episodes"], "success_rate": s["success_rate"],
                        "per_task": s["per_task"]})

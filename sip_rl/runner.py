@@ -57,6 +57,30 @@ def _reward_stats(reward: np.ndarray, oracle: np.ndarray) -> dict:
     }
 
 
+def _sync_check(actor_sums: dict, rollout_sums: dict, tol: float = 0.01) -> dict:
+    """Compare the trainable tensors of the actor with the rollout model's copies after a weight sync.
+    Raises if a tensor is missing on the rollout side or differs by more than tol (relative, on sum |x| and
+    sum x^2): the rollout model would otherwise keep generating episodes with stale weights."""
+    missing = [n for n, v in rollout_sums.items() if v is None]
+    rel = []
+    for name, (a_abs, a_sq) in actor_sums.items():
+        r = rollout_sums.get(name)
+        if r is None:
+            continue
+        rel.append(max(abs(a_abs - r[0]) / max(a_abs, 1e-12), abs(a_sq - r[1]) / max(a_sq, 1e-12)))
+    lora = [n for n in actor_sums if ".lora." in n]
+    check = {
+        "tensors": len(actor_sums),
+        "missing_on_rollout": len(missing),
+        "max_rel_diff": max(rel) if rel else None,
+        "actor_lora_abs_sum": sum(actor_sums[n][0] for n in lora),
+        "rollout_lora_abs_sum": sum(rollout_sums[n][0] for n in lora if rollout_sums.get(n) is not None),
+    }
+    if missing or not rel or max(rel) > tol:
+        raise RuntimeError(f"weight sync check failed: {check}; first missing: {missing[:5]}")
+    return check
+
+
 class GradedRunner(EmbodiedRunner):
     def run(self):  # noqa: C901 (one linear loop, kept together for readability)
         sip = self.cfg.sip
@@ -65,6 +89,9 @@ class GradedRunner(EmbodiedRunner):
         run_dir.mkdir(parents=True, exist_ok=True)
         grader_cfg = OmegaConf.to_container(sip.graders[sip.grader_name], resolve=True)
         grader = make_grader(grader_cfg, repo)
+        # A persistent grader server peaks at ~18 GB of RAM while loading its model; load it now, before the
+        # rollouts and the trajectory hand-off take their share of host memory.
+        grader.start(run_dir / "grading" / "startup")
         # "label": reward = grader's 0/1 label; "score": reward = grader's success probability (oracle: same thing)
         reward_mode = grader_cfg.get("reward", "label")
         n_epochs = int(self.cfg.env.train.rollout_epoch)
@@ -75,6 +102,9 @@ class GradedRunner(EmbodiedRunner):
         min_eps = int(sip.min_episodes)
         snap_every_eps = int(sip.snapshot_every_episodes)
         snap_hours = sorted(float(h) for h in sip.get("snapshot_at_gpu_hours", []))
+        # Pilot: checkpoint and exit (without run_end.json) once this many episodes are reached; run_rl.sh then
+        # resumes the same run from that checkpoint, so a pilot that looks fine becomes the start of the full run.
+        pause_eps = int(sip.get("pause_at_episodes", 0) or 0)
         n_gpus = int(sip.get("num_gpus", 1))
 
         # Resume: RLinf restored the model at self.global_step; drop log lines of later (lost) iterations and
@@ -106,6 +136,7 @@ class GradedRunner(EmbodiedRunner):
             self.env.set_global_step(self.global_step).wait()
             it = self.global_step
             times = {}
+            sync_check = None
 
             t = time.time()
             with self.timer("step"):
@@ -113,6 +144,9 @@ class GradedRunner(EmbodiedRunner):
                     if _step % self.weight_sync_interval == 0:
                         self.update_rollout_weights()
                 times["sync_weights_s"] = time.time() - t
+                if _step % self.weight_sync_interval == 0:
+                    actor_sums = self.actor.trainable_checksums().wait()[0]
+                    sync_check = _sync_check(actor_sums, self.rollout.param_checksums(list(actor_sums)).wait()[0])
 
                 t = time.time()
                 with self.timer("generate_rollouts"):
@@ -210,6 +244,7 @@ class GradedRunner(EmbodiedRunner):
                 "wall_clock_s": time.time() - start_time,
                 "iteration_s": iter_s,
                 **times,
+                "sync_check": sync_check,
                 "timers": timers,
                 "train/oracle_success_rate": float(oracle.mean()),
                 "train/oracle_success_once_rate": float(np.mean([bool(e["oracle_success_once"]) for e in eps])),
@@ -244,7 +279,8 @@ class GradedRunner(EmbodiedRunner):
             prev_eps, prev_h = episodes - len(eps), gpu_h - iter_s * n_gpus / 3600
             crossed_eps = episodes // snap_every_eps > prev_eps // snap_every_eps
             crossed_h = [h for h in snap_hours if prev_h < h <= gpu_h]
-            if stop or crossed_eps or crossed_h:
+            pause = not stop and pause_eps > 0 and prev_eps < pause_eps <= episodes
+            if stop or crossed_eps or crossed_h or pause:
                 # Small snapshot for evaluation (kept), full RLinf checkpoint for resuming (only the latest kept).
                 snap = run_dir / "snapshots" / f"step_{self.global_step:05d}.pt"
                 self.actor.save_trainable(str(snap)).wait()
@@ -254,7 +290,8 @@ class GradedRunner(EmbodiedRunner):
                     if old.name != f"global_step_{self.global_step}":
                         shutil.rmtree(old, ignore_errors=True)
                 record["snapshot"] = str(snap)
-                record["snapshot_reasons"] = (["episodes"] if crossed_eps else []) + [f"gpu_h>={h}" for h in crossed_h] + (["end"] if stop else [])
+                record["snapshot_reasons"] = ((["episodes"] if crossed_eps else []) + [f"gpu_h>={h}" for h in crossed_h]
+                                              + (["end"] if stop else []) + (["pause"] if pause else []))
             metrics_f.write(json.dumps(record, default=float) + "\n")
             metrics_f.flush()
             flat = {k: v for k, v in record.items() if isinstance(v, (int, float)) and v is not None}
@@ -268,6 +305,14 @@ class GradedRunner(EmbodiedRunner):
             )
             if stop:
                 break
+            if pause:
+                self.logger.info(f"[sip] paused at {episodes} episodes (sip.pause_at_episodes={pause_eps}); "
+                                 f"run_rl.sh {sip.run_name} resumes from global_step_{self.global_step}")
+                metrics_f.close()
+                episodes_f.close()
+                grader.close()
+                self._finish_run()
+                return
 
         (run_dir / "run_end.json").write_text(json.dumps({
             "stop_reason": stop_reason, "gpu_hours": gpu_h, "episodes": episodes, "env_steps": env_steps,

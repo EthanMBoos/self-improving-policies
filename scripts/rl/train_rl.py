@@ -13,10 +13,9 @@ from omegaconf.omegaconf import OmegaConf
 from rlinf.config import validate_cfg
 from rlinf.scheduler import Cluster
 from rlinf.utils.placement import HybridComponentPlacement
-from rlinf.workers.rollout.hf.huggingface_worker import MultiStepRolloutWorker
 
 from sip_rl.runner import GradedRunner
-from sip_rl.workers import GradedActor, RecordingEnvWorker
+from sip_rl.workers import CheckedRolloutWorker, GradedActor, RecordingEnvWorker
 
 mp.set_start_method("spawn", force=True)
 
@@ -30,7 +29,7 @@ def main(cfg) -> None:
     actor = GradedActor.create_group(cfg).launch(
         cluster, name=cfg.actor.group_name, placement_strategy=placement.get_strategy("actor")
     )
-    rollout = MultiStepRolloutWorker.create_group(cfg).launch(
+    rollout = CheckedRolloutWorker.create_group(cfg).launch(
         cluster, name=cfg.rollout.group_name, placement_strategy=placement.get_strategy("rollout")
     )
     env = RecordingEnvWorker.create_group(cfg).launch(
