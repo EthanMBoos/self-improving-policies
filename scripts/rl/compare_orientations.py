@@ -13,6 +13,7 @@ they share, so a --sample pilot compares every orientation on the same episodes.
 import argparse
 import json
 import pathlib
+import re
 import sys
 
 import numpy as np
@@ -40,6 +41,7 @@ def main():
     p.add_argument("--logged", type=pathlib.Path, help="RL run directory whose in-loop grader scores to add")
     p.add_argument("--threshold", type=float, default=0.5)
     p.add_argument("--json", type=pathlib.Path)
+    p.add_argument("--source", help="only episodes whose 'source' field matches this regex")
     a = p.parse_args()
 
     rows = {}
@@ -50,12 +52,15 @@ def main():
         rows["logged during RL (no flip)"] = load(a.logged)
 
     ids = sorted(set.intersection(*(set(r) for r in rows.values())))
+    if a.source:
+        first = next(iter(rows.values()))
+        ids = [i for i in ids if re.search(a.source, first[i].get("source", ""))]
     if not ids:
         sys.exit("the directories share no episode ids")
     oracle = np.array([int(next(iter(rows.values()))[i]["oracle_success_at_end"]) for i in ids])
 
     results = {}
-    print(f"{len(ids)} shared episodes, true success {oracle.mean():.1%}, threshold {a.threshold}\n")
+    print(f"{len(ids)} shared episodes{' matching ' + a.source if a.source else ''}, true success {oracle.mean():.1%}, threshold {a.threshold}\n")
     head = f"{'variant':<40} {'says ok':>8} {'prec':>6} {'recall':>7} {'FPR':>6} {'AUROC':>6} {'best bal acc':>13}"
     print(head)
     print("-" * len(head))

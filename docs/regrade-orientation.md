@@ -8,6 +8,35 @@ and compares each against LIBERO's own success check. It needs no simulator and 
 If the mirrored orientation (`lr`) agrees with LIBERO much better than the stored one (`none`), part of the "too
 optimistic" finding was a preprocessing bug. If all orientations score about the same, the finding stands.
 
+## Quick check first: the videos already in git
+
+This needs nothing from stratosreppas. The repo already has 96 labelled rollout videos in the same upright view: the
+π0.5 baseline evals and SeungTaek's LIBERO-90 candidate clips. The outcome is in each file name.
+
+| Source | Successes | Failures |
+|---|---|---|
+| Fine-tuned π0.5 on the four LIBERO suites | 40 | 7 |
+| LIBERO-90 candidate clips | 4 | 5 |
+| Base π0.5, zero-shot | 0 | 40 |
+
+Do the one-time setup in step 2 below, then submit from the login node:
+
+```bash
+cd ~/scratch/self-improving-policies
+sbatch scripts/rl/pace/regrade_committed.sbatch
+```
+
+It grades all 96 videos in four orientations, which should take minutes. Results are in
+`outputs/rl/offline/committed/comparison.txt`, as two tables:
+
+- **All videos.** The 40 base-model failures are easy: its arm drifts away from the objects. Any orientation should
+  reject them, so this table flatters every row.
+- **Hard subset.** Without the base model, 44 successes and 12 near-miss failures. This is the one to read. Compare the
+  false-positive rate and AUROC of `lr`, Robometer's training view, against `none`, the stored view the RL runs used.
+
+With only 12 hard failures, one episode moves the false-positive rate by 8 points. A big gap between `lr` and `none`
+is a strong hint. A small one means nothing either way, and the full re-grade below settles it.
+
 ## What runs where
 
 | Step | Where | Time |
@@ -146,6 +175,7 @@ Scratch is not backed up and old files get cleared, so copy anything you want to
   pipeline behaves as before.
 - `scripts/rl/grade_offline.py` takes `--flip`, plus `--sample N --seed S` for a pilot subset. It rewrites video paths
   when a run was copied from another machine.
-- `scripts/rl/compare_orientations.py` prints the comparison table.
-- `scripts/rl/pace/` holds the PACE environment file and the batch job. `scripts/setup_robometer.sh` comes from branch
-  `stan` unchanged.
+- `scripts/rl/compare_orientations.py` prints the comparison table. `--source` restricts it to a subset.
+- `scripts/rl/videos_to_episodes.py` turns labelled rollout videos into an episode list for `grade_offline.py`.
+- `scripts/rl/pace/` holds the PACE environment file and the batch job. `scripts/setup_robometer.sh` and the LIBERO-90
+  candidate clips come from branch `stan` unchanged.
