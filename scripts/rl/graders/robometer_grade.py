@@ -6,6 +6,11 @@ Reads a manifest of episodes (JSONL: id, task, agentview video path) and writes 
 plus the per-frame progress and success curves. Frames are subsampled uniformly to --max-frames (Robometer's
 config uses 8), as in Robometer's own LIBERO reward wrapper.
 
+Orientation (--flip): applied to the decoded frames before Robometer sees them. The RL worker records the upright
+view (raw render rotated 180 degrees, what the policy sees). Robometer's LIBERO training data is the raw render flipped
+vertically, i.e. the upright view mirrored left-right (found on branch stan, commit 97c235f). Relative to the stored
+video: none = as stored, lr = mirror left-right, ud = flip upside down, rot180 = both (the raw render).
+
 Modes: one-shot (--manifest M --out O) or --server (see sip_rl/graders.py CommandGrader): the model stays in CPU
 RAM between requests and is moved to the GPU only while grading.
 """
@@ -22,11 +27,24 @@ import time
 os.environ.setdefault("PYTORCH_CUDA_ALLOC_CONF", "expandable_segments:True")
 
 import imageio.v3 as iio  # noqa: E402
+import numpy as np  # noqa: E402
 import torch  # noqa: E402
 from robometer.evals.eval_server import compute_batch_outputs
 from robometer.evals.eval_utils import raw_dict_to_sample
 from robometer.utils.save import load_model_from_hf
 from robometer.utils.setup_utils import setup_batch_collator
+
+
+FLIPS = {
+    "none": lambda f: f,
+    "lr": lambda f: f[:, :, ::-1],
+    "ud": lambda f: f[:, ::-1],
+    "rot180": lambda f: f[:, ::-1, ::-1],
+}
+
+
+def load_frames(path: str, flip: str):
+    return np.ascontiguousarray(FLIPS[flip](iio.imread(path)))
 
 
 class Robometer:
@@ -41,7 +59,7 @@ class Robometer:
     def _infer(self, chunk, args) -> dict:
         samples = [
             raw_dict_to_sample(
-                {"frames": iio.imread(e[args.camera]), "task": e["task"], "id": e["id"], "metadata": {},
+                {"frames": load_frames(e[args.camera], args.flip), "task": e["task"], "id": e["id"], "metadata": {},
                  "video_embeddings": None},
                 max_frames=args.max_frames, sample_type="progress",
             )
@@ -115,6 +133,7 @@ def main():
     p.add_argument("--threshold", type=float, default=0.5)
     p.add_argument("--batch-size", type=int, default=16)
     p.add_argument("--camera", default="agentview")
+    p.add_argument("--flip", default="none", choices=sorted(FLIPS), help="orientation fix applied to every frame")
     args = p.parse_args()
 
     if not args.server:
