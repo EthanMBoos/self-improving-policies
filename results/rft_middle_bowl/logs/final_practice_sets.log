@@ -1,0 +1,9 @@
+[loop 21:01:02] policy server up on 8001 (999) after 18s
+[loop 21:01:02] rollout: 300 episodes -> runs/middle_bowl/robometer/round_4/rollouts
+[loop 22:34:56] policy server stopped
+[loop 22:34:56] grading runs/middle_bowl/robometer/round_4/rollouts with robometer
+[loop 22:39:50] policy server up on 8001 (999) after 18s
+[loop 22:39:50] rollout: 300 episodes -> runs/middle_bowl/sim/round_4/rollouts
+[loop 23:39:37] policy server stopped
+[loop 23:39:37] grading runs/middle_bowl/sim/round_4/rollouts with robometer
+[loop 23:43:49] round 4 rollouts done

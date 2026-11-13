@@ -1,0 +1,40 @@
+[loop 08:54:49] run runs/middle_bowl/robometer: judge robometer, grader on, 3 rounds, task 14 'put the middle black bowl on the plate'
+[loop 08:55:07] policy server up on 8001 (pi05_libero) after 18s
+[loop 08:55:07] exam: 100 episodes -> runs/middle_bowl/robometer/round_0/exam
+[loop 09:14:36] policy server stopped
+[loop 09:14:36] grading runs/middle_bowl/robometer/round_0/exam with robometer
+[loop 09:17:24] round 0: true 0.440 [0.35, 0.54], judged 0.640
+[loop 09:17:42] policy server up on 8001 (pi05_libero) after 18s
+[loop 09:17:42] rollout: 300 episodes -> runs/middle_bowl/robometer/round_1/rollouts
+[loop 10:51:41] policy server stopped
+[loop 10:51:41] grading runs/middle_bowl/robometer/round_1/rollouts with robometer
+[loop 10:56:25] round 1: judge robometer kept 215 of 300 (min 50)
+[loop 11:01:53] fine-tuning from checkpoints/pi05_libero
+[loop 11:26:53] policy server up on 8001 (999) after 18s
+[loop 11:26:53] exam: 100 episodes -> runs/middle_bowl/robometer/round_1/exam
+[loop 11:46:32] policy server stopped
+[loop 11:46:32] grading runs/middle_bowl/robometer/round_1/exam with robometer
+[loop 11:49:19] round 1: true 0.450 [0.36, 0.55], judged 0.740, 0.0 h
+[loop 11:49:37] policy server up on 8001 (999) after 18s
+[loop 11:49:37] rollout: 300 episodes -> runs/middle_bowl/robometer/round_2/rollouts
+[loop 13:24:36] policy server stopped
+[loop 13:24:36] grading runs/middle_bowl/robometer/round_2/rollouts with robometer
+[loop 13:29:13] round 2: judge robometer kept 209 of 300 (min 50)
+[loop 13:34:26] fine-tuning from runs/middle_bowl/robometer/round_1/checkpoint/pi05_rft/round_1/999
+[loop 13:59:27] policy server up on 8001 (999) after 18s
+[loop 13:59:27] exam: 100 episodes -> runs/middle_bowl/robometer/round_2/exam
+[loop 14:20:55] policy server stopped
+[loop 14:20:55] grading runs/middle_bowl/robometer/round_2/exam with robometer
+[loop 14:23:44] round 2: true 0.350 [0.26, 0.45], judged 0.740, 0.0 h
+[loop 14:24:02] policy server up on 8001 (999) after 18s
+[loop 14:24:02] rollout: 300 episodes -> runs/middle_bowl/robometer/round_3/rollouts
+[loop 16:02:15] policy server stopped
+[loop 16:02:15] grading runs/middle_bowl/robometer/round_3/rollouts with robometer
+[loop 16:06:57] round 3: judge robometer kept 231 of 300 (min 50)
+[loop 16:13:16] fine-tuning from runs/middle_bowl/robometer/round_2/checkpoint/pi05_rft/round_2/999
+[loop 16:38:25] policy server up on 8001 (999) after 20s
+[loop 16:38:25] exam: 100 episodes -> runs/middle_bowl/robometer/round_3/exam
+[loop 17:01:21] policy server stopped
+[loop 17:01:21] grading runs/middle_bowl/robometer/round_3/exam with robometer
+[loop 17:04:10] round 3: true 0.250 [0.18, 0.34], judged 0.700, 0.0 h
+[loop 17:04:10] done

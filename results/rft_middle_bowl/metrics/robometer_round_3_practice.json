@@ -1,0 +1,25 @@
+{
+  "kind": "rollout",
+  "task": "put the middle black bowl on the plate",
+  "suite": "libero_90",
+  "task_id": 14,
+  "n_requested": 300,
+  "n_logged": 300,
+  "n_errors": 0,
+  "true_success": {
+    "k": 107,
+    "n": 300,
+    "rate": 0.3566666666666667,
+    "ci95": [
+      0.3045865042894623,
+      0.41237127897655523
+    ]
+  },
+  "mean_steps": 300.37666666666667,
+  "mean_steps_success": 120.6822429906542,
+  "seeds": [
+    5000,
+    5299
+  ],
+  "rollout_s": 5632.632573604584
+}
