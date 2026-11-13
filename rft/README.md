@@ -210,7 +210,7 @@ stay under `runs/` on the training box and are not in git.
 | `scripts/make_grader_videos.py` | LIBERO client env | Grader-oriented videos from `frames.npz` for rollouts logged before the worker wrote them (`--raw` adds the raw render) |
 | `grader/audit.py` | any | Confusion matrix against the simulator at several thresholds, the D5 verdict, false positives to watch |
 | `rft/select.py` | any | The only place a verdict becomes training data; one field per judge |
-| `scripts/loop.py` | any (orchestration only) | Rounds: rollouts, grade, select, pack, fine-tune, exam, `metrics.json`; resumable |
+| `scripts/loop.py` | any (orchestration only) | Rounds: rollouts, grade, select, pack, fine-tune, exam, `metrics.json`; resumable; `--port` and `--final-practice` for parallel runs |
 | `analysis/plot_curves.py` | openpi env | True success per round for both loops plus judged success |
 | `analysis/first_grasp.py` | `dump`: LIBERO client env; `count`: any | Gripper paths out of `frames.npz`, then first grab per attempt, the tables above, and `episodes.csv` |
 
@@ -258,24 +258,30 @@ precision at 0.65 must be at least 0.5 (D5). Re-running a loop command resumes a
 
 ### Extra practice attempts for the final policies
 
-The loop has no flag for this yet. This calls its own functions to make and grade 300 attempts from each loop's last
-checkpoint, on the seeds a fourth round would use. It took 2.7 hours for both.
+`--final-practice` makes a loop end with 300 more attempts by its last checkpoint, on the seeds one more round would
+use. They are graded like any other set, never trained on, and land in `round_4/rollouts/`. The seed-1 loops ran
+before the flag existed, so their sets were made afterwards by calling the same two functions (`run_rollouts`,
+`grade`) by hand; that took 2.7 hours for both.
+
+### Several loops at once
+
+Each loop needs its own card and its own policy-server port. `--port` overrides the config's port for one loop.
 
 ```
-third_party/openpi/.venv/bin/python - <<'EOF' 2>&1 | tee runs/middle_bowl_round4_rollouts.log
-import sys, types, pathlib
-sys.path.insert(0, "scripts")
-import loop
-cfg = loop.LoopConfig.load(pathlib.Path("configs/rft/middle_bowl.json"))
-args = types.SimpleNamespace(config=pathlib.Path("configs/rft/middle_bowl.json"), no_video=False)
-for judge in ("robometer", "sim"):
-    run_dir = loop.REPO / "runs" / cfg.run_name / judge
-    ckpt = loop.previous_checkpoint(cfg, run_dir, 4)
-    out = run_dir / "round_4" / "rollouts"
-    loop.run_rollouts(cfg, args, out, "rollout", 4, ckpt, None)
-    loop.grade(cfg, out)
-EOF
+CUDA_VISIBLE_DEVICES=3 python3 scripts/loop.py --config configs/rft/middle_bowl_s2.json --judge robometer --port 8003 --final-practice
 ```
+
+The configs for the next runs differ from `middle_bowl.json` only where the table says, and `tests/` checks that:
+
+| Config | Differs in | Loops |
+|---|---|---|
+| `middle_bowl_s2.json` | training seed 43; practice layouts 12000 to 15299 | `sim`, `robometer` |
+| `middle_bowl_s3.json` | training seed 44; practice layouts 22000 to 25299 | `sim`, `robometer` |
+| `middle_bowl_indomain.json` | the judge is the LIBERO fine-tune of Robometer, at the same 0.65 | `robometer` |
+
+Every config takes the same 100-layout exam. The in-domain loop reuses seed 1's training seed and layouts, so it is
+paired with the two seed-1 loops. As of 2026-11-12 these five loops have not been run, and neither flag has been used
+on the box.
 
 ### First-grab counts
 
@@ -320,8 +326,10 @@ python3 -m unittest discover -s tests
 
 ## Next
 
-1. **Seeds 2 and 3 of both loops,** config numbers unchanged, with the 300 extra attempts for the final policies
-   planned from the start. Every policy then has 400 fresh attempts and the claims can carry intervals over seeds.
+1. **Seeds 2 and 3 of both loops,** config numbers unchanged, with `--final-practice` from the start. Every policy
+   then has 400 fresh attempts and the claims can carry intervals over seeds.
 2. **The LIBERO fine-tune as judge at 0.65,** one seed. From the offline scores we expect the same flat or falling
    curve.
 3. **Videos of the final policy's approved failures,** to see what Robometer is responding to.
+
+Items 1 and 2 are five loops; the configs are in `configs/rft/` ([Several loops at once](#several-loops-at-once)).

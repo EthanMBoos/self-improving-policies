@@ -303,6 +303,19 @@ def run_round(cfg: LoopConfig, args, run_dir: pathlib.Path, k: int, graded: bool
     return True
 
 
+def final_practice(cfg: LoopConfig, args, run_dir: pathlib.Path, rounds: int, graded: bool) -> None:
+    """Practice attempts by the last checkpoint, on the seeds one more round would use. Evaluation only: nothing is
+    selected or trained on. Every earlier checkpoint gets this second sample from the next round's rollouts."""
+    k = rounds + 1
+    info = run_dir / f"round_{rounds}" / "checkpoint" / "train_info.json"
+    checkpoint = pathlib.Path(json.loads(info.read_text())["final_checkpoint"])
+    out = run_dir / f"round_{k}" / "rollouts"
+    run_rollouts(cfg, args, out, "rollout", k, checkpoint, None)
+    if graded:
+        grade(cfg, out)
+    log(f"final practice: {cfg.rollouts_per_round} attempts by the round {rounds} checkpoint -> {out.relative_to(REPO)}")
+
+
 def main() -> None:
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--config", required=True, type=pathlib.Path)
@@ -313,12 +326,20 @@ def main() -> None:
     p.add_argument("--run-root", type=pathlib.Path, default=REPO / "runs")
     p.add_argument("--no-video", action="store_true", help="skip mp4s (not possible when a grader is involved)")
     p.add_argument("--train-steps", type=int, default=None, help="override training steps (smoke tests)")
+    p.add_argument("--port", type=int, default=None,
+                   help="override the config's policy-server port; loops running at once each need their own")
+    p.add_argument("--final-practice", action="store_true",
+                   help="after the last round, rollouts_per_round more attempts by the final checkpoint (not trained on)")
     p.add_argument("--dry-run", action="store_true")
     args = p.parse_args()
     args.config = args.config.resolve()
 
     cfg = LoopConfig.load(args.config)
+    if args.port is not None:
+        cfg.port = args.port
     rounds = args.rounds or cfg.rounds
+    if args.final_practice and cfg.rollout_seeds(rounds + 1)[-1] >= cfg.exam_seed_base:
+        p.error("the final practice set's seeds would reach the exam seeds; lower rollout_seed_base")
     graded = args.judge != select.SIM_JUDGE or args.audit_with is not None
     if graded and args.no_video:
         p.error("grading needs the videos; drop --no-video")
@@ -327,6 +348,9 @@ def main() -> None:
     run_dir = args.run_root / cfg.run_name / args.judge
     run_dir.mkdir(parents=True, exist_ok=True)
     cfg.save(run_dir / "config.json")
+    if args.port is not None:
+        # The stages are subprocesses that read the config file themselves, so the override reaches them as a file.
+        args.config = run_dir / "config.json"
     log(f"run {run_dir.relative_to(REPO)}: judge {args.judge}, grader {'on' if graded else 'off'}, {rounds} rounds, "
         f"task {cfg.task_id} {cfg.task_name!r}")
     if args.dry_run:
@@ -334,9 +358,9 @@ def main() -> None:
             log(f"  round {k}: seeds {cfg.rollout_seeds(k)[0]}..{cfg.rollout_seeds(k)[-1]}, exam {cfg.exam_seeds()[0]}..{cfg.exam_seeds()[-1]}")
         return
     round_zero(cfg, args, run_dir, graded)
-    for k in range(1, rounds + 1):
-        if not run_round(cfg, args, run_dir, k, graded):
-            break
+    completed = all(run_round(cfg, args, run_dir, k, graded) for k in range(1, rounds + 1))
+    if completed and args.final_practice:
+        final_practice(cfg, args, run_dir, rounds, graded)
     log("done")
 
 
