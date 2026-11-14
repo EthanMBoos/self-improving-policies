@@ -10,24 +10,28 @@ This track is separate from the grader-in-the-loop RL work on branch `stratos` (
 written up in that branch's root README). The two tracks share the grader and the question. They differ in method,
 task and starting policy. This file covers the RFT track only: what was run, what came out, and how to rerun it.
 
-**Status (2026-11-12):** both loops have finished on one H200, one seed each.
+**Status (2026-11-14):** seven loops have finished, each on one H200: three seeds of the control, three seeds of the
+experiment, and one loop judged by the LIBERO fine-tune of Robometer. Every policy has 400 attempts on layouts it
+never trained on.
 
-- **With the simulator as judge, the loop works.** True success on the held-out task went from 42% to 83% in three
-  rounds.
-- **With Robometer as judge, the policy got worse:** 44% to 33%. Robometer's own reading of the same policies stayed
-  between 64% and 74%.
-- **42 to 50% of the attempts Robometer approved were failures.** Counted in frames, which is what the trainer
-  samples, failures were 73 to 77% of each training set.
-- **The task is decided by which of three identical bowls the robot grabs first.** The control loop taught that
-  choice. The Robometer loop did not. Its policy drifted toward a clean delivery of the wrong bowl, and Robometer
-  passes more of those failures than it did at the start.
-- These are single runs. Two more seeds are the next step ([Next](#next)).
+- **With Robometer as judge, no seed improved.** True success went 44% to 33%, 38% to 7%, and 40% to 41%. Over the
+  same rounds Robometer's own reading of those policies rose in every seed, from 64 to 72% up to 75 to 80%.
+- **With the simulator as judge, the loop works but is not safe.** Two seeds ended at 83% and 86%. The third reached
+  78% after two rounds and fell back to 48% after the third ([why](#the-control-loop-is-not-monotone)).
+- **42 to 78% of the attempts Robometer approved were failures.** Counted in frames, which is what the trainer
+  samples, failures were 73 to 93% of each training set.
+- **Robometer approves more of the policy's failures as the loop goes on:** 46 to 59% at the start, 66 to 74% after
+  three rounds, in all three seeds. The control's share did not move.
+- **A better-ranking grader at the same threshold changed nothing.** The LIBERO fine-tune (AUROC 0.90 against 0.77)
+  took the policy from 46% to 33%, the same path as the general model on the same seed.
+- **The task is decided by which of three identical bowls the robot grabs first.** Every Robometer-judged policy that
+  got worse did so by choosing the wrong bowl more often and delivering it cleanly.
 
-![True and judged success per round for both loops](../results/rft_middle_bowl/curves.png)
+![True and judged success per round for both loops, seed 1](../results/rft_middle_bowl/curves.png)
 
-*Exam success per round, 100 attempts on the same layouts for every policy. Solid lines are LIBERO's check, dashed and
-dotted lines are Robometer's verdict on the same attempts. Bars are 95% intervals. The exam overstated the experiment's
-final drop; see [True success](#true-success).*
+*Seed 1 only. Exam success per round, 100 attempts on the same layouts for every policy. Solid lines are LIBERO's
+check, dashed and dotted lines are Robometer's verdict on the same attempts. Bars are 95% intervals. A figure with all
+three seeds is still to make.*
 
 ## Setup
 
@@ -49,13 +53,142 @@ final drop; see [True success](#true-success).*
   4. The new policy takes a 100-attempt exam on fixed layouts, the same 100 for every policy in both loops.
 - **Rounds:** three per loop. A round of the experiment took about 2.5 hours on one H200: 95 minutes of attempts, 5
   of grading, 25 of training, 20 of exam. Rounds get shorter as the policy improves, because successes end early.
-  The control loop took 6.6 hours and the experiment 8.2.
+  Alone on the box, the control loop took 6.6 hours and the experiment 8.2.
+- **Seeds:** a seed changes the training seed and the practice layouts and nothing else. All loops take the same
+  exam. The loop judged by the LIBERO fine-tune reuses seed 1's training seed and layouts, so it is paired with
+  seed 1 ([configs](#several-loops-at-once)).
 - **Gate before the experiment:** Robometer was audited on the control loop's first 300 attempts. Its precision at
   0.65 was 0.54 against a floor of 0.5 set in advance
   ([audit](../results/rft_middle_bowl/audit_control_round1.md)).
 - Every number above is in [configs/rft/middle_bowl.json](../configs/rft/middle_bowl.json).
 
 ## Results
+
+### All seeds: true success and Robometer's reading
+
+Each policy has two samples on layouts it never trained on: its 100-attempt exam, and the 300 practice attempts it
+made for the next round (the final policies made 300 extra). Cells are `true / judged` in percent over those 400
+attempts: LIBERO's check, then the share the general Robometer approved at 0.65. A 95% interval on a true rate is
+about 5 points either way, and 2.5 near the bottom of the table.
+
+| Judge | Seed | Start | After round 1 | After round 2 | After round 3 |
+|---|---|---|---|---|---|
+| Simulator | 1 | 42 / 70 | 77 / 83 | 81 / 83 | **83** / 84 |
+| Simulator | 2 | 41 / 68 | 52 / 77 | 78 / 87 | **48** / 72 |
+| Simulator | 3 | 41 / 67 | 66 / 73 | 69 / 74 | **86** / 84 |
+| Robometer | 1 | 44 / 70 | 43 / 71 | 39 / 76 | **33** / 75 |
+| Robometer | 2 | 38 / 64 | 35 / 77 | 16 / 75 | **7** / 76 |
+| Robometer | 3 | 40 / 72 | 47 / 77 | 46 / 76 | **41** / 80 |
+| LIBERO fine-tune | 1 | 46 / 71 | 44 / 71 | 42 / 72 | **33** / 77 |
+
+The last row's judged number is the LIBERO fine-tune's own verdict. All seven loops start from the same policy:
+across their 2,800 start attempts it succeeds 41.7% of the time (40 to 44).
+
+- **No Robometer-judged loop improved.** Start against final: -11 points (p = 0.001), -31 points (p < 1e-20), and +1
+  point (p = 0.83). The mean over seeds went from 41% to 27%.
+- **Robometer's reading went up in every one of them**, by 5 to 12 points. In seed 2 it says 76% of the final
+  policy's attempts succeed when 7% do.
+- **The control loops gained 41, 7 and 44 points.** Seed 2 gained 37 by round 2 and lost 31 of them in round 3
+  (p < 1e-18); see [below](#the-control-loop-is-not-monotone).
+- **Exams and practice sets agree.** The largest gap between a policy's exam and its practice attempts in the five
+  new loops is 6 points.
+
+### What Robometer approved, all seeds
+
+The training sets of the Robometer-judged loops. "Wrong first" is the share of approved attempts that did not open
+with the middle bowl.
+
+| Judge | Seed | Round | Approved of 300 | Failures by episode | Failures by frame | Wrong first |
+|---|---|---|---|---|---|---|
+| Robometer | 1 | 1, 2, 3 | 215, 209, 231 | 43%, 42%, 50% | 73%, 74%, 77% | 41%, 39%, 46% |
+| Robometer | 2 | 1, 2, 3 | 194, 236, 223 | 46%, 59%, 78% | 77%, 84%, 93% | 43%, 55%, 78% |
+| Robometer | 3 | 1, 2, 3 | 212, 228, 232 | 50%, 44%, 43% | 79%, 74%, 74% | 49%, 41%, 42% |
+| LIBERO fine-tune | 1 | 1, 2, 3 | 214, 209, 211 | 38%, 41%, 45% | 71%, 72%, 76% | 38%, 38%, 44% |
+
+- **Failures are long.** Every failure in all seven loops (5,784 of 5,784) ran to the 400-step limit. Successes stop
+  when LIBERO's check fires, after 120 steps on average. openpi samples training frames uniformly, so a kept failure
+  weighs three to four times a kept success.
+- **Seed 2 ran away.** Its policy failed more, Robometer approved about 70% of the failures, so the next training set
+  held more failures, and the next policy failed more. By round 3 the set was 93% failure frames.
+- **Seed 3 held level.** Its sets stayed between 43 and 50% failures by episode and its policy between 40 and 47%.
+- **Robometer approves a growing share of the loop's failures in every seed:**
+
+| Judge | Seed | Failures approved, start | Failures approved, after round 3 | p |
+|---|---|---|---|---|
+| Robometer | 1 | 117/223 (52%) | 176/268 (66%) | 0.003 |
+| Robometer | 2 | 114/250 (46%) | 276/373 (74%) | < 1e-12 |
+| Robometer | 3 | 142/241 (59%) | 172/238 (72%) | 0.002 |
+| LIBERO fine-tune | 1 | 109/216 (50%) | 180/267 (67%) | 0.0002 |
+| Simulator | 1 | 125/231 (54%) | 37/69 (54%) | 0.94 |
+| Simulator | 2 | 119/236 (50%) | 103/210 (49%) | 0.77 |
+| Simulator | 3 | 110/235 (47%) | 33/58 (57%) | 0.17 |
+
+  This holds in seed 3, where true success did not move. Training on what the grader approves makes the policy's
+  failures look more like successes to that grader, whether or not the policy gets worse at the task.
+- Over all 9,600 episodes it graded, the general Robometer at 0.65 has precision 0.61, recall 0.93, false-positive
+  rate 0.585 (2,833 of 4,843 failures approved) and AUROC 0.75.
+
+### The first grab, all seeds
+
+Share of 300 practice attempts that open with the middle bowl, and failures that are one clean delivery of a wrong
+bowl ([definitions](#the-task-is-decided-by-the-first-grab)).
+
+| Judge | Seed | Middle bowl first: start, 1, 2, 3 | One wrong delivery: start, 1, 2, 3 |
+|---|---|---|---|
+| Simulator | 1 | 44%, 80%, 86%, 89% | 55, 20, 12, 8 |
+| Simulator | 2 | 43%, 63%, 62%, 35% | 39, 70, 10, 5 |
+| Simulator | 3 | 41%, 86%, 93%, 80% | 50, 19, 6, 1 |
+| Robometer | 1 | 46%, 46%, 44%, 38% | 63, 54, 76, 121 |
+| Robometer | 2 | 41%, 39%, 19%, 9% | 52, 67, 143, 199 |
+| Robometer | 3 | 40%, 51%, 49%, 43% | 45, 36, 36, 31 |
+| LIBERO fine-tune | 1 | 48%, 50%, 46%, 36% | 51, 54, 47, 84 |
+
+- **In every grader-judged loop, the first grab decides the attempt.** A middle-first attempt succeeds 86 to 98% of
+  the time. Of 2,868 attempts that opened with another bowl, 8 succeeded.
+- **Every loss is the choice.** Seed 2's final policy opens with the middle bowl 9% of the time and carries the back
+  bowl to the plate, touching nothing else, in 199 of 300 attempts. That is the sibling LIBERO-90 task "put the black
+  bowl at the back on the plate", done cleanly.
+- Check on the method: 1,926 of 1,937 one-grab successes in the five new loops start at the middle bowl.
+
+### The control loop is not monotone
+
+Seed 2's control went 41%, 52%, 78%, then 48%. Its training sets were all true successes. What changed is the kind of
+success:
+
+| Seed 2 control | Start | After round 1 | After round 2 | After round 3 |
+|---|---|---|---|---|
+| Successes with two or more grabs | 9% | 26% | 63% | 85% |
+| Mean steps of a success | 105 | 122 | 164 | 198 |
+| Successes that opened with the back bowl | 1/124 | 5/157 | 75/232 | 75/143 |
+
+- **The round-2 policy learned a detour:** close on the back bowl, let go, then take the middle bowl. The simulator's
+  check looks only at the end state, so these count as successes, and 32% of round 3's training set opened that way.
+- **The round-3 policy copied the detour** (65% back-first) and regrabs more. Its failures are attempts that run out
+  of the 400 steps while still handling the middle bowl. This is read from gripper paths, not yet from videos.
+- **The same drift shows in the other control seeds, without the fall so far.** Successes with two or more grabs rose
+  from 11% to 42% in seed 1 and from 9% to 72% in seed 3, and seed 3's final policy also opens with the back bowl
+  and recovers (51 of its 260 successes). In the Robometer-judged loops the share was at most 26%.
+- Our reading, not yet tested: slow successes carry more frames than quick ones, for the same reason failures
+  outweigh successes, so each round tilts the policy toward slower attempts. An outcome-only judge does not protect
+  how the task is done.
+
+### The LIBERO fine-tune as judge
+
+`jesbu1/robometer-4b-fft-libero` is Robometer-4B fine-tuned on all five LIBERO suites, LIBERO-90 included. One loop
+used it as the judge at the same 0.65, with seed 1's training seed and layouts.
+
+| Judge, seed 1 | Start | After round 1 | After round 2 | After round 3 | AUROC | Precision at 0.65 |
+|---|---|---|---|---|---|---|
+| Robometer-4B | 44% | 43% | 39% | 33% | 0.77 | 0.51 |
+| LIBERO fine-tune | 46% | 44% | 42% | 33% | 0.90 | 0.54 |
+
+- **Same path, same end point.** The fine-tune ranks attempts much better and approves the same mix at 0.65, so its
+  training sets were 71 to 76% failure frames against 73 to 77%. What the loop trains on depends on precision at
+  the threshold, not on ranking quality.
+- This matches what its offline scores on seed 1's episodes predicted
+  ([A second grader, offline](#a-second-grader-offline)).
+
+The sections below look at seed 1 in detail.
 
 ### True success
 
@@ -114,7 +247,9 @@ and the plate). Check on the method: 1,009 of 1,013 successes with exactly one g
 | Robometer | after round 3 | 113/300 (38%) | 107/113 | 0/187 |
 
 - **A correct first grab succeeds about 9 times in 10. A wrong one almost never recovers.** The wrong grab is nearly
-  always the bowl at the back.
+  always the bowl at the back. This holds for the starting policy and every grader-judged policy in all seeds. The
+  control policies of seeds 2 and 3 later learned to recover
+  ([The control loop is not monotone](#the-control-loop-is-not-monotone)).
 - **The control loop's whole gain is the choice.** Its training sets opened with the wrong bowl in 2 to 4% of
   attempts, and the policy's wrong-first rate fell from 56% to 11%. Skill after a correct grab did not change.
 - **The Robometer loop's training sets opened with the wrong bowl in 39 to 46% of attempts.** The policy's own rate
@@ -151,8 +286,8 @@ and it grabs no third bowl. Counts are out of 300 practice attempts per policy.
 
 ### A second grader, offline
 
-`jesbu1/robometer-4b-fft-libero` is Robometer-4B fine-tuned on all five LIBERO suites, LIBERO-90 included. We scored
-the experiment's 1,300 loop episodes with it and trained nothing on its verdicts. Cells are precision / recall / false-positive rate.
+Before running the LIBERO fine-tune as a judge ([above](#the-libero-fine-tune-as-judge)), we scored seed 1's 1,300
+experiment episodes with it and trained nothing on its verdicts. Cells are precision / recall / false-positive rate.
 
 | Grader | AUROC | at 0.65 | at 0.85 | at 0.99 | at 0.995 |
 |---|---|---|---|---|---|
@@ -166,14 +301,22 @@ the experiment's 1,300 loop episodes with it and trained nothing on its verdicts
 ### Agreement with the RL track
 
 The RL runs on `stratos` found Robometer about 2x too optimistic on LIBERO-10: it passed 46 to 52% of failures, with
-AUROC 0.73 to 0.77. Here, on a different task, method and policy, it passed 55 to 59% of failures at 0.65 with AUROC
-0.77 over 3,200 episodes. Our videos are already in Robometer's training orientation, so orientation alone does not
-remove the optimism.
+AUROC 0.73 to 0.77. Here, on a different task, method and policy, it passed 58.5% of failures at 0.65 with AUROC
+0.75 over 9,600 episodes. Our videos are already in Robometer's training orientation, so orientation alone does not
+remove the optimism. Ethan's check on branch `regrade-orientation` agrees: on 96 labelled videos Robometer did about
+as well on the upright view as on the mirrored one (AUROC 0.90 for both).
 
 ### Limits
 
-- **One seed per loop.** Run-to-run noise is visible: the first practice set of each loop is the same starting policy
-  on the same 300 layouts, and the two runs agree on the first bowl in 256 of them and score 41% and 44%.
+- **Three seeds, and they disagree in size.** The Robometer-judged loops ended at 33%, 7% and 41%, the controls at
+  83%, 48% and 86%. The direction is consistent (no grader-judged loop improved, every control did by round 2), the
+  amount is not, and three seeds cannot say how often a loop runs away as seed 2 did.
+- **One task, one threshold, one seed of the LIBERO fine-tune.** The fine-tune's loop is paired with seed 1 only.
+- **Run-to-run noise is visible** even with nothing changed: the first practice set of each seed-1 loop is the same
+  starting policy on the same 300 layouts, and the two runs agree on the first bowl in 256 of them and score 41% and
+  44%.
+- **The control's fall in seed 2 is explained from gripper paths only.** The frame-weighting reading of it is a
+  hypothesis.
 - **The 300 extra attempts for the final policies were added after seeing the exam.** They use the config's seed
   rule for a fourth round and no setting was changed.
 - **Why the policy moved toward the wrong bowl is not settled.** Counted by episode, the approved sets were less
@@ -184,12 +327,15 @@ remove the optimism.
 
 ## Result files
 
-Small files are in [results/rft_middle_bowl/](../results/rft_middle_bowl/). Rollout videos, datasets and checkpoints
+Small files are in `results/`, one folder per config: [rft_middle_bowl/](../results/rft_middle_bowl/) (seed 1),
+[rft_middle_bowl_s2/](../results/rft_middle_bowl_s2/), [rft_middle_bowl_s3/](../results/rft_middle_bowl_s3/) and
+[rft_middle_bowl_indomain/](../results/rft_middle_bowl_indomain/) (the LIBERO fine-tune as judge). Each holds the
+first three rows below; the audit and the figure exist for seed 1 only. Rollout videos, datasets and checkpoints
 stay under `runs/` on the training box and are not in git.
 
 | File | Holds |
 |---|---|
-| `episodes.csv` | One row per logged episode, 3,200 in all: loop, exam or practice, the checkpoint that made it (0 is the start), seed, LIBERO's label, steps, Robometer's score and verdict, first grab, grab count, the one-wrong-delivery flag, and the LIBERO fine-tune's score where it was run. Every table above can be recomputed from it. |
+| `episodes.csv` | One row per logged episode, 3,200 per seed (1,600 for the single fine-tune loop) and 11,200 in all: loop, exam or practice, the checkpoint that made it (0 is the start), seed, LIBERO's label, steps, Robometer's score and verdict, first grab, grab count, the one-wrong-delivery flag, and the LIBERO fine-tune's score where it was run. Every table above can be recomputed from it. |
 | `metrics/<judge>_round_<k>.json` | The loop's own summary for the policy after k rounds: exam success with interval, judged success, training-set size. `_round_3_practice.json` is the extra 300 attempts. |
 | `logs/` | The two loop logs and the log of the extra practice sets. |
 | `audit_control_round1.md` | The audit that gated the experiment. |
@@ -280,8 +426,9 @@ The configs for the next runs differ from `middle_bowl.json` only where the tabl
 | `middle_bowl_indomain.json` | the judge is the LIBERO fine-tune of Robometer, at the same 0.65 | `robometer` |
 
 Every config takes the same 100-layout exam. The in-domain loop reuses seed 1's training seed and layouts, so it is
-paired with the two seed-1 loops. As of 2026-11-12 these five loops have not been run, and neither flag has been used
-on the box.
+paired with the two seed-1 loops. The five loops ran together on five cards from 2026-11-12 21:34 and took 8.7 to
+11.5 hours each, against 7.7 and 9.8 hours for a control and an experiment loop alone (both with the extra 300
+attempts).
 
 ### First-grab counts
 
@@ -291,8 +438,8 @@ python3 analysis/first_grasp.py count runs/middle_bowl --config configs/rft/midd
 ```
 
 `dump` writes one small `grasp_trace.json` per rollout folder. `count` needs only those files and the sidecars, so it
-runs on a laptop after copying them. The traces behind these results were written by the same few lines run inline;
-the `dump` command itself has not been run on the box yet.
+runs on a laptop after copying them. Seed 1's traces were written by the same few lines run inline; the five later
+loops used the `dump` command.
 
 ### Round layout
 
@@ -326,10 +473,9 @@ python3 -m unittest discover -s tests
 
 ## Next
 
-1. **Seeds 2 and 3 of both loops,** config numbers unchanged, with `--final-practice` from the start. Every policy
-   then has 400 fresh attempts and the claims can carry intervals over seeds.
-2. **The LIBERO fine-tune as judge at 0.65,** one seed. From the offline scores we expect the same flat or falling
-   curve.
-3. **Videos of the final policy's approved failures,** to see what Robometer is responding to.
-
-Items 1 and 2 are five loops; the configs are in `configs/rft/` ([Several loops at once](#several-loops-at-once)).
+1. **Videos.** The approved failures of seed 2's final policy, to see what Robometer responds to, and the seed 2
+   control's round-3 attempts, to check the detour reading.
+2. **A figure with all three seeds,** true against judged per round.
+3. **Open, needs a team decision:** a loop with the LIBERO fine-tune at a much higher threshold. Offline on seed 1,
+   0.995 gave training sets with 22 to 26% failure frames. That threshold was read off the data and changing it
+   departs from the pre-registered 0.65.

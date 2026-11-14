@@ -1,0 +1,45 @@
+[loop 21:34:01] run runs/middle_bowl_s3/sim: judge sim, grader on, 3 rounds, task 14 'put the middle black bowl on the plate'
+[loop 21:34:23] policy server up on 8004 (pi05_libero) after 22s
+[loop 21:34:23] exam: 100 episodes -> runs/middle_bowl_s3/sim/round_0/exam
+[loop 21:55:27] policy server stopped
+[loop 21:55:27] grading runs/middle_bowl_s3/sim/round_0/exam with robometer
+[loop 21:58:42] round 0: true 0.460 [0.37, 0.56], judged 0.670
+[loop 21:59:00] policy server up on 8004 (pi05_libero) after 18s
+[loop 21:59:00] rollout: 300 episodes -> runs/middle_bowl_s3/sim/round_1/rollouts
+[loop 23:41:05] policy server stopped
+[loop 23:41:05] grading runs/middle_bowl_s3/sim/round_1/rollouts with robometer
+[loop 23:47:11] round 1: judge sim kept 119 of 300 (min 50)
+[loop 23:49:15] fine-tuning from checkpoints/pi05_libero
+[loop 00:14:31] policy server up on 8004 (999) after 20s
+[loop 00:14:31] exam: 100 episodes -> runs/middle_bowl_s3/sim/round_1/exam
+[loop 00:32:07] policy server stopped
+[loop 00:32:07] grading runs/middle_bowl_s3/sim/round_1/exam with robometer
+[loop 00:35:14] round 1: true 0.640 [0.54, 0.73], judged 0.740, 0.0 h
+[loop 00:35:34] policy server up on 8004 (999) after 20s
+[loop 00:35:34] rollout: 300 episodes -> runs/middle_bowl_s3/sim/round_2/rollouts
+[loop 01:55:29] policy server stopped
+[loop 01:55:29] grading runs/middle_bowl_s3/sim/round_2/rollouts with robometer
+[loop 02:00:42] round 2: judge sim kept 198 of 300 (min 50)
+[loop 02:04:00] fine-tuning from runs/middle_bowl_s3/sim/round_1/checkpoint/pi05_rft/round_1/999
+[loop 02:29:17] policy server up on 8004 (999) after 20s
+[loop 02:29:17] exam: 100 episodes -> runs/middle_bowl_s3/sim/round_2/exam
+[loop 02:47:27] policy server stopped
+[loop 02:47:27] grading runs/middle_bowl_s3/sim/round_2/exam with robometer
+[loop 02:50:35] round 2: true 0.670 [0.57, 0.75], judged 0.720, 0.0 h
+[loop 02:50:53] policy server up on 8004 (999) after 18s
+[loop 02:50:53] rollout: 300 episodes -> runs/middle_bowl_s3/sim/round_3/rollouts
+[loop 04:09:52] policy server stopped
+[loop 04:09:52] grading runs/middle_bowl_s3/sim/round_3/rollouts with robometer
+[loop 04:15:26] round 3: judge sim kept 209 of 300 (min 50)
+[loop 04:19:07] fine-tuning from runs/middle_bowl_s3/sim/round_2/checkpoint/pi05_rft/round_2/999
+[loop 04:44:23] policy server up on 8004 (999) after 20s
+[loop 04:44:23] exam: 100 episodes -> runs/middle_bowl_s3/sim/round_3/exam
+[loop 05:01:15] policy server stopped
+[loop 05:01:15] grading runs/middle_bowl_s3/sim/round_3/exam with robometer
+[loop 05:04:24] round 3: true 0.820 [0.73, 0.88], judged 0.830, 0.0 h
+[loop 05:04:44] policy server up on 8004 (999) after 20s
+[loop 05:04:44] rollout: 300 episodes -> runs/middle_bowl_s3/sim/round_4/rollouts
+[loop 06:10:28] policy server stopped
+[loop 06:10:28] grading runs/middle_bowl_s3/sim/round_4/rollouts with robometer
+[loop 06:15:58] final practice: 300 attempts by the round 3 checkpoint -> runs/middle_bowl_s3/sim/round_4/rollouts
+[loop 06:15:58] done

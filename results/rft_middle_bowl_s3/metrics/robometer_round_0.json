@@ -1,0 +1,58 @@
+{
+  "round": 0,
+  "n_rollouts": 0,
+  "n_kept": 0,
+  "true_success": {
+    "k": 42,
+    "n": 100,
+    "rate": 0.42,
+    "ci95": [
+      0.327982249185113,
+      0.5179369200110473
+    ]
+  },
+  "judged_success": {
+    "k": 78,
+    "n": 100,
+    "rate": 0.78,
+    "ci95": [
+      0.6892946528499969,
+      0.849988254963442
+    ],
+    "agreement": {
+      "n": 100,
+      "tp": 41,
+      "fp": 37,
+      "fn": 1,
+      "tn": 21,
+      "accuracy": 0.62,
+      "precision": 0.5256410256410257,
+      "recall": 0.9761904761904762,
+      "f1": 0.6833333333333332,
+      "false_positive_rate": 0.6379310344827587,
+      "false_negative_rate": 0.023809523809523808,
+      "balanced_accuracy": 0.6691297208538588,
+      "sim_success_rate": 0.42,
+      "grader_success_rate": 0.78,
+      "success_rate_gap": 0.36000000000000004,
+      "auroc": 0.7103858784893268,
+      "brier": 0.2994856548309326,
+      "ece": 0.30293945312500004,
+      "score_mean_success": 0.8116629464285714,
+      "score_mean_failure": 0.65869140625
+    }
+  },
+  "seed": {
+    "exam_seeds": [
+      100000,
+      100099
+    ]
+  },
+  "task": "put the middle black bowl on the plate",
+  "task_id": 14,
+  "suite": "libero_90",
+  "judge": "robometer",
+  "threshold": 0.65,
+  "checkpoint": "checkpoints/pi05_libero",
+  "status": "ok"
+}
