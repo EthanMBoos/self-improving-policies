@@ -14,3 +14,5 @@ docs/*.md
 docs/verification/
 docs/diagrams/
 .DS_Store
+# Python caches
+__pycache__/
