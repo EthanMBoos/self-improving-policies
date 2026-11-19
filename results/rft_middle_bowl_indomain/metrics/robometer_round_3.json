@@ -1,0 +1,115 @@
+{
+  "round": 3,
+  "n_rollouts": 300,
+  "n_kept": 211,
+  "task": "put the middle black bowl on the plate",
+  "task_id": 14,
+  "suite": "libero_90",
+  "judge": "robometer",
+  "threshold": 0.65,
+  "grader_name": "robometer-fft-libero",
+  "seed": {
+    "rollout_seeds": [
+      4000,
+      4299
+    ],
+    "exam_seeds": [
+      100000,
+      100099
+    ],
+    "train_seed": 42
+  },
+  "init_checkpoint": "/sci-ai-pool/data/shared/slee3321/self-improving-policies/runs/middle_bowl_indomain/robometer/round_2/checkpoint/pi05_rft/round_2/999",
+  "rollouts": {
+    "true_success": {
+      "k": 122,
+      "n": 300,
+      "rate": 0.4066666666666667,
+      "ci95": [
+        0.3526007999029206,
+        0.4630926403633234
+      ]
+    },
+    "judged_rate": {
+      "k": 211,
+      "n": 300,
+      "rate": 0.7033333333333334,
+      "ci95": [
+        0.649335553589633,
+        0.7521894515446212
+      ]
+    },
+    "agreement": {
+      "n": 300,
+      "tp": 115,
+      "fp": 96,
+      "fn": 7,
+      "tn": 82,
+      "accuracy": 0.6566666666666666,
+      "precision": 0.5450236966824644,
+      "recall": 0.9426229508196722,
+      "f1": 0.6906906906906907,
+      "false_positive_rate": 0.5393258426966292,
+      "false_negative_rate": 0.05737704918032787,
+      "balanced_accuracy": 0.7016485540615215,
+      "sim_success_rate": 0.4066666666666667,
+      "grader_success_rate": 0.7033333333333334,
+      "success_rate_gap": 0.2966666666666667,
+      "auroc": 0.9116319764229139,
+      "brier": 0.30454409930023457,
+      "ece": 0.33007540702819826,
+      "score_mean_success": 0.9544857838114754,
+      "score_mean_failure": 0.5875020027160645
+    }
+  },
+  "true_success": {
+    "k": 37,
+    "n": 100,
+    "rate": 0.37,
+    "ci95": [
+      0.28182212569509163,
+      0.46779652424866885
+    ]
+  },
+  "judged_success": {
+    "k": 76,
+    "n": 100,
+    "rate": 0.76,
+    "ci95": [
+      0.6676748127670786,
+      0.8330878873454004
+    ],
+    "agreement": {
+      "n": 100,
+      "tp": 35,
+      "fp": 41,
+      "fn": 2,
+      "tn": 22,
+      "accuracy": 0.57,
+      "precision": 0.4605263157894737,
+      "recall": 0.9459459459459459,
+      "f1": 0.6194690265486725,
+      "false_positive_rate": 0.6507936507936508,
+      "false_negative_rate": 0.05405405405405406,
+      "balanced_accuracy": 0.6475761475761476,
+      "sim_success_rate": 0.37,
+      "grader_success_rate": 0.76,
+      "success_rate_gap": 0.39,
+      "auroc": 0.8371943371943372,
+      "brier": 0.3965689330974419,
+      "ece": 0.42161403656005864,
+      "score_mean_success": 0.9546558277027027,
+      "score_mean_failure": 0.6958593338254898
+    }
+  },
+  "checkpoint": "/sci-ai-pool/data/shared/slee3321/self-improving-policies/runs/middle_bowl_indomain/robometer/round_3/checkpoint/pi05_rft/round_3/999",
+  "status": "ok",
+  "timings": {
+    "rollouts_s": 6180.691319942474,
+    "grade_s": 350.4480335712433,
+    "pack_s": 345.01317596435547,
+    "train_s": 1494.0457212924957,
+    "exam_s": 1597.809547662735,
+    "round_s": 9968.01360321045
+  }
+}

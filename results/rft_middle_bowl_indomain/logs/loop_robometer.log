@@ -1,0 +1,45 @@
+[loop 21:34:01] run runs/middle_bowl_indomain/robometer: judge robometer, grader on, 3 rounds, task 14 'put the middle black bowl on the plate'
+[loop 21:34:25] policy server up on 8006 (pi05_libero) after 24s
+[loop 21:34:25] exam: 100 episodes -> runs/middle_bowl_indomain/robometer/round_0/exam
+[loop 21:55:25] policy server stopped
+[loop 21:55:25] grading runs/middle_bowl_indomain/robometer/round_0/exam with robometer-fft-libero
+[loop 21:58:32] round 0: true 0.450 [0.36, 0.55], judged 0.720
+[loop 21:58:52] policy server up on 8006 (pi05_libero) after 20s
+[loop 21:58:52] rollout: 300 episodes -> runs/middle_bowl_indomain/robometer/round_1/rollouts
+[loop 23:35:15] policy server stopped
+[loop 23:35:15] grading runs/middle_bowl_indomain/robometer/round_1/rollouts with robometer-fft-libero
+[loop 23:40:52] round 1: judge robometer kept 214 of 300 (min 50)
+[loop 23:46:32] fine-tuning from checkpoints/pi05_libero
+[loop 00:11:42] policy server up on 8006 (999) after 18s
+[loop 00:11:42] exam: 100 episodes -> runs/middle_bowl_indomain/robometer/round_1/exam
+[loop 00:32:20] policy server stopped
+[loop 00:32:20] grading runs/middle_bowl_indomain/robometer/round_1/exam with robometer-fft-libero
+[loop 00:35:33] round 1: true 0.460 [0.37, 0.56], judged 0.770, 0.0 h
+[loop 00:35:49] policy server up on 8006 (999) after 16s
+[loop 00:35:49] rollout: 300 episodes -> runs/middle_bowl_indomain/robometer/round_2/rollouts
+[loop 02:15:59] policy server stopped
+[loop 02:15:59] grading runs/middle_bowl_indomain/robometer/round_2/rollouts with robometer-fft-libero
+[loop 02:21:43] round 2: judge robometer kept 209 of 300 (min 50)
+[loop 02:27:13] fine-tuning from runs/middle_bowl_indomain/robometer/round_1/checkpoint/pi05_rft/round_1/999
+[loop 02:52:33] policy server up on 8006 (999) after 20s
+[loop 02:52:33] exam: 100 episodes -> runs/middle_bowl_indomain/robometer/round_2/exam
+[loop 03:13:22] policy server stopped
+[loop 03:13:22] grading runs/middle_bowl_indomain/robometer/round_2/exam with robometer-fft-libero
+[loop 03:16:33] round 2: true 0.450 [0.36, 0.55], judged 0.780, 0.0 h
+[loop 03:16:53] policy server up on 8006 (999) after 20s
+[loop 03:16:53] rollout: 300 episodes -> runs/middle_bowl_indomain/robometer/round_3/rollouts
+[loop 04:59:33] policy server stopped
+[loop 04:59:34] grading runs/middle_bowl_indomain/robometer/round_3/rollouts with robometer-fft-libero
+[loop 05:05:24] round 3: judge robometer kept 211 of 300 (min 50)
+[loop 05:11:09] fine-tuning from runs/middle_bowl_indomain/robometer/round_2/checkpoint/pi05_rft/round_2/999
+[loop 05:36:23] policy server up on 8006 (999) after 20s
+[loop 05:36:23] exam: 100 episodes -> runs/middle_bowl_indomain/robometer/round_3/exam
+[loop 05:59:30] policy server stopped
+[loop 05:59:30] grading runs/middle_bowl_indomain/robometer/round_3/exam with robometer-fft-libero
+[loop 06:02:41] round 3: true 0.370 [0.28, 0.47], judged 0.760, 0.0 h
+[loop 06:02:59] policy server up on 8006 (999) after 18s
+[loop 06:02:59] rollout: 300 episodes -> runs/middle_bowl_indomain/robometer/round_4/rollouts
+[loop 07:43:03] policy server stopped
+[loop 07:43:03] grading runs/middle_bowl_indomain/robometer/round_4/rollouts with robometer-fft-libero
+[loop 07:48:15] final practice: 300 attempts by the round 3 checkpoint -> runs/middle_bowl_indomain/robometer/round_4/rollouts
+[loop 07:48:15] done
