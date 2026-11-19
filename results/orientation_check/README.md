@@ -53,7 +53,8 @@ subset, threshold 0.5:
 - **The fine-tune catches the near-misses the general model passes with confidence.** The general model scored five
   hard failures at 0.9 or more in both orientations: a drawer opened but apparently not the middle one, a mug put in
   the microwave with the door left open, both moka pots crowded on the burner, the right moka pot, and the mug and
-  pudding task. The fine-tune rejects four of the five in either orientation.
+  pudding task. The fine-tune rejects four of the five in either orientation. Frames from three of them:
+  [confident_mistakes.png](confident_mistakes.png).
 - **The fine-tune does care about orientation.** In the stored view it rejects 17 of 44 successes, against 5 of 44
   in its mirrored training view. The general model barely notices the mirror; the fine-tune learned LIBERO's look
   closely, including which way it faces.
