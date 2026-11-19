@@ -30,8 +30,8 @@ never trained on.
 ![True and judged success per round for both loops, seed 1](../results/rft_middle_bowl/curves.png)
 
 *Seed 1 only. Exam success per round, 100 attempts on the same layouts for every policy. Solid lines are LIBERO's
-check, dashed and dotted lines are Robometer's verdict on the same attempts. Bars are 95% intervals. A figure with all
-three seeds is still to make.*
+check, dashed and dotted lines are Robometer's verdict on the same attempts. Bars are 95% intervals. All three seeds are in
+[the figure below](#all-seeds-true-success-and-robometers-reading).*
 
 ## Setup
 
@@ -83,6 +83,12 @@ about 5 points either way, and 2.5 near the bottom of the table.
 
 The last row's judged number is the LIBERO fine-tune's own verdict. All seven loops start from the same policy:
 across their 2,800 start attempts it succeeds 41.7% of the time (40 to 44).
+
+![True success and Robometer's reading per round, all three seeds](../results/rft_all_seeds.png)
+
+*Each point is a policy's 400 attempts, as in the table. Solid lines are LIBERO's check, dashed lines the share
+Robometer-4B approves at 0.65. Bands are 95% intervals on true success. Code:
+[analysis/plot_all_seeds.py](../analysis/plot_all_seeds.py).*
 
 - **No Robometer-judged loop improved.** Start against final: -11 points (p = 0.001), -31 points (p < 1e-20), and +1
   point (p = 0.83). The mean over seeds went from 41% to 27%.
@@ -303,8 +309,10 @@ experiment episodes with it and trained nothing on its verdicts. Cells are preci
 The RL runs on `stratos` found Robometer about 2x too optimistic on LIBERO-10: it passed 46 to 52% of failures, with
 AUROC 0.73 to 0.77. Here, on a different task, method and policy, it passed 58.5% of failures at 0.65 with AUROC
 0.75 over 9,600 episodes. Our videos are already in Robometer's training orientation, so orientation alone does not
-remove the optimism. Ethan's check on branch `regrade-orientation` agrees: on 96 labelled videos Robometer did about
-as well on the upright view as on the mirrored one (AUROC 0.90 for both).
+remove the optimism. Ethan's check agrees: on 96 labelled videos Robometer did about as well on the upright view as on
+the mirrored one (AUROC 0.90 for both). On the same videos the LIBERO fine-tune rejected near-misses the general model
+passed with confidence, and was itself sensitive to orientation
+([results/orientation_check/](../results/orientation_check/README.md)).
 
 ### Limits
 
@@ -475,7 +483,6 @@ python3 -m unittest discover -s tests
 
 1. **Videos.** The approved failures of seed 2's final policy, to see what Robometer responds to, and the seed 2
    control's round-3 attempts, to check the detour reading.
-2. **A figure with all three seeds,** true against judged per round.
-3. **Open, needs a team decision:** a loop with the LIBERO fine-tune at a much higher threshold. Offline on seed 1,
+2. **Open, needs a team decision:** a loop with the LIBERO fine-tune at a much higher threshold. Offline on seed 1,
    0.995 gave training sets with 22 to 26% failure frames. That threshold was read off the data and changing it
    departs from the pre-registered 0.65.
