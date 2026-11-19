@@ -27,11 +27,13 @@ never trained on.
 - **The task is decided by which of three identical bowls the robot grabs first.** Every Robometer-judged policy that
   got worse did so by choosing the wrong bowl more often and delivering it cleanly.
 
-![True and judged success per round for both loops, seed 1](../results/rft_middle_bowl/curves.png)
+![True and judged success per round, every loop and seed](../results/rft_curves_all_seeds.png)
 
-*Seed 1 only. Exam success per round, 100 attempts on the same layouts for every policy. Solid lines are LIBERO's
-check, dashed and dotted lines are Robometer's verdict on the same attempts. Bars are 95% intervals. A figure with all
-three seeds is still to make.*
+*Every loop and seed. Each point is 400 attempts on layouts the policy never trained on: its 100-attempt exam plus its
+300 practice attempts. Solid blue is LIBERO's check, with 95% intervals. Dashed orange is the grader's verdict on the
+same attempts at 0.65: general Robometer in the first two panels (in the control it was logged only, never used to
+pick training data), the LIBERO fine-tune in the third. Marker shape is the seed. Seed 1's exam-only figure is
+[results/rft_middle_bowl/curves.png](../results/rft_middle_bowl/curves.png).*
 
 ## Setup
 
@@ -330,8 +332,10 @@ as well on the upright view as on the mirrored one (AUROC 0.90 for both).
 Small files are in `results/`, one folder per config: [rft_middle_bowl/](../results/rft_middle_bowl/) (seed 1),
 [rft_middle_bowl_s2/](../results/rft_middle_bowl_s2/), [rft_middle_bowl_s3/](../results/rft_middle_bowl_s3/) and
 [rft_middle_bowl_indomain/](../results/rft_middle_bowl_indomain/) (the LIBERO fine-tune as judge). Each holds the
-first three rows below; the audit and the figure exist for seed 1 only. Rollout videos, datasets and checkpoints
-stay under `runs/` on the training box and are not in git.
+first three rows below; the audit and the exam-only figure exist for seed 1 only. The figure at the top,
+[rft_curves_all_seeds.png](../results/rft_curves_all_seeds.png), is drawn from the four `episodes.csv` files by
+`analysis/plot_seeds.py`. Rollout videos, datasets and checkpoints stay under `runs/` on the training box and are not
+in git.
 
 | File | Holds |
 |---|---|
@@ -339,7 +343,7 @@ stay under `runs/` on the training box and are not in git.
 | `metrics/<judge>_round_<k>.json` | The loop's own summary for the policy after k rounds: exam success with interval, judged success, training-set size. `_round_3_practice.json` is the extra 300 attempts. |
 | `logs/` | The two loop logs and the log of the extra practice sets. |
 | `audit_control_round1.md` | The audit that gated the experiment. |
-| `curves.png` | The figure above. |
+| `curves.png` | Seed 1's exam success per round, 100 attempts each. |
 
 ## Running it
 
@@ -357,7 +361,8 @@ stay under `runs/` on the training box and are not in git.
 | `grader/audit.py` | any | Confusion matrix against the simulator at several thresholds, the D5 verdict, false positives to watch |
 | `rft/select.py` | any | The only place a verdict becomes training data; one field per judge |
 | `scripts/loop.py` | any (orchestration only) | Rounds: rollouts, grade, select, pack, fine-tune, exam, `metrics.json`; resumable; `--port` and `--final-practice` for parallel runs |
-| `analysis/plot_curves.py` | openpi env | True success per round for both loops plus judged success |
+| `analysis/plot_curves.py` | openpi env | Exam success per round for one seed's two loops, from `runs/` |
+| `analysis/plot_seeds.py` | any Python with matplotlib | The figure at the top: every loop and seed, 400 attempts per point, from the committed `episodes.csv` files |
 | `analysis/first_grasp.py` | `dump`: LIBERO client env; `count`: any | Gripper paths out of `frames.npz`, then first grab per attempt, the tables above, and `episodes.csv` |
 
 ### Setup on sci-ai (once)
@@ -475,7 +480,6 @@ python3 -m unittest discover -s tests
 
 1. **Videos.** The approved failures of seed 2's final policy, to see what Robometer responds to, and the seed 2
    control's round-3 attempts, to check the detour reading.
-2. **A figure with all three seeds,** true against judged per round.
-3. **Open, needs a team decision:** a loop with the LIBERO fine-tune at a much higher threshold. Offline on seed 1,
+2. **Open, needs a team decision:** a loop with the LIBERO fine-tune at a much higher threshold. Offline on seed 1,
    0.995 gave training sets with 22 to 26% failure frames. That threshold was read off the data and changing it
    departs from the pre-registered 0.65.
