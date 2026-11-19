@@ -1,0 +1,15 @@
+==== all committed videos
+96 shared episodes, true success 45.8%, threshold 0.5
+
+variant                                   says ok   prec  recall    FPR  AUROC  best bal acc
+--------------------------------------------------------------------------------------------
+none (flip none)                            29.2%   0.96    0.61   0.02  0.962    0.846 @0.05
+lr (flip lr)                                42.7%   0.95    0.89   0.04  0.970    0.924 @0.45
+
+==== hard subset: without the zero-shot base model, whose arm just drifts away
+56 shared episodes matching ^(pi05_libero|libero90), true success 78.6%, threshold 0.5
+
+variant                                   says ok   prec  recall    FPR  AUROC  best bal acc
+--------------------------------------------------------------------------------------------
+none (flip none)                            50.0%   0.96    0.61   0.08  0.862    0.795 @0.70
+lr (flip lr)                                73.2%   0.95    0.89   0.17  0.869    0.867 @0.85

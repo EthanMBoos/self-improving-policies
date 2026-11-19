@@ -38,9 +38,37 @@ Full tables in [comparison.txt](comparison.txt). Hard subset, threshold 0.5:
 - **Robometer misses near-misses in every orientation.** It passes about half of the hard failures, consistent with
   the RL runs, where it passed about half of all failures.
 
+## The LIBERO fine-tune of Robometer on the same videos
+
+Same 96 videos, same job, graded by `jesbu1/robometer-4b-fft-libero`, Robometer-4B fine-tuned on all five LIBERO
+suites (2026-11-18, one H200). Full tables in [comparison_libero_finetune.txt](comparison_libero_finetune.txt). Hard
+subset, threshold 0.5:
+
+| | General, stored | General, mirrored | LIBERO fine-tune, stored | LIBERO fine-tune, mirrored |
+|---|---|---|---|---|
+| AUROC | 0.66 | 0.63 | 0.86 | 0.87 |
+| Failures passed | 7 of 12 | 5 of 12 | 1 of 12 | 2 of 12 |
+| Successes caught | 38 of 44 | 42 of 44 | 27 of 44 | 39 of 44 |
+
+- **The fine-tune catches the near-misses the general model passes with confidence.** The general model scored five
+  hard failures at 0.9 or more in both orientations: a drawer opened but apparently not the middle one, a mug put in
+  the microwave with the door left open, both moka pots crowded on the burner, the right moka pot, and the mug and
+  pudding task. The fine-tune rejects four of the five in either orientation.
+- **The fine-tune does care about orientation.** In the stored view it rejects 17 of 44 successes, against 5 of 44
+  in its mirrored training view. The general model barely notices the mirror; the fine-tune learned LIBERO's look
+  closely, including which way it faces.
+- **It was trained on these scenes.** Its training data covers all five LIBERO suites, LIBERO-90 included, so this is
+  an in-distribution test, not a general one.
+- **This does not contradict SeungTaek's loop result.** On the bowl task, the fine-tune ranked attempts well (AUROC
+  0.90) but still approved about half the failures at 0.65, and the policy got worse the same way
+  ([rft/README.md](../../rft/README.md), branch `stan`). Those failures are clean deliveries of the wrong identical
+  bowl, harder than the near-misses here.
+
 ## Caveats
 
-- Only 12 hard failures, so one episode moves the false-positive rate by 8 points. This rules out a large orientation
-  effect, not a small one.
+- Only 12 hard failures, so one episode moves the false-positive rate by 8 points. A bootstrap 95% interval for the
+  hard-subset AUROC difference, mirrored minus stored, is -0.18 to +0.13 for the general model. This rules out a large
+  orientation effect, not a small one.
+- The openpi eval client keeps the last episode per task and outcome, so the videos are not a random sample.
 - These are fine-tuned π0.5 rollouts, not the RL policy's episodes on LIBERO-10. Re-grading the RL episodes themselves
   would give a firmer number; `scripts/rl/pace/regrade.sbatch` does that once the recorded episodes are available.
