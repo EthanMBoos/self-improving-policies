@@ -4,6 +4,9 @@
 # videos and for the hard subset without the zero-shot base model's failures. See docs/regrade-orientation.md.
 #
 #   sbatch scripts/rl/pace/regrade_committed.sbatch
+#   sbatch --export=ALL,MODEL=checkpoints/Robometer-4B-fft-libero-infer,TAG=indomain,FLIPS="none lr" scripts/rl/pace/regrade_committed.sbatch
+#
+# MODEL  grader checkpoint (default: the config's general Robometer-4B); TAG names the output folder
 #SBATCH -J regrade-committed
 #SBATCH --gres=gpu:1
 #SBATCH --constraint=cuda13
@@ -16,7 +19,8 @@ source "${SIP_REPO:-$HOME/scratch/self-improving-policies}/scripts/rl/pace/env.s
 cd "$SIP_REPO"
 FLIPS="${FLIPS:-none lr ud rot180}"
 RUN="$SIP_REPO/outputs/rl/committed"
-OUT="$SIP_REPO/outputs/rl/offline/committed"
+OUT="$SIP_REPO/outputs/rl/offline/committed${TAG:+_$TAG}"
+MODEL_ARGS=(); [ -n "${MODEL:-}" ] && MODEL_ARGS=(--model "$MODEL")
 nvidia-smi --query-gpu=name,memory.total --format=csv,noheader
 
 python3 scripts/rl/videos_to_episodes.py "$RUN" results/libero_eval/*/videos_* results/libero90_sweep_50/videos_candidates
@@ -24,7 +28,7 @@ python3 scripts/rl/videos_to_episodes.py "$RUN" results/libero_eval/*/videos_* r
 PY=(uv run -q --no-project --with omegaconf --with numpy python)
 for flip in $FLIPS; do
   echo "==== flip=$flip $(date)"
-  "${PY[@]}" scripts/rl/grade_offline.py "$RUN" "$OUT/$flip" --grader robometer_soft --flip "$flip" --batch-size 16
+  "${PY[@]}" scripts/rl/grade_offline.py "$RUN" "$OUT/$flip" --grader robometer_soft --flip "$flip" --batch-size 16 "${MODEL_ARGS[@]}"
 done
 
 dirs=(); for flip in $FLIPS; do dirs+=("$OUT/$flip"); done

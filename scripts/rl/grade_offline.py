@@ -37,6 +37,7 @@ def main():
     p.add_argument("--flip", default=None, choices=["none", "lr", "ud", "rot180"], help="re-orient frames before grading")
     p.add_argument("--sample", type=int, default=0, help="grade only this many episodes, chosen at random (0 = all)")
     p.add_argument("--seed", type=int, default=0, help="seed for --sample")
+    p.add_argument("--model", default=None, help="grader checkpoint directory instead of the config's")
     a = p.parse_args()
     a.run_dir, a.out_dir = a.run_dir.resolve(), a.out_dir.resolve()  # the grader runs in its own working directory
 
@@ -47,6 +48,8 @@ def main():
         preset["args"]["batch_size"] = a.batch_size
     if a.flip:
         preset.setdefault("args", {})["flip"] = a.flip
+    if a.model:
+        preset.setdefault("args", {})["model"] = str(pathlib.Path(a.model).resolve())
     reward_mode = preset.get("reward", "label")
     grader = make_grader(preset, ROOT)
 
