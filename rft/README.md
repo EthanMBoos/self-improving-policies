@@ -154,25 +154,40 @@ bowl ([definitions](#the-task-is-decided-by-the-first-grab)).
 
 ### The control loop is not monotone
 
-Seed 2's control went 41%, 52%, 78%, then 48%. Its training sets were all true successes. What changed is the kind of
-success:
+Seed 2's control went 41%, 52%, 78%, then 48%.
+
+**The drop is not chance.** The exam went 80/100 to 47/100 and the practice attempts 232/300 to 143/300, two
+independent samples. On the same 100 exam layouts, the round-2 policy won 39 that the round-3 policy lost, and the
+reverse happened 6 times (sign test p = 5e-7). LIBERO's check is deterministic; the randomness is the layout and the
+policy's own action sampling, about 5 points either way at 400 attempts. For scale, the same starting policy measured
+in the seven loops scored 37.5% to 46%.
+
+**Nothing was broken.** Its training sets were all true successes, and the fine-tunes ended at normal losses (0.0069,
+0.0060, 0.0083 at step 990). What changed is the kind of success:
 
 | Seed 2 control | Start | After round 1 | After round 2 | After round 3 |
 |---|---|---|---|---|
 | Successes with two or more grabs | 9% | 26% | 63% | 85% |
 | Mean steps of a success | 105 | 122 | 164 | 198 |
 | Successes that opened with the back bowl | 1/124 | 5/157 | 75/232 | 75/143 |
+| Failures that carried the middle bowl to the plate and still failed | 4/176 | 40/143 | 44/68 | 118/157 |
 
 - **The round-2 policy learned a detour:** close on the back bowl, let go, then take the middle bowl. The simulator's
   check looks only at the end state, so these count as successes, and 32% of round 3's training set opened that way.
-- **The round-3 policy copied the detour** (65% back-first) and regrabs more. Its failures are attempts that run out
-  of the 400 steps while still handling the middle bowl. This is read from gripper paths, not yet from videos.
+- **The round-3 policy copied the detour** (65% back-first) and regrabs more. It usually reaches the right bowl, but
+  fumbles setting it down, grabs it again, and runs out of the 400 steps: 75% of its failures had carried the middle
+  bowl to the plate. This is read from gripper paths, not yet from videos.
 - **The same drift shows in the other control seeds, without the fall so far.** Successes with two or more grabs rose
   from 11% to 42% in seed 1 and from 9% to 72% in seed 3, and seed 3's final policy also opens with the back bowl
   and recovers (51 of its 260 successes). In the Robometer-judged loops the share was at most 26%.
 - Our reading, not yet tested: slow successes carry more frames than quick ones, for the same reason failures
   outweigh successes, so each round tilts the policy toward slower attempts. An outcome-only judge does not protect
   how the task is done.
+- **What it means.** The simulator judged correctly; the weakness is in the method: the judge checks only the end
+  state, training weighs an attempt by its length, and the loop keeps the last policy, not the best one. Weighting
+  every kept attempt equally, keeping only quick successes, or stopping at the best exam would each address one of
+  these; none was tried. It does not change the main comparison: the control was ahead of the Robometer-judged loop
+  after every round of every seed, by 17 to 62 points, and 48% against 7% in seed 2 after round 3.
 
 ### The LIBERO fine-tune as judge
 
