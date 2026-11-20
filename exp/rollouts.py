@@ -70,12 +70,24 @@ def make_env(task, seed, lock_path):
     return env
 
 
+def fixture_joints(sim):
+    """Positions of hinge and slide joints that are not the robot's: drawers, doors, stove knobs, etc.
+    (Movable objects have free joints and are covered by their body positions.)"""
+    out = {}
+    for j, name in enumerate(sim.model.joint_names):
+        if sim.model.jnt_type[j] in (2, 3) and not name.startswith(("robot", "gripper", "mount")):
+            out[name] = round(float(sim.data.qpos[sim.model.jnt_qposadr[j]]), 4)
+    return out
+
+
 def scene_state(env):
-    """Object positions and each goal predicate's truth value, to tell near-misses from obvious failures later."""
+    """Object positions, fixture joint positions and each goal predicate's truth value, to tell near-misses from
+    obvious failures later."""
     out = {}
     try:
         e = env.env
         out["objects"] = {n: e.sim.data.body_xpos[i].round(4).tolist() for n, i in e.obj_body_id.items()}
+        out["joints"] = fixture_joints(e.sim)
         out["goal"] = [[" ".join(map(str, g)), bool(e._eval_predicate(g))] for g in e.parsed_problem["goal_state"]]
     except Exception as ex:  # never let bookkeeping kill a rollout
         out["error"] = repr(ex)

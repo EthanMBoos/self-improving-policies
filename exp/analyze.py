@@ -7,7 +7,8 @@ test with a fixed hash of the name. Thresholds are chosen on validation and froz
 (all)" is on test only.
 
 Failures are tagged from scene.json:
-  obvious    no object moved more than 3 cm and no goal predicate became true
+  obvious    no object moved more than 3 cm, no drawer/door/knob moved more than 0.01 (m or rad), and no goal
+             predicate became true
   near-miss  anything else (something was moved, or part of the goal holds)
 """
 import argparse
@@ -55,8 +56,10 @@ def tag_failure(ep_dir):
         sc = json.loads((ep_dir / "scene.json").read_text())
         a, b = sc["start"]["objects"], sc["end"]["objects"]
         moved = max(np.linalg.norm(np.subtract(b[k], a[k])) for k in a)
+        ja, jb = sc["start"].get("joints", {}), sc["end"].get("joints", {})
+        turned = max([abs(jb[k] - ja[k]) for k in ja if k in jb] or [0.0])  # drawers, doors, knobs (m or rad)
         partial = any(v for _, v in sc["end"]["goal"]) and not any(v for _, v in sc["start"]["goal"])
-        return "near-miss" if moved > 0.03 or partial else "obvious"
+        return "near-miss" if moved > 0.03 or turned > 0.01 or partial else "obvious"
     except Exception:
         return "unknown"
 

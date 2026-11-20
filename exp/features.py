@@ -49,7 +49,8 @@ def main():
     out = {k: np.stack(v) for k, v in feats.items()}
     if a.encoder == "siglip":
         with torch.no_grad():
-            t = proc(text=texts, padding="max_length", return_tensors="pt")
+            n = model.config.text_config.max_position_embeddings  # SigLIP is trained on text padded to this length
+            t = proc(text=texts, padding="max_length", truncation=True, max_length=n, return_tensors="pt")
             out["text"] = model.get_text_features(input_ids=t["input_ids"].cuda()).float().cpu().numpy()
     np.savez(a.out, names=np.array(names), **out)
     print("saved", a.out, {k: v.shape for k, v in out.items()})
