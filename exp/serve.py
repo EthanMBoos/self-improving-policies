@@ -12,6 +12,8 @@ import sys
 
 import websockets.asyncio.server as _server
 
+import exp1_config  # noqa: F401  registers pi05_libero_lora, so fine-tuned checkpoints can be served by name
+
 _server.serve = functools.partial(_server.serve, ping_interval=None)
 sys.argv[0] = "scripts/serve_policy.py"
 runpy.run_path("scripts/serve_policy.py", run_name="__main__")

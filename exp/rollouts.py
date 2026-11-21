@@ -48,6 +48,7 @@ class Args:
     port: int = 8000
     replan_steps: int = 5
     num_steps_wait: int = 10
+    save_frames: bool = True  # False for evaluation runs: keep meta.json and scene.json, skip episode.npz and videos
 
 
 def quat2axisangle(quat):
@@ -164,9 +165,10 @@ def main(args: Args):
             t0 = time.time()
             success, agent, wrist, states, actions, scene = run_episode(env, inits[i], task.language, client, args, max_steps)
             ep.mkdir(parents=True, exist_ok=True)
-            np.savez_compressed(ep / "episode.npz", agentview=agent, wrist=wrist, state=states, actions=actions)
-            imageio.mimwrite(ep / "agentview.mp4", list(agent[:, ::-1, ::-1]), fps=20)
-            imageio.mimwrite(ep / "wrist.mp4", list(wrist[:, ::-1, ::-1]), fps=20)
+            if args.save_frames:
+                np.savez_compressed(ep / "episode.npz", agentview=agent, wrist=wrist, state=states, actions=actions)
+                imageio.mimwrite(ep / "agentview.mp4", list(agent[:, ::-1, ::-1]), fps=20)
+                imageio.mimwrite(ep / "wrist.mp4", list(wrist[:, ::-1, ::-1]), fps=20)
             meta = dict(name=name, suite=args.suite, task_id=task_id, task=task.language, init=i, seed=args.seed,
                         tag=args.tag, success=success, steps=len(actions), max_steps=max_steps,
                         seconds=round(time.time() - t0, 1))

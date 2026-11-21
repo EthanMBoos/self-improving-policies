@@ -14,6 +14,10 @@ Code for the experiments in [docs/EXPERIMENTS.md](../docs/EXPERIMENTS.md), run o
 5. `replay_joints.py` (`pace/replay_joints.sbatch`): backfills joint positions for episodes recorded before
    `rollouts.py` saved them, by replaying the saved actions without rendering.
 6. `sheets.py`: contact sheets for looking at episodes.
+7. Experiment 1: `exp1_select.py` picks the episodes for each dataset, `make_dataset.py` writes a LeRobot dataset
+   (`pace/exp1_datasets.sbatch`), `exp1_config.py` + `train.py` fine-tune pi0.5 with LoRA (`pace/exp1_train.sbatch`),
+   and `rollouts.sbatch` with `CONFIG`/`CKPT`/`NOFRAMES=1` evaluates the result. `check_batch.py` and
+   `pace/exp1_smoke.sbatch` were the setup checks (data loader output, a 200-step run, serving the checkpoint).
 
 Run jobs with `pace/submit.sh <script> <sbatch options>` and watch them from a laptop with `pace/watch.sh <job ids>`.
 
@@ -23,7 +27,8 @@ Run jobs with `pace/submit.sh <script> <sbatch options>` and watch them from a l
   The policy samples actions, so the same seed and init reproduce the outcome but not the exact trajectory.
 - Pool `pools/main`: LIBERO-90, 90 tasks x inits 0-4 = 450 episodes, 28% success. Of 324 failures, 302 are
   near-misses (an object moved, a drawer/door/knob moved, or part of the goal holds) and 22 are obvious.
-- Experiments 4 and 2 are done on this pool. Experiment 1 (fine-tuning) has not started.
+- Experiments 4 and 2 are done on this pool. Experiment 1's first round (base, Clean, FP 30, real grader, matched)
+  is done on a separate training pool.
 
 ### Experiment 4: graders vs. LIBERO success (317 test episodes)
 
@@ -64,6 +69,41 @@ Run jobs with `pace/submit.sh <script> <sbatch options>` and watch them from a l
   general Robometer is better. First + last frames beat last frame alone by up to 0.07.
 - "Unseen" means unseen by the probe; the LIBERO fine-tuned Robometer was trained on all LIBERO tasks.
 
+### Experiment 1, first round: fine-tune on what each grader keeps
+
+Training pool `pools/exp1_train`: the 19 LIBERO-90 tasks the base policy solves sometimes (1-4 of 5 in `pools/main`),
+inits 10-39, 570 episodes, 52% success; 264 of 273 failures are near-misses. The real grader is the general
+Robometer-4B (true view) at the balanced-accuracy threshold from `pools/main` validation: on this pool it passes 35%
+of failures and drops 26% of successes (AUROC 0.77). Matched keeps the same number of successes and failures per
+task as the real grader, chosen at random.
+
+| Dataset | Episodes | Frames | Failures in it (episodes) |
+|---|---|---|---|
+| Clean (true successes) | 297 | 67.5k | 0% |
+| FP 30 (plus 30% of failures) | 379 | 100.3k | 22% |
+| Real grader | 315 | 92.7k | 30% |
+| Matched | 315 | 93.2k | 30% |
+
+Failures run to the 400-step limit, so their share of frames is far larger than their share of episodes.
+
+Every run: `pi05_libero_lora` (LoRA on both Gemma models, from the `pi05_libero` checkpoint), batch 32, 2000 steps,
+cosine LR 5e-5, one seed. About 47 min on an H200 (108 GB of GPU memory). Evaluation: the same 19 tasks x held-out
+inits 5-9 and 40-49 = 285 episodes per policy, LIBERO's check as judge. CIs are bootstrap over paired episodes.
+
+| Policy | Success | vs. base |
+|---|---|---|
+| Base pi0.5 | 147/285 = 51.6% | |
+| Clean | 168/285 = 58.9% | +7.4 (+1.4 to +13.0) |
+| Real grader | 150/285 = 52.6% | +1.1 (-4.9 to +7.0) |
+| Matched | 150/285 = 52.6% | +1.1 (-4.6 to +6.7) |
+| FP 30 | 138/285 = 48.4% | -3.2 (-9.1 to +2.5) |
+
+- Clean beats base, so the pipeline works and there is room to improve.
+- Clean beats the real grader by 6.3 points (+1.1 to +11.9): the grader's mistakes erase the gain.
+- Real grader and matched tie exactly (0.0, -5.6 to +5.3): this round, the number of mistakes mattered, not which
+  episodes. Per-task differences go both ways (task 79: real grader 9/15 vs. matched 2/15; task 2: 7 vs. 11).
+- One seed per dataset; a gap of about 6 points is the smallest this setup resolves.
+
 ### Caveats
 
 - One policy, one benchmark; test set of 97 successes / 220 failures (CIs about +-0.05).
@@ -96,9 +136,18 @@ Run jobs with `pace/submit.sh <script> <sbatch options>` and watch them from a l
   `$EXP/feat-venv` (torch 2.8.0+cu128, transformers 4.57.6, sentencepiece).
 - **Near-misses on drawers looked like obvious failures** because only free objects were tracked. Fixture joints are
   now saved and counted (31 of 53 "obvious" failures were near-misses).
+- **EGL fails on some GPUs, not nodes.** About 1 in 3 rollout jobs gets a GPU where EGL falls back to software
+  ("Cannot initialize a EGL device display"); the same node works on its next job. Render failures are logged as
+  "bad" (not FAIL) and the job resubmits itself elsewhere, up to 4 attempts. Every retry so far passed on attempt 2.
+- **Data loader workers re-run the script.** openpi's loader uses spawn, so `train.py` and `check_batch.py` need a
+  `__main__` guard or they hang.
+- **Reading npz frames one at a time** decompresses the whole array each time (1 min per episode). Load each array once.
+- **One H200 ran at 89 C with clocks at 450 MHz**, so its fine-tune took 2 h 17 min instead of 47 min. Same result,
+  just slower.
 - **LIBERO prints an info line on import**, so anything parsing its stdout takes `tail -1`.
 
 ## Next
 
-Experiment 1 (fine-tune on episodes kept by each grader, measure the effect of false positives), roughly 1-2 days of
-GPU time. Optional: a grader aimed at near-misses (e.g. comparing start and end states), probes on a second suite.
+Experiment 1, rest of the sweep: FP 10/50 and FN 10/30/50 on the same pool (FP vs. FN is the headline question),
+then a second seed for the main rows, then the two plots. Optional: the same comparison with the LIBERO fine-tuned
+Robometer, a grader aimed at near-misses (e.g. comparing start and end states), probes on a second suite.

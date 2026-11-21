@@ -11,6 +11,7 @@
 # CONFIG   openpi config (default pi05_libero);  CKPT  checkpoint dir (default gs://openpi-assets/checkpoints/$CONFIG)
 # TAG      appended to episode names
 # WORKERS  parallel sim clients (default 6)
+# NOFRAMES set to 1 for evaluation runs: save only meta/scene (no images), a few KB per episode
 #SBATCH -J exp-rollouts
 #SBATCH -p coe-gpu  # without a partition PACE spreads the job over 3 partitions and drops --exclude
 #SBATCH --gres=gpu:1
@@ -31,7 +32,9 @@ PORT=$((20000 + RANDOM % 20000))
 # numbering, so it can pick a GPU this job does not own (software fallback ~0.4 steps/s, or EGL failure).
 # Try the default and then each EGL device index; keep the first that renders fast.
 probe_once() {
-  (cd /tmp && PYTHONPATH="$OPENPI/third_party/libero" timeout 60 "$CLIENT_PY" "$CODE/egl_probe.py" 2>/dev/null | grep PROBE || true)
+  # full probe output goes to logs/probe-<job>.log so a failure can be diagnosed
+  (cd /tmp && PYTHONPATH="$OPENPI/third_party/libero" timeout 60 "$CLIENT_PY" "$CODE/egl_probe.py" 2>&1 \
+    | tee -a "$EXP/logs/probe-$SLURM_JOB_ID.log" | grep PROBE || true)
 }
 echo "node $SLURMD_NODENAME, earlier checks:"; node_history
 good=""
@@ -44,8 +47,16 @@ for dev in default 0 1 2 3 4 5 6 7 8; do
   node_log render "bad" "EGL device $dev: ${probe:-timeout}"
 done
 if [ -z "$good" ]; then
-  node_log render "FAIL" "no EGL device rendered fast"
+  # EGL failures follow the GPU we were given, not the node (the same node renders fine on another GPU), so log it
+  # as "bad" (not FAIL, which would blacklist the node) and resubmit this job elsewhere, up to 3 more times.
+  node_log render "bad" "no EGL device rendered fast (attempt ${ATTEMPT:-1})"
   echo "BAD_RENDER_NODE $SLURMD_NODENAME"
+  if [ "${ATTEMPT:-1}" -lt 4 ]; then
+    bad=$(awk -F'\t' '$6 == "FAIL" {print $3}' "$EXP/node_health.tsv" 2>/dev/null | sort -u | paste -sd, -)
+    new=$(cd "$EXP" && sbatch --parsable -p coe-gpu --exclude="${bad:+$bad,}$SLURMD_NODENAME" \
+          --export=ALL,ATTEMPT=$(( ${ATTEMPT:-1} + 1 )) "$CODE/pace/rollouts.sbatch")
+    echo "RESUBMITTED as job $new (attempt $(( ${ATTEMPT:-1} + 1 )))"
+  fi
   exit 3
 fi
 node_log render "ok" "EGL device $good, $rate steps/s"
@@ -94,7 +105,7 @@ for w in $(seq 0 $((WORKERS - 1))); do
   for j in "${!ALL[@]}"; do [ $((j % WORKERS)) -eq "$w" ] && mine+=("${ALL[$j]}"); done
   [ ${#mine[@]} -eq 0 ] && continue
   PYTHONPATH="$OPENPI/third_party/libero" "$CLIENT_PY" "$CODE/rollouts.py" --out "$EXP/$OUT" --suite "$SUITE" \
-    --tasks "${mine[@]}" --inits $INITS --seed "$SEED" --port "$PORT" ${TAG:+--tag "$TAG"} \
+    --tasks "${mine[@]}" --inits $INITS --seed "$SEED" --port "$PORT" ${TAG:+--tag "$TAG"} ${NOFRAMES:+--no-save-frames} \
     > "$EXP/$OUT/worker$w-$SLURM_JOB_ID.log" 2>&1 &
   pids+=($!)
   sleep 3
