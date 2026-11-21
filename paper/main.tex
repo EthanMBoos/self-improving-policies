@@ -1,0 +1,237 @@
+% RA-L draft (6 pages max incl. references). Build: tectonic main.tex
+\documentclass[letterpaper, journal, twoside]{IEEEtran}
+
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+\usepackage{cite}
+
+\newcommand{\todo}[1]{\textcolor{red}{[TODO: #1]}}
+\newcommand{\pizerofive}{$\pi_{0.5}$}
+
+\title{Can a VLM Grade the Robot?\\ False Positives, Not Accuracy, Decide Whether Self-Improvement Works}
+
+\author{\todo{Authors}%
+\thanks{\todo{Affiliation, Georgia Institute of Technology.}}}
+
+\markboth{IEEE Robotics and Automation Letters. Preprint Version. Month, Year}%
+{Authors: Can a VLM Grade the Robot?}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+In order for robot policies to improve from their own experience, something must decide which attempts succeeded.
+In simulation the environment provides this signal, but in the real world it does not, and recent work proposes to
+use vision-language models (VLMs) as graders in its place. It remains an open question whether such graders are good
+enough, and what ``good enough'' means for the policy that is trained on their decisions. We study this question with
+the \pizerofive{} policy in LIBERO, where the simulator's success check provides ground truth for both grading and
+evaluation. We measure how often current VLM graders pass failed attempts, compare them with a small probe trained on
+in-domain labels, and fine-tune the policy on datasets with controlled grader errors. Our experiments show that
+off-the-shelf graders pass a large fraction of failures, nearly all of them near-misses, and that these false positives,
+rather than rejected successes, are what erase the benefit of self-improvement. A real grader's effect on the policy
+matches that of random errors at the same rates, which implies that the quantity to measure and control is the
+grader's precision on the policy's own rollouts, rather than its accuracy. \todo{Final numbers with two seeds; strict-threshold result.}
+\end{abstract}
+
+\begin{IEEEkeywords}
+\todo{Learning from experience, reinforcement learning, vision-language models, reward modeling.}
+\end{IEEEkeywords}
+
+\section{Introduction}
+
+\IEEEPARstart{R}{obot} policies trained on demonstrations are limited by the demonstrations they receive.
+Vision-language-action (VLA) models such as \pizerofive{}~\cite{pi05} can perform a wide range of manipulation tasks,
+but no demonstration set covers every task, object, and scene that a robot will encounter, and collecting more
+demonstrations is expensive. A natural way past this limit is to let the robot learn from its own attempts: the robot
+tries a task, each attempt is labelled as a success or a failure, and the policy is fine-tuned on its successes, either
+by filtered imitation or by reinforcement learning~\cite{sefm,pistar06,simplevlarl}. This kind of self-improvement
+requires no new demonstrations, but it does require a judge. In simulation the judge is free, because the simulator can
+check whether the goal holds. On a real robot there is no such check, and the self-improvement loop can only be as good
+as whatever labels the attempts.
+
+A person who watches a robot can usually tell whether it put the bowl on the plate, and it is reasonable to ask whether
+a VLM can do the same. Early work used image-text similarity as a reward~\cite{vlmrm,roboclip} or asked a VLM
+directly whether a task succeeded~\cite{successvqa}, and more recent robot reward models are trained on robot video,
+including failures, to predict progress or success~\cite{gvl,roboreward,robometer}. These graders are typically
+evaluated by their accuracy on labelled episodes. However, a self-improvement loop does not consume accuracy: it consumes
+the set of episodes that the grader passes, and the two kinds of grader error enter that set differently. A false
+positive, a failure that the grader passes, places a failed trajectory in the training set as if it were a
+demonstration of success. A false negative, a success that the grader rejects, only removes a good trajectory. We might
+therefore hypothesize that the two errors have very different costs, and that a grader's usefulness for
+self-improvement is determined primarily by its false positives. Prior work points the same way: resampling against an
+imperfect verifier is capped by its false positives~\cite{flaws}, injected false-positive rewards hurt reinforcement
+learning more than missing ones~\cite{huang2025darkside}, and robot reward models that over-score failures train poor
+policies~\cite{roboref,tian2026bad}. However, no work has isolated the two errors in the data used to fine-tune a robot
+policy on its own rollouts. This setting is sharpened by a property of robot failures: many of them are near-misses,
+such as a drawer opened but not the right one, that look almost exactly like successes, and current graders tend to
+pass them~\cite{failbench,tian2026bad}.
+
+In this paper, we study the effect of grader errors on self-improvement directly. We use \pizerofive{} in
+LIBERO~\cite{libero}, where the simulator's success check provides ground truth, so that we can both measure the
+errors of a grader and control them. We first measure how current VLM graders perform on the policy's own rollouts and
+characterize the failures they pass. We then ask how much in-domain data is needed to build a better grader, by
+comparing the graders with a linear probe trained on a small number of labelled rollouts. Finally, we fine-tune the
+policy on datasets constructed from the same pool of rollouts with controlled rates of false positives and false
+negatives, on the selection of a real VLM grader, and on random errors matched to that grader's rates. This last
+comparison separates two explanations for a grader's effect on the policy: whether it depends only on how many errors
+the grader makes, or also on which episodes it gets wrong.
+
+Our central finding is that false positives, not false negatives, determine whether self-improvement succeeds.
+Fine-tuning on true successes improves the policy, adding failures to the training set erases this improvement, and
+removing a large fraction of the successes costs little. A real VLM grader's effect on the policy is matched by random
+errors at its rates, so its usefulness can be predicted from quantities that are measurable on a small labelled set.
+\todo{One sentence on the strict-threshold result and the share of failures in the kept set.} Together, these results
+suggest that a grader for self-improvement should be selected and thresholded by its precision on the policy's own
+rollouts, rather than by its accuracy.
+
+This finding is not only a limitation. A policy that improves itself from its own experience, judged by a model rather
+than a person, is one of the most appealing goals in robot learning, because it would let a robot keep getting better
+without anyone collecting new demonstrations. Our results identify what such a loop needs. Because rejected successes
+cost little, a grader does not need to recognize every success: it can be strict, provided that what it passes is
+clean. In the second part of the paper, we therefore ask how to obtain a grader with high precision cheaply, and test
+three ways of doing so: adapting the grader to the domain, training a small probe on a few hundred labelled rollouts,
+and ranking episodes within each task rather than thresholding scores across tasks. \todo{Result: which fixes reach
+low $\rho$ and recover Clean's gain.} Finally, the share of failures in the kept set falls as the policy's success rate
+rises, so a loop that begins above a threshold makes its own grading easier with each round. We discuss what this
+implies for recursive self-improvement.
+
+\section{Related Work}
+
+\textbf{VLMs as rewards and success detectors.} A number of prior works have used pre-trained vision-language models to
+judge robot behaviour, either as a dense reward from image-text similarity~\cite{vlmrm,roboclip}, as a success detector
+queried in natural language~\cite{successvqa}, or as an estimator of task progress from video~\cite{gvl}. More recent
+robot reward models are trained on large collections of robot video that include failed and partially successful
+attempts~\cite{roboreward,robometer}. These works, and recent audits of grader reliability~\cite{failbench,tian2026bad},
+evaluate graders by their agreement with human or oracle labels. The closest work to ours relates reward-model errors to
+the policies they train: RoboRef finds that offline accuracy is a poor predictor of robot RL success and that
+over-scored failures are the main cause~\cite{roboref}, and Hu et al.\ inject false positives and false negatives
+into the success detector of a hierarchical VLA at run time~\cite{hu2026orchestrating}. In this work, we inject
+controlled errors into the training data of a policy that improves from its own rollouts.
+
+\textbf{Self-improvement and reinforcement learning for VLAs.} Prior works have improved robot foundation models from
+their own experience using learned success detectors or rewards~\cite{sefm,pistar06}, and have trained VLAs with
+reinforcement learning against simulator success~\cite{simplevlarl}. These systems depend on the quality of their
+success signal, but do not isolate how errors in that signal affect the result. Our experiments hold the policy,
+rollouts, and training procedure fixed and vary only the errors in the success labels.
+
+\textbf{Learning from noisy labels and imperfect verifiers.} Imitation from imperfect or noisy demonstrations has
+been addressed by weighting demonstrations by confidence~\cite{wu2019imperfect,sasaki2021noisy}, and filtering
+trajectories by return is a strong baseline in offline RL~\cite{chen2021dt}. Class-conditional label noise, in which
+the two error rates differ, is well studied for classifiers~\cite{natarajan2013noisy}. In language models, policies
+over-optimize imperfect reward models~\cite{gao2023overopt}, resampling is capped by verifier false
+positives~\cite{flaws}, self-distillation gains track the filter's precision~\cite{zhou2026verifier}, and systematic
+verifier errors can be more harmful than random ones~\cite{egashira2026delay}. We test whether these findings hold
+when the verifier is a VLM, the learner is a robot policy, and the false positives are dominated by near-misses.
+
+\section{Preliminaries}
+
+We consider a policy $\pi_0$ that is rolled out on a set of tasks to produce trajectories $\tau$, each with a
+ground-truth outcome $y(\tau) \in \{0, 1\}$. A grader assigns each trajectory a score $s(\tau)$, and trajectories with
+$s(\tau) \geq t$ are kept. Self-improvement by filtered imitation then fine-tunes the policy on the kept set,
+\begin{equation}
+  \max_\theta \; \mathbb{E}_{\tau \sim \pi_0} \big[ \mathbb{1}[s(\tau) \geq t] \, \log \pi_\theta(\tau) \big],
+\end{equation}
+so that the policy imitates the distribution $p_t(\tau) \propto \pi_0(\tau)\,\mathbb{1}[s(\tau) \geq t]$. When the
+grader is perfect, $p_t$ is the distribution of the policy's own successes. When it is not, let $q$ be the policy's
+success rate, $\alpha$ the grader's false-positive rate (the fraction of failures kept), and $\beta$ its
+false-negative rate (the fraction of successes rejected). The kept set is then a mixture of successes and failures,
+in which failures make up a fraction
+\begin{equation}
+  \rho = \frac{\alpha (1 - q)}{\alpha (1 - q) + (1 - \beta)\, q} = 1 - \text{precision}.
+  \label{eq:rho}
+\end{equation}
+This is the standard expression for one minus precision at prevalence $q$: $\rho$ is the grader's false discovery
+rate on the policy's own rollouts. Unlike AUROC or accuracy, it depends on the policy's success rate as well as on the
+grader. It makes the asymmetry between the two errors explicit. A false negative that is independent of the
+trajectory only removes successes, which shrinks the kept set but leaves the distribution of kept successes
+unchanged~\cite{elkan2008pu}.
+A false positive changes the distribution itself, by adding failed trajectories to the imitation target. Equation
+\eqref{eq:rho} also shows that raising the threshold reduces $\rho$ only if it reduces $\alpha$ faster than
+$1 - \beta$. For a grader that cannot separate near-misses from successes, the two fall together, and a stricter
+threshold discards data without making it cleaner.
+
+\section{Setup}
+\todo{Policy: \pizerofive{} LIBERO checkpoint. Rollouts: LIBERO-90, both cameras, state, actions, object and fixture
+joint positions, goal predicates. Near-miss tagging: an object moved $>$3\,cm, a fixture joint moved, or part of the goal
+holds. Graders: Robometer-4B (general and LIBERO fine-tuned), RoboReward-4B, Qwen yes/no prompts. Thresholds chosen on
+a validation split by episode-name hash, metrics on test.}
+
+\section{Experimental Evaluation}
+
+Our experiments use the policy's own rollouts in LIBERO, where the simulator's success check serves as ground truth
+for grading and for evaluating fine-tuned policies. They focus on the following questions:
+\begin{enumerate}
+  \item How often do current VLM graders pass failed attempts, and what kind of failures do they pass?
+  \item How much in-domain data does a grader need to match or exceed a large general grader?
+  \item Which grader error, false positives or false negatives, reduces the benefit of self-improvement?
+  \item Is a real grader's effect on the policy explained by its error rates alone?
+  \item Can a grader with high precision be obtained cheaply, and does it recover the benefit of self-improvement?
+\end{enumerate}
+Questions 1--4 diagnose why a general VLM grader fails to support self-improvement. Question 5, addressed in
+Section~\ref{sec:fixes}, tests ways to make it work.
+
+\subsection{How often do graders pass failures?}
+\todo{AUROC with bootstrap CIs; false-positive rate at 90\% recall; near-miss vs.\ obvious failures; overlap of passed
+failures between graders. Table I.}
+
+\subsection{How much in-domain data does a grader need?}
+\todo{Linear probes on frozen SigLIP and DINOv2 features vs.\ number of labels; seen vs.\ unseen tasks. Fig.~1.}
+
+\subsection{Which grader error hurts self-improvement?}
+\todo{Training pool of 19 partially solved tasks (570 rollouts). Datasets: Clean, FP~10/30/50, FN~10/30/50. LoRA
+fine-tuning with identical settings; 285 held-out evaluation episodes per policy; paired bootstrap CIs; two seeds for
+the main rows. Fig.~2: policy success vs.\ false-positive and false-negative rate.}
+
+\subsection{Is a real grader explained by its error rates?}
+\todo{Real grader vs.\ random errors matched per task to its rates; strict-threshold grader; relate results to
+$\rho$ in Eq.~\eqref{eq:rho}. Contrast with~\cite{egashira2026delay}, where systematic false positives were worse than
+random ones.}
+
+\section{Making Self-Improvement Work}
+\label{sec:fixes}
+
+The results above identify what a grader needs in order to support self-improvement. Because rejecting successes is
+nearly free, the grader does not need high recall. Because a real grader's effect is predicted by its error rates, the
+share of failures in the data it keeps, $\rho$, can be estimated from a modest labelled set before any training. A grader
+is therefore useful exactly when it can reach a low $\rho$ at some threshold while still keeping enough episodes on each
+task. The general grader fails this test: on our training pool its kept set is \todo{30\%} failures at the balanced
+threshold and \todo{24\%} at a strict one, because it cannot separate near-misses from successes. In this section we
+test three ways to obtain a grader that passes it, each at a different cost.
+
+\subsection{Candidate fixes}
+\todo{(a) Domain adaptation: Robometer fine-tuned on LIBERO (AUROC 0.94 on the main pool vs.\ 0.84 for the general
+model); an upper bound, since it was trained on LIBERO data. (b) A linear probe on frozen features trained on about 100
+labelled rollouts (Section~V-B); the realistic option, since labelling a hundred of the robot's own attempts is cheap.
+(c) Ranking within each task: keep each task's top-scoring episodes instead of applying one global threshold, since
+grader scores are not calibrated across tasks (the strict global threshold lost \todo{5} of 19 tasks).}
+
+\subsection{Predicting usefulness before training}
+\todo{Table: for each grader and selection rule on the training pool, $\rho$, episodes kept, tasks covered. Computed
+offline, no training. Identify which fixes reach $\rho \le$ \todo{10\%}.}
+
+\subsection{Does a high-precision grader recover the gain?}
+\todo{Fine-tune on the selections of the two or three most promising fixes (identical settings, 285 held-out episodes).
+Fig.~3: policy success vs.\ $\rho$ for every run in the paper (Clean, FP sweep, real grader, matched, strict, fixes).
+Claim to test: runs fall on one curve, and fixes with low $\rho$ land near Clean.}
+
+\section{Discussion and Future Work}
+
+\textbf{Toward recursive self-improvement.} Equation~\eqref{eq:rho} has a consequence beyond a single round. For a
+fixed grader, $\rho$ falls as the policy's success rate $q$ rises, because failures make up a smaller part of what the
+policy produces. A loop whose first round improves the policy therefore makes its own grading easier in the next round,
+while a loop whose first round degrades the policy makes it harder. This suggests that recursive self-improvement with
+a learned grader has a threshold: what matters is whether the first round starts above it, and the fixes in
+Section~\ref{sec:fixes} are ways to start above it. \todo{State the threshold condition explicitly in terms of $\alpha$,
+$\beta$, $q$; we test one round, so this is a prediction.}
+
+\todo{Summary; implication for choosing and thresholding graders by precision; limitations (one policy, one benchmark,
+simulation, one round of self-improvement); future work (multi-round loops that test the threshold prediction, graders
+aimed at near-misses, real robots).}
+
+\bibliographystyle{IEEEtran}
+\bibliography{refs}
+
+\end{document}

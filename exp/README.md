@@ -1,27 +1,68 @@
-# Experiment code (work in progress)
+# Experiment code
 
-Code for the experiments in [docs/EXPERIMENTS.md](../docs/EXPERIMENTS.md), run on PACE ICE. Status as of 2026-11-20.
+Code for the experiments in [docs/EXPERIMENTS.md](../docs/EXPERIMENTS.md), run on Georgia Tech's PACE ICE cluster.
+Everything heavy runs as a Slurm job; nothing runs on the login node.
 
-## Pipeline
+## Conventions
 
-1. `rollouts.py` + `pace/rollouts.sbatch`: run pi0.5 (`pi05_libero`) in LIBERO and save every episode (both cameras,
-   state, actions, object positions, drawer/door/knob joint positions and goal predicates at start and end).
-2. `grade.py` + `pace/grade.sbatch`: score each episode with a grader (Robometer, RoboReward prompt, Qwen yes/no).
-3. `analyze.py`: grader vs. LIBERO success. Thresholds picked on a validation split (hash of the episode name),
-   metrics on test. Also near-miss vs. obvious failures, overlap of passed failures, majority vote.
-4. `features.py` + `probe.py` (`pace/features.sbatch`, `pace/probe.sbatch`): Experiment 2, linear probes on frozen
-   SigLIP/DINOv2 features.
-5. `replay_joints.py` (`pace/replay_joints.sbatch`): backfills joint positions for episodes recorded before
-   `rollouts.py` saved them, by replaying the saved actions without rendering.
-6. `sheets.py`: contact sheets for looking at episodes.
-7. Experiment 1: `exp1_select.py` picks the episodes for each dataset, `make_dataset.py` writes a LeRobot dataset
-   (`pace/exp1_datasets.sbatch`), `exp1_config.py` + `train.py` fine-tune pi0.5 with LoRA (`pace/exp1_train.sbatch`),
-   and `rollouts.sbatch` with `CONFIG`/`CKPT`/`NOFRAMES=1` evaluates the result. `check_batch.py` and
-   `pace/exp1_smoke.sbatch` were the setup checks (data loader output, a 200-step run, serving the checkpoint).
+- Code is synced to `$CODE = ~/scratch/ethan-exp/code` and data lives in `$EXP = ~/scratch/ethan-exp` (set by
+  `pace/env.sh`). Job scripts are submitted from `$EXP`, and paths like `pools/main` are relative to it.
+- Submit with `pace/submit.sh <script> <sbatch options>`. It checks scratch space and skips nodes logged as broken in
+  `$EXP/node_health.tsv`. Options go before the script.
+- Watch jobs from a laptop with `pace/watch.sh <job ids>`. It exits and prints a summary when a job ends.
+- A pool is a directory of episodes: `pools/<name>/episodes/<name>/{meta.json, scene.json, episode.npz, *.mp4}`, plus
+  `episodes.jsonl` (one line per episode) and `scores/<grader>.jsonl` (one line per episode per grader).
 
-Run jobs with `pace/submit.sh <script> <sbatch options>` and watch them from a laptop with `pace/watch.sh <job ids>`.
+## Run order
 
-## Where things stand
+| Step | Run | Produces |
+|---|---|---|
+| 0. Setup, once | `sbatch pace/setup.sbatch`, `sbatch pace/setup_graders.sbatch`, then `pace/infer_views.sh` | openpi and LIBERO envs, grader env and checkpoints |
+| 1. Roll out the policy | `pace/rollouts.sbatch` (runs `serve.py` + `rollouts.py`) | `pools/<name>/episodes` |
+| 2. Grade the episodes | `pace/grade.sbatch` (runs `grade.py`) | `pools/<name>/scores/*.jsonl` |
+| 3. Experiment 4: graders vs. ground truth | `analyze.py` | grader table (AUROC, FPR, near-miss breakdown) |
+| 4. Experiment 2: linear probes | `pace/features.sbatch` (`features.py`), then `pace/probe.sbatch` (`probe.py`) | `features_*.npz`, probe table |
+| 5. Experiment 1: fine-tune on graded data | `exp1_select.py`, then `pace/exp1_train.sbatch`, then `pace/rollouts.sbatch` with `CKPT` set | dataset lists, checkpoints, evaluation pool |
+| 6. Part 2: high-precision graders | `phase_a.py`, then the same train and evaluation jobs | precision table, dataset lists |
+
+Example commands, run from `$EXP` on the login node (each submits a job):
+
+```bash
+S=code/pace/submit.sh
+# 1. 19 tasks x inits 10-39 with the base pi0.5 checkpoint
+$S code/pace/rollouts.sbatch --export=ALL,OUT=pools/exp1_train,SUITE=libero_90,TASKS="0 2 12",INITS="$(seq -s ' ' 10 39)"
+# 2. score them with Robometer-4B, true camera view
+$S code/pace/grade.sbatch --export=ALL,POOL=pools/exp1_train,SETTINGS="robometer:$EXP/ckpt/Robometer-4B:true:agent"
+# 3. compare every scored grader against LIBERO's success check (CPU, quick)
+robometer/.venv/bin/python code/analyze.py --pool pools/main pools/main/scores/*.jsonl
+# 5. build the dataset lists, fine-tune one, evaluate it on held-out inits
+robometer/.venv/bin/python code/exp1_select.py --pool pools/exp1_train --scores <train scores> \
+    --calib-pool pools/main --calib-scores <main scores> --out exp1/sets
+$S code/pace/exp1_train.sbatch --export=ALL,RUN=clean            # optional: SEED=43,EXP_NAME=clean_s43
+$S code/pace/rollouts.sbatch --export=ALL,OUT=pools/exp1_eval,SUITE=libero_90,TASKS="...",INITS="$(cat exp1/eval_inits.txt)",\
+    TAG=clean,CONFIG=pi05_libero_lora,CKPT=$EXP/checkpoints/pi05_libero_lora/clean/1999,NOFRAMES=1
+```
+
+Each job script lists its settings at the top. `rollouts.sbatch` checks that the GPU can render before starting
+and resubmits itself elsewhere if it can't. `exp1_train.sbatch` builds its dataset on the node's local disk from
+`exp1/sets/<RUN>.txt`.
+
+## Files
+
+| File | Role |
+|---|---|
+| `rollouts.py`, `serve.py` | LIBERO client that runs and saves episodes; openpi policy server with keepalive pings off |
+| `egl_probe.py` | Render check that `rollouts.sbatch` runs before starting |
+| `grade.py` | Robometer, RoboReward-prompt and Qwen yes/no graders |
+| `analyze.py` | Thresholds on validation, metrics on test, near-miss tagging, grader overlap |
+| `features.py`, `probe.py` | Frozen SigLIP/DINOv2 features; linear probes vs. number of labels |
+| `exp1_select.py` | Experiment 1 datasets (Clean, FP/FN sweep, real grader, matched random, strict grader) |
+| `phase_a.py` | Part 2: failure share of each grader and selection rule; writes dataset lists |
+| `make_dataset.py`, `exp1_config.py`, `train.py` | LeRobot dataset builder, LoRA training config, openpi training entry point |
+| `replay_joints.py`, `sheets.py` | One-off tools: backfill fixture joints for old episodes; contact sheets for viewing episodes |
+| `pace/env.sh`, `submit.sh`, `watch.sh` | Paths and checks shared by all jobs; submit wrapper; job watcher |
+
+## Results so far
 
 - Step 0 checks pass: LIBERO-Spatial 99/100 (openpi reports 98.8%), LIBERO-10 95% (openpi reports 92.4%).
   The policy samples actions, so the same seed and init reproduce the outcome but not the exact trajectory.
@@ -139,15 +180,14 @@ inits 5-9 and 40-49 = 285 episodes per policy, LIBERO's check as judge. CIs are 
 - **EGL fails on some GPUs, not nodes.** About 1 in 3 rollout jobs gets a GPU where EGL falls back to software
   ("Cannot initialize a EGL device display"); the same node works on its next job. Render failures are logged as
   "bad" (not FAIL) and the job resubmits itself elsewhere, up to 4 attempts. Every retry so far passed on attempt 2.
-- **Data loader workers re-run the script.** openpi's loader uses spawn, so `train.py` and `check_batch.py` need a
-  `__main__` guard or they hang.
+- **Data loader workers re-run the script.** openpi's loader uses spawn, so `train.py` needs a `__main__` guard or
+  it hangs.
+- **The datasets library copies every training dataset into its cache** (~9 GB each, on scratch by default).
+  `exp1_train.sbatch` points `HF_DATASETS_CACHE` at the node's local disk.
+- **Checkpoints with optimizer state are ~9 GB.** Training saves only the final step and deletes `train_state`
+  afterwards; serving needs only `params` and `assets`.
 - **Reading npz frames one at a time** decompresses the whole array each time (1 min per episode). Load each array once.
 - **One H200 ran at 89 C with clocks at 450 MHz**, so its fine-tune took 2 h 17 min instead of 47 min. Same result,
   just slower.
 - **LIBERO prints an info line on import**, so anything parsing its stdout takes `tail -1`.
 
-## Next
-
-Experiment 1, rest of the sweep: FP 10/50 and FN 10/30/50 on the same pool (FP vs. FN is the headline question),
-then a second seed for the main rows, then the two plots. Optional: the same comparison with the LIBERO fine-tuned
-Robometer, a grader aimed at near-misses (e.g. comparing start and end states), probes on a second suite.

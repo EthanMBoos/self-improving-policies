@@ -8,6 +8,8 @@ Datasets (one names file each in --out):
   fp30       true successes plus a random 30% of failures, relabelled as successes
   grader     whatever the grader passes, at the balanced-accuracy threshold picked on the calibration pool's
              validation split (the same split analyze.py uses), frozen before looking at the training pool
+  grader_strict  the same grader at a strict threshold (at most --strict-fpr of calibration failures pass)
+  fp10/fp50, fn10/fn30/fn50   the rest of the sweep: 10/50% of failures added, or 10/30/50% of successes dropped
   matched    the same number of successes and failures per task as the grader set, but chosen at random: same
              error rates and task mix, only *which* failures get in differs (structured vs. random mistakes)
 
@@ -47,6 +49,7 @@ def main():
     ap.add_argument("--calib-scores", required=True)
     ap.add_argument("--out", required=True)
     ap.add_argument("--seed", type=int, default=0)
+    ap.add_argument("--strict-fpr", type=float, default=0.10, help="failure pass rate for the grader_strict set")
     a = ap.parse_args()
     rng = np.random.default_rng(a.seed)
 
@@ -54,6 +57,9 @@ def main():
     val = [n for n in cs if is_val(n, 0.3)]
     thr, _ = thresholds(np.array([cm[n]["success"] for n in val]), np.array([cs[n] for n in val]))
     print("grader threshold (balanced accuracy on %d calibration-validation episodes): %.4f" % (len(val), thr))
+    vf = np.sort([cs[n] for n in val if not cm[n]["success"]])
+    strict = vf[min(len(vf) - 1, int(np.floor((1 - a.strict_fpr) * len(vf))))] + 1e-9  # passes <= strict_fpr of them
+    print("strict threshold (at most %.0f%% of calibration-validation failures pass): %.4f" % (100 * a.strict_fpr, strict))
 
     meta, s = load(a.pool, a.scores)
     names = sorted(n for n in meta if n in s)
@@ -82,6 +88,21 @@ def main():
         ks, kf = sum(passed[n] for n in ts), sum(passed[n] for n in tf)
         matched += list(rng.choice(ts, ks, replace=False)) + list(rng.choice(tf, kf, replace=False))
     sets["matched"] = matched
+    sets["grader_strict"] = [n for n in names if s[n] >= strict]
+    sfp = sum(s[n] >= strict for n in fail) / max(len(fail), 1)
+    sfn = sum(s[n] < strict for n in succ) / max(len(succ), 1)
+    print("strict grader on training pool: FPR %.2f, FNR %.2f" % (sfp, sfn))
+    # The sweep, nested so each level only adds more of the same noise: FP 10 < FP 30 < FP 50 share failures (FP 30's
+    # are drawn first, above), FN 10 < FN 30 < FN 50 drop successes in one fixed random order.
+    fp30_fail = [n for n in sets["fp30"] if not y[n]]
+    rest = [n for n in rng.permutation(fail) if n not in set(fp30_fail)]
+    fail_order = list(rng.permutation(fp30_fail)) + rest
+    for k in (10, 50):
+        sets["fp%d" % k] = succ + fail_order[: int(round(k / 100 * len(fail)))]
+    succ_order = list(rng.permutation(succ))
+    for k in (10, 30, 50):
+        dropped = set(succ_order[: int(round(k / 100 * len(succ)))])
+        sets["fn%d" % k] = [n for n in succ if n not in dropped]
 
     out = pathlib.Path(a.out)
     out.mkdir(parents=True, exist_ok=True)
